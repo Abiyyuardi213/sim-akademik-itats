@@ -11,3 +11,4 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::resource('role', RoleController::class);
 Route::get('role/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('role.toggleStatus');
+Route::resource('pengguna', PenggunaController::class);
