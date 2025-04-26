@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PeriodeCutiController;
+use App\Http\Controllers\ProdiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,3 +16,5 @@ Route::get('role/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->
 Route::resource('pengguna', PenggunaController::class);
 Route::resource('periode', PeriodeCutiController::class);
 Route::get('periode/{id}/toggle-status', [PeriodeCutiController::class, 'toggleStatus'])->name('periode.toggleStatus');
+Route::resource('prodi', ProdiController::class);
+Route::get('prodi/{id}/toggle-status', [ProdiController::class, 'toggleStatus'])->name('prodi.toggleStatus');

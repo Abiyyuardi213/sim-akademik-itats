@@ -57,6 +57,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ url('prodi') }}" class="nav-link">
+                        <i class="nav-icon fas fa-university"></i>
+                        <p>Program Studi</p>
+                    </a>
+                </li>
+
                 @php
                     $isCuti = request()->is('cuti*');
                 @endphp
