@@ -33,6 +33,12 @@ class PeriodeCutiController extends Controller
         return redirect()->route('periode.index')->with('success', 'Periode berhasil ditambahkan.');
     }
 
+    public function show($id)
+    {
+        $periode = PeriodeCuti::findOrFail($id);
+        return view('periode.show', compact('periode'));
+    }
+
     public function edit($id)
     {
         $periode = PeriodeCuti::findOrFail($id);

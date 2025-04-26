@@ -76,7 +76,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('cuti/periode') }}" class="nav-link">
+                            <a href="{{ route('periode.index') }}" class="nav-link">
                                 <i class="fas fa-calendar-alt nav-icon text-success"></i>
                                 <p>Periode Cuti</p>
                             </a>
