@@ -95,7 +95,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('cuti/mahasiswa-cuti') }}" class="nav-link">
+                            <a href="{{ url('mahasiswa-cuti') }}" class="nav-link">
                                 <i class="fas fa-user-graduate nav-icon text-info"></i>
                                 <p>List Mahasiswa Cuti</p>
                             </a>
