@@ -12,6 +12,12 @@
         body {
             font-family: 'Source Sans Pro', sans-serif !important;
         }
+        .card {
+            border-radius: 10px;
+        }
+        .table th {
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -31,52 +37,48 @@
             </div>
 
             <section class="content">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Informasi Cuti Mahasiswa</h3>
+                <div class="container d-flex justify-content-center">
+                    <div class="card shadow-lg" style="width: 60%;">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title mb-0">Informasi Cuti Mahasiswa</h3>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <table class="table table-bordered">
-                                        <tr>
-                                            <th>Nama Mahasiswa</th>
-                                            <td>{{ $mahasiswa->nama_mahasiswa }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>NPM</th>
-                                            <td>{{ $mahasiswa->npm }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Program Studi</th>
-                                            <td>{{ $mahasiswa->prodi ? $mahasiswa->prodi->nama_prodi : '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Periode Cuti</th>
-                                            <td>{{ $mahasiswa->periode ? $mahasiswa->periode->nama_periode : '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>No. Surat Cuti</th>
-                                            <td>{{ $mahasiswa->nomor_cuti }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <td>{{ $mahasiswa->keterangan }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Status Cuti Mahasiswa</th>
-                                            <td>{{ $mahasiswa->surat_status ? 'Aktif' : 'Tidak Aktif' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Data dibuat pada</th>
-                                            <td>{{ $mahasiswa->created_at }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <th width="40%">Nama Mahasiswa</th>
+                                    <td>{{ $mahasiswa->nama_mahasiswa }}</td>
+                                </tr>
+                                <tr>
+                                    <th>NPM</th>
+                                    <td>{{ $mahasiswa->npm }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>{{ $mahasiswa->prodi ? $mahasiswa->prodi->nama_prodi : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Periode Cuti</th>
+                                    <td>{{ $mahasiswa->periode ? $mahasiswa->periode->nama_periode : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>No. Surat Cuti</th>
+                                    <td>{{ $mahasiswa->nomor_cuti }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>{{ $mahasiswa->keterangan }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status Cuti Mahasiswa</th>
+                                    <td>{{ $mahasiswa->surat_status ? 'Aktif' : 'Tidak Aktif' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data dibuat pada</th>
+                                    <td>{{ $mahasiswa->created_at }}</td>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer text-right">
                             <a href="{{ route('mahasiswa-cuti.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>

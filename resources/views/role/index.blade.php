@@ -196,6 +196,15 @@
                 });
             });
         });
+
+        $(document).ready(function() {
+            @if (session('success') || session('error'))
+                $('#toastNotification').toast({
+                    delay: 3000,
+                    autohide: true
+                }).toast('show');
+            @endif
+        });
     </script>
 </body>
 </html>

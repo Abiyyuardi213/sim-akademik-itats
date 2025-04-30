@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\MahasiswaCuti;
 use App\Models\PeriodeCuti;
 use App\Models\Prodi;
+use League\Csv\Writer;
+use League\Csv\Reader;
+use Illuminate\Support\Facades\Response;
 
 class MahasiswaCutiController extends Controller
 {
@@ -81,5 +84,92 @@ class MahasiswaCutiController extends Controller
         $mahasiswa->deleteMahasiswaCuti();
 
         return redirect()->route('mahasiswa-cuti.index')->with('success', 'Data mahasiswa cuti berhasil di hapus');
+    }
+
+    public function exportCsv()
+    {
+        $mahasiswas = MahasiswaCuti::with('periode')->get();
+
+
+        return response()->streamDownload(function () use ($mahasiswas) {
+            $stream = fopen('php://output', 'w');
+
+            fputcsv($stream, ['ID', 'NAMA_MAHASISWA', 'NPM', 'PRODI_ID', 'PERIODE_ID', 'NOMOR_CUTI', 'KETERANGAN'], ';');
+
+            foreach ($mahasiswas as $mhs) {
+                fputcsv($stream, [
+                    $mhs->id,
+                    $mhs->nama_mahasiswa,
+                    $mhs->npm,
+                    $mhs->prodi?->id ?? '-',
+                    $mhs->periode?->id ?? '-',
+                    $mhs->nomor_cuti,
+                    $mhs->keterangan,
+                ], ';');
+            }
+
+            fclose($stream);
+        }, 'mahasiswa_cuti.csv', [
+            'Content-Type' => 'text/csv',
+            'Cache-Control' => 'no-store, no-cache',
+        ]);
+    }
+
+    public function importCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        $file = $request->file('csv_file');
+
+        $csv = Reader::createFromPath($file->getRealPath(), 'r');
+        $csv->setDelimiter(';');
+        $csv->setHeaderOffset(0);
+
+        $records = $csv->getRecords();
+
+        // Ambil semua data prodi dan periode
+        $prodis = Prodi::pluck('nama_prodi', 'id')->toArray();
+        $periodes = PeriodeCuti::pluck('nama_periode', 'id')->toArray();
+
+        $data = [];
+        foreach ($records as $record) {
+            $prodi_id = $record['PRODI_ID'] ?? null;
+            $periode_id = $record['PERIODE_ID'] ?? null;
+
+            $data[] = [
+                'nama_mahasiswa' => $record['NAMA_MAHASISWA'] ?? '',
+                'npm' => $record['NPM'] ?? '',
+                'prodi_id' => $prodi_id,
+                'prodi_nama' => $prodis[$prodi_id] ?? 'Tidak ditemukan',
+                'periode_id' => $periode_id,
+                'periode_nama' => $periodes[$periode_id] ?? 'Tidak ditemukan',
+                'nomor_cuti' => $record['NOMOR_CUTI'] ?? '',
+                'keterangan' => $record['KETERANGAN'] ?? null,
+                'surat_status' => 0,
+            ];
+        }
+
+        return view('mahasiswa-cuti.showDataUpload', ['data' => $data]);
+    }
+
+    public function importConfirm(Request $request)
+    {
+        $decoded = unserialize(base64_decode($request->input('data')));
+
+        foreach ($decoded as $item) {
+            MahasiswaCuti::create([
+                'nama_mahasiswa' => $item['nama_mahasiswa'],
+                'npm' => $item['npm'],
+                'prodi_id' => $item['prodi_id'],
+                'periode_id' => $item['periode_id'],
+                'nomor_cuti' => $item['nomor_cuti'],
+                'keterangan' => $item['keterangan'] ?? null,
+                'surat_status' => 0,
+            ]);
+        }
+
+        return redirect()->route('mahasiswa-cuti.index')->with('success', 'Data berhasil diimpor!');
     }
 }

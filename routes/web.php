@@ -19,4 +19,7 @@ Route::resource('periode', PeriodeCutiController::class);
 Route::get('periode/{id}/toggle-status', [PeriodeCutiController::class, 'toggleStatus'])->name('periode.toggleStatus');
 Route::resource('prodi', ProdiController::class);
 Route::get('prodi/{id}/toggle-status', [ProdiController::class, 'toggleStatus'])->name('prodi.toggleStatus');
+Route::get('mahasiswa-cuti/export', [MahasiswaCutiController::class, 'exportCsv'])->name('mahasiswa-cuti.export');
+Route::post('mahasiswa-cuti/import', [MahasiswaCutiController::class, 'importCsv'])->name('mahasiswa-cuti.import');
 Route::resource('mahasiswa-cuti', MahasiswaCutiController::class);
+Route::post('mahasiswa-cuti/import/confirm', [MahasiswaCutiController::class, 'importConfirm'])->name('mahasiswa-cuti.import.confirm');

@@ -51,6 +51,10 @@
                                             <th>Bulan Pelakasanaan HER</th>
                                             <td>{{ $periode->bulan_her }}</td>
                                         </tr>
+                                        <tr>
+                                            <th>Status Periode Cuti</th>
+                                            <td>{{ $periode->periode_status }}</td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>

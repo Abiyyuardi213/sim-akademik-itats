@@ -165,11 +165,10 @@
     <script>
         $(document).ready(function () {
             $("#prodiTable").DataTable({
-                "paging": true,
-                "lengthChange": false,
+                "paging": false,
                 "searching": true,
                 "ordering": true,
-                "info": true,
+                "info": false,
                 "autoWidth": false,
                 "responsive": true
             });
@@ -209,12 +208,23 @@
                 const id = $(this).data('id');
                 navigator.clipboard.writeText(id)
                     .then(() => {
-                        toastr.success('ID berhasil disalin: ' + id);
+                        $(".toast-body").text('ID berhasil disalin ke clipboard');
+                        $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
                     })
                     .catch(() => {
-                        toastr.error('Gagal menyalin ID');
+                        $(".toast-body").text('Gagal menyalin ID');
+                        $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
                     });
             });
+        });
+
+        $(document).ready(function() {
+            @if (session('success') || session('error'))
+                $('#toastNotification').toast({
+                    delay: 3000,
+                    autohide: true
+                }).toast('show');
+            @endif
         });
     </script>
 </body>

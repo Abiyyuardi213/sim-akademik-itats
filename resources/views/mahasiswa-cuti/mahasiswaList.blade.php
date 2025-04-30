@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        .card-header .d-flex.justify-content-end {
+            margin-left: auto;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -31,9 +36,26 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="card-title">Daftar Mahasiswa Cuti</h3>
-                            <a href="{{ route('mahasiswa-cuti.create') }}" class="btn btn-primary btn-sm ml-auto">
-                                <i class="fas fa-plus"></i> Tambah Data Cuti
-                            </a>
+                            <div class="d-flex justify-content-end gap-2">
+                                <!-- Form Import CSV -->
+                                <form action="{{ route('mahasiswa-cuti.import') }}" method="POST" enctype="multipart/form-data" id="importCsvForm" class="mr-2">
+                                    @csrf
+                                    <input type="file" name="csv_file" id="csv_file" accept=".csv" class="d-none" required onchange="document.getElementById('importCsvForm').submit();">
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('csv_file').click();">
+                                        <i class="fas fa-upload"></i> Import CSV
+                                    </button>
+                                </form>
+
+                                <!-- Export CSV -->
+                                <a href="{{ url('mahasiswa-cuti/export') }}" class="btn btn-success btn-sm mr-2">
+                                    <i class="fas fa-download"></i> Export CSV
+                                </a>
+
+                                <!-- Tambah Data -->
+                                <a href="{{ route('mahasiswa-cuti.create') }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i> Tambah Data Cuti
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -140,6 +162,15 @@
                 let deleteUrl = "{{ url('mahasiswa-cuti') }}/" + mahasiswaId;
                 $('#deleteForm').attr('action', deleteUrl);
             });
+        });
+
+        $(document).ready(function() {
+            @if (session('success') || session('error'))
+                $('#toastNotification').toast({
+                    delay: 3000,
+                    autohide: true
+                }).toast('show');
+            @endif
         });
     </script>
 </body>

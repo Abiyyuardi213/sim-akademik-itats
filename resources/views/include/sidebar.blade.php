@@ -9,7 +9,7 @@
         <img src="{{ asset('image/itats-biru.png') }}"
              alt="Logo Mini ITATS"
              class="brand-image d-inline d-md-none"
-             style="width: 40px; height: 40px; object-fit: contain;">
+             style="width: 160px; height: 80px; object-fit: contain;">
     </a>
 
     <!-- Sidebar -->

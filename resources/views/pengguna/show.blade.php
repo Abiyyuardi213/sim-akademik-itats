@@ -13,10 +13,14 @@
             font-family: 'Source Sans Pro', sans-serif !important;
         }
         .profile-img {
-            width: 200px;
-            height: 250px;
+            width: 180px;
+            height: 220px;
             object-fit: cover;
-            border: 3px solid #ddd;
+            border: 3px solid #dee2e6;
+            border-radius: 10px;
+        }
+        .table th {
+            background-color: #f8f9fa;
         }
     </style>
 </head>
@@ -37,21 +41,21 @@
             </div>
 
             <section class="content">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Informasi Pengguna</h3>
+                <div class="container d-flex justify-content-center">
+                    <div class="card shadow-lg" style="width: 65%;">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title mb-0">Informasi Pengguna</h3>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4 text-center">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4 text-center mb-3">
                                     <img src="{{ $pengguna->profile_picture ? asset('storage/' . $pengguna->profile_picture) : asset('image/default-avatar.png') }}"
-                                        class="profile-img img-fluid" alt="Foto Profil">
+                                         class="profile-img img-fluid rounded" alt="Foto Profil">
                                 </div>
                                 <div class="col-md-8">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered table-striped">
                                         <tr>
-                                            <th>ID Pengguna</th>
+                                            <th style="width: 35%;">ID Pengguna</th>
                                             <td>{{ $pengguna->id }}</td>
                                         </tr>
                                         <tr>
@@ -74,7 +78,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer text-right">
                             <a href="{{ route('pengguna.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>
