@@ -8,6 +8,7 @@ use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\MahasiswaCutiController;
 use App\Http\Controllers\LegalisirController;
 use App\Http\Controllers\GedungController;
+use App\Http\Controllers\KelasController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,3 +32,5 @@ Route::resource('legalisir', LegalisirController::class);
 Route::post('legalisir/import/confirm', [LegalisirController::class, 'importConfirm'])->name('legalisir.import.confirm');
 Route::resource('gedung', GedungController::class);
 Route::get('gedung/{id}/toggle-status', [GedungController::class, 'toggleStatus'])->name('gedung.toggleStatus');
+Route::resource('kelas', KelasController::class);
+Route::get('kelas/{id}/toggle-status', [KelasController::class, 'toggleStatus'])->name('kelas.toggleStatus');
