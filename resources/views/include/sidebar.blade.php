@@ -103,6 +103,48 @@
                     </ul>
                 </li>
 
+                @php
+                    $isFasilitas = request()->is('fasilitas*') || request()->is('gedung*') || request()->is('kelas*') || request()->is('peminjaman-ruangan*');
+                @endphp
+                <li class="nav-item has-treeview {{ $isFasilitas ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ $isFasilitas ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-briefcase"></i>
+                        <p>
+                            Fasilitas
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="{{ $isFasilitas ? 'display: block;' : '' }}">
+                        <li class="nav-item">
+                            <a href="{{ url('fasilitas/dashboard') }}" class="nav-link">
+                                <i class="nav-icon fas fa-chart-bar"></i>
+                                <p>Dashboard Fasilitas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            {{-- <a href="{{ route('gedung/index') }}" class="nav-link"> --}}
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>Gedung</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            {{-- <a href="{{ route('kelas/index') }}" class="nav-link"> --}}
+                                <i class="nav-icon fas fa-chalkboard"></i>
+                                <p>Ruang Kelas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            {{-- <a href="{{ route('peminjaman-ruangan/index') }}" class="nav-link"> --}}
+                                <i class="nav-icon fas fa-calendar-check"></i>
+                                <p>Peminjaman Kelas</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="nav-item">
                     <a href="{{ url('legalisir') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-signature"></i>
