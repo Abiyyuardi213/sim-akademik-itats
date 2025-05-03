@@ -7,6 +7,7 @@ use App\Http\Controllers\PeriodeCutiController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\MahasiswaCutiController;
 use App\Http\Controllers\LegalisirController;
+use App\Http\Controllers\GedungController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,3 +29,5 @@ Route::post('legalisir/import', [LegalisirController::class, 'importCsv'])->name
 Route::get('legalisir/export', [LegalisirController::class, 'exportCsv'])->name('legalisir.export');
 Route::resource('legalisir', LegalisirController::class);
 Route::post('legalisir/import/confirm', [LegalisirController::class, 'importConfirm'])->name('legalisir.import.confirm');
+Route::resource('gedung', GedungController::class);
+Route::get('gedung/{id}/toggle-status', [GedungController::class, 'toggleStatus'])->name('gedung.toggleStatus');

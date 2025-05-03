@@ -9,7 +9,7 @@ class GedungController extends Controller
 {
     public function index()
     {
-        $gedungs = Gedung::orderBy('create_at', 'asc')->get();
+        $gedungs = Gedung::orderBy('created_at', 'asc')->get();
         return view('gedung.index', compact('gedungs'));
     }
 
