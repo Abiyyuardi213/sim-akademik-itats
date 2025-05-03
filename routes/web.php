@@ -6,6 +6,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PeriodeCutiController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\MahasiswaCutiController;
+use App\Http\Controllers\LegalisirController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,3 +24,7 @@ Route::get('mahasiswa-cuti/export', [MahasiswaCutiController::class, 'exportCsv'
 Route::post('mahasiswa-cuti/import', [MahasiswaCutiController::class, 'importCsv'])->name('mahasiswa-cuti.import');
 Route::resource('mahasiswa-cuti', MahasiswaCutiController::class);
 Route::post('mahasiswa-cuti/import/confirm', [MahasiswaCutiController::class, 'importConfirm'])->name('mahasiswa-cuti.import.confirm');
+Route::post('legalisir/import', [LegalisirController::class, 'importCsv'])->name('legalisir.import');
+Route::get('legalisir/export', [LegalisirController::class, 'exportCsv'])->name('legalisir.export');
+Route::resource('legalisir', LegalisirController::class);
+Route::post('legalisir/import/confirm', [LegalisirController::class, 'importConfirm'])->name('legalisir.import.confirm');

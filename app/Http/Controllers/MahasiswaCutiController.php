@@ -90,7 +90,6 @@ class MahasiswaCutiController extends Controller
     {
         $mahasiswas = MahasiswaCuti::with('periode')->get();
 
-
         return response()->streamDownload(function () use ($mahasiswas) {
             $stream = fopen('php://output', 'w');
 

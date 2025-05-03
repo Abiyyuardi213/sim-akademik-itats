@@ -66,7 +66,7 @@ class MahasiswaCuti extends Model
     }
 
     public function periode()
-{
-    return $this->belongsTo(PeriodeCuti::class, 'periode_id');
-}
+    {
+        return $this->belongsTo(PeriodeCuti::class, 'periode_id');
+    }
 }
