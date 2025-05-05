@@ -9,6 +9,7 @@ use App\Http\Controllers\MahasiswaCutiController;
 use App\Http\Controllers\LegalisirController;
 use App\Http\Controllers\GedungController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\PeminjamanRuanganController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,3 +35,4 @@ Route::resource('gedung', GedungController::class);
 Route::get('gedung/{id}/toggle-status', [GedungController::class, 'toggleStatus'])->name('gedung.toggleStatus');
 Route::resource('kelas', KelasController::class);
 Route::get('kelas/{id}/toggle-status', [KelasController::class, 'toggleStatus'])->name('kelas.toggleStatus');
+Route::resource('peminjaman-ruangan', PeminjamanRuanganController::class);
