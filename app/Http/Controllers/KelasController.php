@@ -8,10 +8,18 @@ use Illuminate\Http\Request;
 
 class KelasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kelass = Kelas::orderBy('created_at', 'asc')->get();
-        return view('kelas.index', compact('kelass'));
+        $query = Kelas::with('gedung');
+
+        if ($request->filled('gedung_id')) {
+            $query->where('gedung_id', $request->gedung_id);
+        }
+
+        $kelass = $query->orderBy('created_at', 'asc')->get(); // atau 'desc' untuk terbaru di atas
+        $gedungs = Gedung::all();
+
+        return view('kelas.index', compact('kelass', 'gedungs'));
     }
 
     public function create()
@@ -38,7 +46,7 @@ class KelasController extends Controller
 
     public function edit($id)
     {
-        $kelass = Kelas::findOrFail($id);
+        $kelas = Kelas::findOrFail($id);
         $gedungs = Gedung::all();
         return view('kelas.edit', compact('kelas', 'gedungs'));
     }

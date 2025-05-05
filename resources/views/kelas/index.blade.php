@@ -74,12 +74,25 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
+                                <form method="GET" action="{{ route('kelas.index') }}" class="form-inline mb-3">
+                                    <label for="filter_gedung" class="mr-2">Filter Gedung:</label>
+                                    <select name="gedung_id" id="filter_gedung" class="form-control mr-2">
+                                        <option value="">-- Semua Gedung --</option>
+                                        @foreach ($gedungs as $gedung)
+                                            <option value="{{ $gedung->id }}" {{ request('gedung_id') == $gedung->id ? 'selected' : '' }}>
+                                                {{ $gedung->nama_gedung }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="btn btn-secondary">Terapkan</button>
+                                </form>
                                 <table id="kelasTable" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Nama Kelas</th>
                                             <th>Gedung</th>
+                                            <th>Kapasitas</th>
                                             <th>Keterangan</th>
                                             <th>Status Kelas</th>
                                             <th>Aksi</th>
@@ -91,6 +104,7 @@
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $kelas->nama_kelas }}</td>
                                                 <td>{{ $kelas->gedung->nama_gedung ?? '-' }}</td>
+                                                <td>{{ $kelas->kapasitas_mahasiswa }}</td>
                                                 <td>{{ $kelas->keterangan }}</td>
                                                 <td class="text-center">
                                                     <input type="checkbox" class="toggle-status"
