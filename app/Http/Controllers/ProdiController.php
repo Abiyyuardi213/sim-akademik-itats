@@ -61,9 +61,19 @@ class ProdiController extends Controller
 
     public function toggleStatus($id)
     {
-        $prodi = Prodi::findOrFail($id);
-        $prodi->toggleStatus();
+        try {
+            $prodi = Prodi::findOrFail($id);
+            $prodi->toggleStatus();
 
-        return redirect()->route('role.index')->with('success', 'Status role diperbarui.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Status prodi berhasil diperbarui.'
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui status.'
+            ], 500);
+        }
     }
 }

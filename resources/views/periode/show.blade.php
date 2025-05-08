@@ -53,7 +53,13 @@
                                         </tr>
                                         <tr>
                                             <th>Status Periode Cuti</th>
-                                            <td>{{ $periode->periode_status }}</td>
+                                            <td>
+                                                @if($periode->periode_status)
+                                                    <span class="badge badge-success">Aktif</span>
+                                                @else
+                                                    <span class="badge badge-secondary">Nonaktif</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>

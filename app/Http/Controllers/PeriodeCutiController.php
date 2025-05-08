@@ -71,9 +71,23 @@ class PeriodeCutiController extends Controller
 
     public function toggleStatus($id)
     {
-        $periode = PeriodeCuti::findOrFail($id);
-        $periode->toggleStatus();
+        try {
+            $periode = PeriodeCuti::findOrFail($id);
+            $periode->toggleStatus();
 
-        return redirect()->route('periode.index')->with('success', 'Status periode diperbarui.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Status periode berhasil diperbarui.'
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui status.'
+            ], 500);
+        }
+        // $periode = PeriodeCuti::findOrFail($id);
+        // $periode->toggleStatus();
+
+        // return redirect()->route('periode.index')->with('success', 'Status periode diperbarui.');
     }
 }

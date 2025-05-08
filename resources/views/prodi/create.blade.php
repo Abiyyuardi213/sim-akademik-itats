@@ -27,7 +27,10 @@
 
             <section class="content">
                 <div class="container-fluid">
-                    <div class="card">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-plus-circle"></i> Form Tambah Data Program Studi</h3>
+                        </div>
                         <div class="card-body">
                             @if(session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>

@@ -108,7 +108,7 @@
                                                     <a href="{{ route('periode.show', $periode->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
-                                                    <a href="{{ route('periode.edit', $periode->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('periode.edit', $periode->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-periode-btn"
@@ -200,6 +200,27 @@
                         $(".toast-body").text('Gagal menyalin ID');
                         $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
                     });
+            });
+        });
+
+        $(document).ready(function () {
+            $(".toggle-status").change(function () {
+                let periodeId = $(this).data("periode-id");
+                let status = $(this).prop("checked") ? 1 : 0;
+
+                $.post("{{ url('periode') }}/" + periodeId + "/toggle-status", {
+                    _token: '{{ csrf_token() }}',
+                    periode_status: status
+                }, function (res) {
+                    if (res.success) {
+                        $(".toast-body").text(res.message);
+                        $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
+                    } else {
+                        alert("Gagal memperbarui status.");
+                    }
+                }).fail(function () {
+                    alert("Terjadi kesalahan dalam mengubah status.");
+                });
             });
         });
 
