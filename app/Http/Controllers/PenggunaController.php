@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengguna;
 use App\Models\Role;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -29,12 +30,19 @@ class PenggunaController extends Controller
             'email' => 'nullable|email|max:255|unique:pengguna,email',
             'no_telepon' => 'nullable|string|max:20',
             'password' => 'required|string|min:6',
-            'profile_picture' => 'nullable|string',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'role_id' => 'required|exists:role,id',
         ]);
 
         $data = $request->all();
         $data['password'] = Hash::make($request->password);
+
+        if ($request->hasFile('profile_picture')) {
+            $file = $request->file('profile_picture');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/profile'), $filename);
+            $data['profile_picture'] = $filename;
+        }
 
         Pengguna::createPengguna($data);
 
@@ -54,20 +62,35 @@ class PenggunaController extends Controller
 
         $request->validate([
             'nama_pengguna' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:pengguna,username,' . $pengguna->id,
-            'email' => 'nullable|email|max:255|unique:pengguna,email,' . $pengguna->id,
+            'username' => [
+                'required', 'string', 'max:255',
+                Rule::unique('pengguna', 'username')->ignore($pengguna->id),
+            ],
+            'email' => [
+                'nullable', 'email', 'max:255',
+                Rule::unique('pengguna', 'email')->ignore($pengguna->id),
+            ],
             'no_telepon' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:6',
-            'profile_picture' => 'nullable|string',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'role_id' => 'required|exists:role,id',
         ]);
 
-        $data = $request->all();
+        $data = $request->only([
+            'nama_pengguna', 'username', 'email', 'no_telepon', 'password', 'role_id'
+        ]);
 
         if (!empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
-            unset($data['password']); // jangan update kalau kosong
+            unset($data['password']);
+        }
+
+        if ($request->hasFile('profile_picture')) {
+            $file = $request->file('profile_picture');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/profile'), $filename);
+            $data['profile_picture'] = $filename;
         }
 
         $pengguna->updatePengguna($data);

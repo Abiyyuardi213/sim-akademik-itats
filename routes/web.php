@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardCutiController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PeriodeCutiController;
@@ -16,13 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::post('role/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('role.toggleStatus');
 Route::resource('role', RoleController::class);
-Route::get('role/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('role.toggleStatus');
 Route::resource('pengguna', PenggunaController::class);
 Route::resource('periode', PeriodeCutiController::class);
 Route::get('periode/{id}/toggle-status', [PeriodeCutiController::class, 'toggleStatus'])->name('periode.toggleStatus');
 Route::resource('prodi', ProdiController::class);
 Route::get('prodi/{id}/toggle-status', [ProdiController::class, 'toggleStatus'])->name('prodi.toggleStatus');
+Route::get('/mahasiswa-cuti/dashboard', [DashboardCutiController::class, 'index'])->name('mahasiswa-cuti.dashboard');
 Route::get('mahasiswa-cuti/export', [MahasiswaCutiController::class, 'exportCsv'])->name('mahasiswa-cuti.export');
 Route::post('mahasiswa-cuti/import', [MahasiswaCutiController::class, 'importCsv'])->name('mahasiswa-cuti.import');
 Route::resource('mahasiswa-cuti', MahasiswaCutiController::class);

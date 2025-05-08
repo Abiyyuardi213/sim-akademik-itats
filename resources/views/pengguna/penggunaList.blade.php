@@ -60,7 +60,7 @@
                                                     <a href="{{ route('pengguna.show', $pengguna->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
-                                                    <a href="{{ route('pengguna.edit', $pengguna->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('pengguna.edit', $pengguna->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-pengguna-btn"

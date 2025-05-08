@@ -49,8 +49,8 @@
                         <div class="card-body">
                             <div class="row justify-content-center">
                                 <div class="col-md-4 text-center mb-3">
-                                    <img src="{{ $pengguna->profile_picture ? asset('storage/' . $pengguna->profile_picture) : asset('image/default-avatar.png') }}"
-                                         class="profile-img img-fluid rounded" alt="Foto Profil">
+                                    <img src="{{ $pengguna->profile_picture ? asset('uploads/profile/' . $pengguna->profile_picture) : asset('image/default-avatar.png') }}"
+                                        class="profile-img img-fluid rounded" alt="Foto Profil">
                                 </div>
                                 <div class="col-md-8">
                                     <table class="table table-bordered table-striped">

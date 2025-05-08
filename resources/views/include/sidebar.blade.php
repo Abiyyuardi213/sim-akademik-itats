@@ -77,7 +77,7 @@
                     </a>
                     <ul class="nav nav-treeview" style="{{ $isCuti ? 'display: block;' : '' }}">
                         <li class="nav-item">
-                            <a href="{{ url('cuti/dashboard') }}" class="nav-link">
+                            <a href="{{ url('mahasiswa-cuti/dashboard') }}" class="nav-link">
                                 <i class="fas fa-chart-bar nav-icon"></i>
                                 <p>Dashboard Rekap Cuti</p>
                             </a>
@@ -86,12 +86,6 @@
                             <a href="{{ route('periode.index') }}" class="nav-link">
                                 <i class="fas fa-calendar-alt nav-icon text-success"></i>
                                 <p>Periode Cuti</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('cuti/manajemen-cuti') }}" class="nav-link">
-                                <i class="fas fa-cogs nav-icon text-danger"></i>
-                                <p>Manajemen Cuti</p>
                             </a>
                         </li>
                         <li class="nav-item">

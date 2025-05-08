@@ -47,83 +47,81 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    @if (session('role_name') == 'Admin')
-                        <div class="col-lg-3 col-6">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{ $totalPeran }}</h3>
-                                    <p>Total Peran</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-user-shield"></i>
-                                </div>
-                                <a href="{{ url('role') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-6">
-                            <div class="small-box bg-success">
-                                <div class="inner">
-                                    <h3>{{ $totalPengguna }}</h3>
-                                    <p>Total Pengguna</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <a href="{{ url('pengguna') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                    @endif
-
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-warning">
+                        <div class="small-box bg-info">
                             <div class="inner">
-                                {{-- <h3>{{ $totalDivisi }}</h3> --}}
-                                <p>Total Divisi</p>
+                                <h3>{{ $totalPeran ?? 0 }}</h3>
+                                <p>Total Peran</p>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-sitemap"></i>
+                                <i class="fas fa-user-tag"></i>
                             </div>
-                            <a href="{{ url('divisi') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ url('role') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{ $totalPengguna ?? 0 }}</h3>
+                                <p>Total Pengguna</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <a href="{{ url('pengguna') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning text-white">
+                            <div class="inner">
+                                <h3>{{ $totalDivisi ?? 0 }}</h3>
+                                <p>Program Studi</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <a href="{{ url('divisi') }}" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-6">
                         <div class="small-box bg-primary">
                             <div class="inner">
-                                {{-- <h3>{{ $totalAnggota }}</h3> --}}
-                                <p>Total Anggota</p>
+                                <h3>Cuti</h3>
+                                <p>Periode & Manajemen Cuti</p>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-user-friends"></i>
+                                <i class="fas fa-calendar-check"></i>
                             </div>
-                            <a href="{{ url('anggota') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ url('mahasiswa-cuti/dashboard') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-purple">
+                            <div class="inner">
+                                <h3>Fasilitas</h3>
+                                <p>Fasilitas & Peminjaman</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <a href="{{ url('fasilitas') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-6">
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                {{-- <h3>{{ $totalProker }}</h3> --}}
-                                <p>Total Proker</p>
+                                <h3>{{ $totalLegalisir ?? 0 }}</h3>
+                                <p>Manajemen Legalisir</p>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-tasks"></i>
+                                <i class="fas fa-file-signature"></i>
                             </div>
-                            <a href="{{ url('proker') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-6">
-                        {{-- <div class="small-box {{ $saldoColor }}"> --}}
-                            <div class="inner">
-                                {{-- <h3>Rp{{ number_format($totalSaldo, 0, ',', '.') }}</h3> --}}
-                                <p>Total Saldo</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-wallet"></i>
-                            </div>
-                            <a href="{{ url('keuangan/dashboard') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ url('legalisir') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>
