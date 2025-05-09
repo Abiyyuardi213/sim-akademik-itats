@@ -68,16 +68,16 @@
                                                 <td>{{ $peminjaman->waktu_peminjaman }} - {{ $peminjaman->waktu_berakhir_peminjaman }}</td>
                                                 <td>
                                                     <a href="{{ route('peminjaman-ruangan.show', $peminjaman->id) }}" class="btn btn-info btn-sm">
-                                                        <i class="fas fa-eye"></i> Detail
+                                                        <i class="fas fa-eye"></i>
                                                     </a>
                                                     <a href="{{ route('peminjaman-ruangan.edit', $peminjaman->id) }}" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-edit"></i> Edit
+                                                        <i class="fas fa-edit"></i>
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-peminjaman-btn"
                                                         data-toggle="modal"
                                                         data-target="#deletePeminjamanModal"
                                                         data-peminjaman-id="{{ $peminjaman->id }}">
-                                                        <i class="fas fa-trash"></i> Hapus
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
                                                 </td>
                                             </tr>

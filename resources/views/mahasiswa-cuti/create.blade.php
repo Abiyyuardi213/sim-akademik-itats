@@ -27,82 +27,93 @@
 
             <section class="content">
                 <div class="container-fluid">
-                    <div class="card">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-plus-circle"></i> Form Tambah Data Cuti</h3>
+                        </div>
                         <div class="card-body">
                             @if(session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
                             <form action="{{ route('mahasiswa-cuti.store') }}" method="POST">
                                 @csrf
+                                <div class="row">
+                                    <!-- Kolom Kiri -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nama_mahasiswa">Nama Mahasiswa</label>
+                                            <input type="text" class="form-control @error('nama_mahasiswa') is-invalid @enderror" name="nama_mahasiswa" value="{{ old('nama_mahasiswa') }}" required>
+                                            @error('nama_mahasiswa')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="nama_mahasiswa">Nama Mahasiswa</label>
-                                    <input type="text" class="form-control @error('nama_mahasiswa') is-invalid @enderror" name="nama_mahasiswa" value="{{ old('nama_mahasiswa') }}" required>
-                                    @error('nama_mahasiswa')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                        <div class="form-group">
+                                            <label for="npm">NPM</label>
+                                            <input type="text" class="form-control @error('npm') is-invalid @enderror" name="npm" value="{{ old('npm') }}" required>
+                                            @error('npm')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="prodi_id">Program Studi</label>
+                                            <select name="prodi_id" id="prodi_id" class="form-control @error('prodi_id') is-invalid @enderror" required>
+                                                <option value="">-- Pilih Program Studi --</option>
+                                                @foreach($prodis as $prodi)
+                                                    <option value="{{ $prodi->id }}" {{ old('prodi_id') == $prodi->id ? 'selected' : '' }}>
+                                                        {{ $prodi->nama_prodi }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('prodi_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <!-- Kolom Kanan -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="periode_id">Periode Cuti</label>
+                                            <select name="periode_id" class="form-control @error('periode_id') is-invalid @enderror" required>
+                                                <option value="">-- Pilih Periode --</option>
+                                                @foreach($periodes as $periode)
+                                                    <option value="{{ $periode->id }}" {{ old('periode_id') == $periode->id ? 'selected' : '' }}>
+                                                        {{ $periode->nama_periode }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('periode_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="nomor_cuti">Nomor Surat Cuti</label>
+                                            <input type="text" class="form-control @error('nomor_cuti') is-invalid @enderror" name="nomor_cuti" value="{{ old('nomor_cuti') }}" placeholder="contoh : 01/CK/WRI/ITATS/IV/2023" required>
+                                            @error('nomor_cuti')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="surat_status">Status Surat</label>
+                                            <select class="form-control" name="surat_status">
+                                                <option value="1">Aktif</option>
+                                                <option value="0">Nonaktif</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="npm">NPM</label>
-                                    <input type="text" class="form-control @error('npm') is-invalid @enderror" name="npm" value="{{ old('npm') }}" required>
-                                    @error('npm')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="prodi_id">Program Studi</label>
-                                    <select name="prodi_id" id="prodi_id" class="form-control @error('prodi_id') is-invalid @enderror" required>
-                                        <option value="">-- Pilih Program Studi --</option>
-                                        @foreach($prodis as $prodi)
-                                            <option value="{{ $prodi->id }}" {{ old('prodi_id') == $prodi->id ? 'selected' : '' }}>
-                                                {{ $prodi->nama_prodi }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('prodi_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="periode_id">Periode Cuti</label>
-                                    <select name="periode_id" class="form-control @error('periode_id') is-invalid @enderror" required>
-                                        <option value="">-- Pilih Periode --</option>
-                                        @foreach($periodes as $periode)
-                                            <option value="{{ $periode->id }}" {{ old('periode_id') == $periode->id ? 'selected' : '' }}>
-                                                {{ $periode->nama_periode }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('periode_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="nomor_cuti">Nomor Surat Cuti</label>
-                                    <input type="text" class="form-control @error('nomor_cuti') is-invalid @enderror" name="nomor_cuti" value="{{ old('nomor_cuti') }}" placeholder="contoh : 01/CK/WRI/ITATS/IV/2023" required>
-                                    @error('nomor_cuti')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
+                                <!-- Full Width (textarea dan tombol) -->
                                 <div class="form-group">
                                     <label for="keterangan">Keterangan</label>
                                     <textarea name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" rows="3">{{ old('keterangan') }}</textarea>
                                     @error('keterangan')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="surat_status">Status Surat</label>
-                                    <select class="form-control" name="surat_status">
-                                        <option value="1">Aktif</option>
-                                        <option value="0">Nonaktif</option>
-                                    </select>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>

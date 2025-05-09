@@ -27,55 +27,66 @@
 
             <section class="content">
                 <div class="container-fluid">
-                    <div class="card">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-plus-circle"></i> Form Tambah Data Ruang Kelas</h3>
+                        </div>
                         <div class="card-body">
                             @if(session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
                             <form action="{{ route('kelas.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <div class="form-group">
-                                    <label for="gedung_id">Gedung</label>
-                                    <select name="gedung_id" id="gedung_id" class="form-control @error('gedung_id') is-invalid @enderror">
-                                        <option value="">-- Pilih Gedung --</option>
-                                        @foreach($gedungs as $gedung)
-                                            <option value="{{ $gedung->id }}" {{ old('gedung_id') == $gedung->id ? 'selected' : '' }}>
-                                                {{ $gedung->nama_gedung }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('gedung_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                <div class="row">
+                                    <!-- Kolom Kiri -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="gedung_id">Gedung</label>
+                                            <select name="gedung_id" id="gedung_id" class="form-control @error('gedung_id') is-invalid @enderror">
+                                                <option value="">-- Pilih Gedung --</option>
+                                                @foreach($gedungs as $gedung)
+                                                    <option value="{{ $gedung->id }}" {{ old('gedung_id') == $gedung->id ? 'selected' : '' }}>
+                                                        {{ $gedung->nama_gedung }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('gedung_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="nama_kelas">Nama Ruang Kelas</label>
+                                            <input type="text" class="form-control @error('nama_kelas') is-invalid @enderror" name="nama_kelas" value="{{ old('nama_kelas') }}" required>
+                                            @error('nama_kelas')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <!-- Kolom Kanan -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="kapasitas_mahasiswa">Kapasitas Kelas</label>
+                                            <input type="number" class="form-control @error('kapasitas_mahasiswa') is-invalid @enderror" name="kapasitas_mahasiswa" value="{{ old('kapasitas_mahasiswa') }}" required>
+                                            @error('kapasitas_mahasiswa')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="kelas_status">Status Ruang Kelas</label>
+                                            <select class="form-control" name="kelas_status">
+                                                <option value="1" {{ old('kelas_status') == '1' ? 'selected' : '' }}>Siap Digunakan</option>
+                                                <option value="0" {{ old('kelas_status') == '0' ? 'selected' : '' }}>Maintenance</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="nama_kelas">Nama Ruang Kelas</label>
-                                    <input type="text" class="form-control @error('nama_kelas') is-invalid @enderror" name="nama_kelas" value="{{ old('nama_kelas') }}" required>
-                                    @error('nama_kelas')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="kapasitas_mahasiswa">Kapasitas Kelas</label>
-                                    <input type="number" class="form-control @error('kapasitas_mahasiswa') is-invalid @enderror" name="kapasitas_mahasiswa" value="{{ old('kapasitas_mahasiswa') }}" required>
-                                    @error('kapasitas_mahasiswa')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="keterangan">Ketarangan Kelas</label>
-                                    <textarea class="form-control" name="keterangan"></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="kelas_status">Status Ruang Kelas</label>
-                                    <select class="form-control" name="kelas_status">
-                                        <option value="1">Siap Digunakan</option>
-                                        <option value="0">Maintenance</option>
-                                    </select>
+                                    <label for="keterangan">Keterangan Kelas</label>
+                                    <textarea class="form-control" name="keterangan">{{ old('keterangan') }}</textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>

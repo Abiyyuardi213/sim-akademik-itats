@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gedung;
+use App\Models\PeminjamanRuangan;
 use Illuminate\Http\Request;
 
 class GedungController extends Controller
@@ -61,9 +62,19 @@ class GedungController extends Controller
 
     public function toggleStatus($id)
     {
-        $gedung = Gedung::findOrFail($id);
-        $gedung->toggleStatus();
+        try {
+            $gedung = Gedung::findOrFail($id);
+            $gedung->toggleStatus();
 
-        return redirect()->route('gedung.index')->with('success', 'Status gedung diperbarui.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Status gedung berhasil diperbarui.'
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui status.'
+            ], 500);
+        }
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Mahasiswa Cuti</title>
+    <title>Detail Peminjaman Ruangan</title>
     <link rel="icon" href="{{ asset('assets/itats-icon.jpg') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -30,7 +30,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Detail Informasi Mahasiswa Cuti</h1>
+                            <h1 class="m-0">Detail Informasi Peminjaman Ruangan</h1>
                         </div>
                     </div>
                 </div>
@@ -42,48 +42,36 @@
                         <div class="col-lg-8 col-md-10 col-sm-12">
                             <div class="card shadow-lg">
                                 <div class="card-header bg-primary text-white">
-                                    <h3 class="card-title mb-0">Informasi Cuti Mahasiswa</h3>
+                                    <h3 class="card-title mb-0">Informasi Peminjaman Ruangan</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped">
                                             <tr>
-                                                <th width="40%">Nama Mahasiswa</th>
-                                                <td>{{ $mahasiswa->nama_mahasiswa }}</td>
+                                                <th width="40%">Tanggal Peminjaman</th>
+                                                <td>{{ $peminjaman->tanggal_peminjaman }}</td>
                                             </tr>
                                             <tr>
-                                                <th>NPM</th>
-                                                <td>{{ $mahasiswa->npm }}</td>
+                                                <th>Penanggung Jawab Peminjaman</th>
+                                                <td>{{ $peminjaman->prodi ? $peminjaman->prodi->nama_prodi : '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <th>Program Studi</th>
-                                                <td>{{ $mahasiswa->prodi ? $mahasiswa->prodi->nama_prodi : '-' }}</td>
+                                                <th>Ruangan</th>
+                                                <td>{{ $peminjaman->kelas ? $peminjaman->kelas->nama_kelas : '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <th>Periode Cuti</th>
-                                                <td>{{ $mahasiswa->periode ? $mahasiswa->periode->nama_periode : '-' }}</td>
+                                                <th>Keperluan Peminjaman</th>
+                                                <td>{{ $peminjaman->keperluan_peminjaman }}</td>
                                             </tr>
                                             <tr>
-                                                <th>No. Surat Cuti</th>
-                                                <td>{{ $mahasiswa->nomor_cuti }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Keterangan</th>
-                                                <td>{{ $mahasiswa->keterangan }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Status Cuti Mahasiswa</th>
-                                                <td>{{ $mahasiswa->surat_status ? 'Aktif' : 'Tidak Aktif' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Data dibuat pada</th>
-                                                <td>{{ $mahasiswa->created_at }}</td>
+                                                <th>Waktu Peminjaman</th>
+                                                <td>{{ $peminjaman->waktu_peminjaman }} - {{ $peminjaman->waktu_berakhir_peminjaman }}</td>
                                             </tr>
                                         </table>
                                     </div>
                                 </div>
                                 <div class="card-footer text-right">
-                                    <a href="{{ route('mahasiswa-cuti.index') }}" class="btn btn-secondary">
+                                    <a href="{{ route('peminjaman-ruangan.index') }}" class="btn btn-secondary">
                                         <i class="fas fa-arrow-left"></i> Kembali
                                     </a>
                                 </div>
@@ -104,7 +92,7 @@
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('[data-widget="treeview"]').Treeview('init');
+            $('.nav-sidebar').Treeview('init');
         });
     </script>
 </body>

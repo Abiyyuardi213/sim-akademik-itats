@@ -76,11 +76,25 @@ class KelasController extends Controller
         return view('kelas.show', compact('kelas'));
     }
 
-    public function destroy($id)
+    public function toggleStatus(Request $request, $id)
     {
-        $kelas = Kelas::findOrFail($id);
-        $kelas->deleteKelas();
+        try {
+            $kelas = Kelas::findOrFail($id);
 
-        return redirect()->route('kelas.index')->with('success', 'Data kelas berhasil dihapus.');
+            // Ubah berdasarkan nilai yang dikirim dari checkbox
+            $kelas->kelas_status = $request->input('kelas_status', !$kelas->kelas_status);
+            $kelas->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status kelas berhasil diperbarui.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui status.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

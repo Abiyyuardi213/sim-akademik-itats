@@ -108,7 +108,7 @@
                             <div class="icon">
                                 <i class="fas fa-building"></i>
                             </div>
-                            <a href="{{ url('fasilitas') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ url('fasilitas/dashboard') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 

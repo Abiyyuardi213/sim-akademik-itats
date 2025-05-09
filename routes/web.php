@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardCutiController;
+use App\Http\Controllers\DashboardFasilitasController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PeriodeCutiController;
@@ -33,8 +34,9 @@ Route::post('legalisir/import', [LegalisirController::class, 'importCsv'])->name
 Route::get('legalisir/export', [LegalisirController::class, 'exportCsv'])->name('legalisir.export');
 Route::resource('legalisir', LegalisirController::class);
 Route::post('legalisir/import/confirm', [LegalisirController::class, 'importConfirm'])->name('legalisir.import.confirm');
+Route::post('gedung/{id}/toggle-status', [GedungController::class, 'toggleStatus'])->name('gedung.toggleStatus');
 Route::resource('gedung', GedungController::class);
-Route::get('gedung/{id}/toggle-status', [GedungController::class, 'toggleStatus'])->name('gedung.toggleStatus');
+Route::post('kelas/{id}/toggle-status', [KelasController::class, 'toggleStatus'])->name('kelas.toggleStatus');
 Route::resource('kelas', KelasController::class);
-Route::get('kelas/{id}/toggle-status', [KelasController::class, 'toggleStatus'])->name('kelas.toggleStatus');
 Route::resource('peminjaman-ruangan', PeminjamanRuanganController::class);
+Route::get('fasilitas/dashboard', [DashboardFasilitasController::class, 'index'])->name('fasilitas.dashboard');

@@ -27,7 +27,10 @@
 
             <section class="content">
                 <div class="container-fluid">
-                    <div class="card">
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Data Gedung</h3>
+                        </div>
                         <div class="card-body">
                             <form action="{{ route('gedung.update', $gedung->id) }}" method="POST">
                                 @csrf

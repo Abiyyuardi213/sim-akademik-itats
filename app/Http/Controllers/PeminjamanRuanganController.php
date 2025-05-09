@@ -78,7 +78,7 @@ class PeminjamanRuanganController extends Controller
     public function show($id)
     {
         $peminjaman = PeminjamanRuangan::with(['kelas', 'prodi'])->findOrFail($id);
-        return view('peminjaman-ruangan.index', compact('peminjaman'));
+        return view('peminjaman-ruangan.show', compact('peminjaman'));
     }
 
     public function destroy($id)
