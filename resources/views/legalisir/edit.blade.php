@@ -27,50 +27,83 @@
 
             <section class="content">
                 <div class="container-fluid">
-                    <div class="card">
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Data Legalisir</h3>
+                        </div>
                         <div class="card-body">
                             <form action="{{ route('legalisir.update', $legalisir->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
-                                <div class="form-group">
-                                    <label for="tanggal">Tanggal</label>
-                                    <input type="date" class="form-control" name="tanggal" value="{{ old('tanggal', $legalisir->tanggal) }}" required>
-                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tanggal">Tanggal</label>
+                                            <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal" value="{{ old('tanggal', $legalisir->tanggal) }}" required>
+                                            @error('tanggal')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="no_legalisir">No. Legalisir</label>
-                                    <input type="text" class="form-control" name="no_legalisir" value="{{ old('no_legalisir', $legalisir->no_legalisir) }}" required>
-                                </div>
+                                        <div class="form-group">
+                                            <label for="no_legalisir">No. Legalisir</label>
+                                            <input type="text" class="form-control @error('no_legalisir') is-invalid @enderror" name="no_legalisir" value="{{ old('no_legalisir', $legalisir->no_legalisir) }}" required>
+                                            @error('no_legalisir')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="nama">Nama</label>
-                                    <input type="text" class="form-control" name="nama" value="{{ old('nama', $legalisir->nama) }}" required>
-                                </div>
+                                        <div class="form-group">
+                                            <label for="nama">Nama</label>
+                                            <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ old('nama', $legalisir->nama) }}" required>
+                                            @error('nama')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="npm">NPM</label>
-                                    <input type="text" class="form-control" name="npm" value="{{ old('npm', $legalisir->npm) }}" required>
-                                </div>
+                                        <div class="form-group">
+                                            <label for="npm">NPM</label>
+                                            <input type="text" class="form-control @error('npm') is-invalid @enderror" name="npm" value="{{ old('npm', $legalisir->npm) }}" required>
+                                            @error('npm')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="jumlah_ijazah">Jumlah Ijazah</label>
-                                    <input type="text" class="form-control" name="jumlah_ijazah" value="{{ old('jumlah_ijazah', $legalisir->jumlah_ijazah) }}">
-                                </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="jumlah_ijazah">Jumlah Ijazah</label>
+                                            <input type="text" class="form-control @error('jumlah_ijazah') is-invalid @enderror" name="jumlah_ijazah" value="{{ old('jumlah_ijazah', $legalisir->jumlah_ijazah) }}">
+                                            @error('jumlah_ijazah')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="jumlah_transkip">Jumlah Transkip</label>
-                                    <input type="text" class="form-control" name="jumlah_transkip" value="{{ old('jumlah_transkip', $legalisir->jumlah_transkip) }}">
-                                </div>
+                                        <div class="form-group">
+                                            <label for="jumlah_transkip">Jumlah Transkip</label>
+                                            <input type="text" class="form-control @error('jumlah_transkip') is-invalid @enderror" name="jumlah_transkip" value="{{ old('jumlah_transkip', $legalisir->jumlah_transkip) }}">
+                                            @error('jumlah_transkip')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="jumlah_lain">Jumlah Lain</label>
-                                    <input type="text" class="form-control" name="jumlah_lain" value="{{ old('jumlah_lain', $legalisir->jumlah_lain) }}">
-                                </div>
+                                        <div class="form-group">
+                                            <label for="jumlah_lain">Jumlah Lain</label>
+                                            <input type="text" class="form-control @error('jumlah_lain') is-invalid @enderror" name="jumlah_lain" value="{{ old('jumlah_lain', $legalisir->jumlah_lain) }}">
+                                            @error('jumlah_lain')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="jumlah_total">Jumlah Total</label>
-                                    <input type="text" class="form-control" name="jumlah_total" value="{{ old('jumlah_total', $legalisir->jumlah_total) }}" required>
+                                        <div class="form-group">
+                                            <label for="jumlah_total">Jumlah Total</label>
+                                            <input type="text" class="form-control @error('jumlah_total') is-invalid @enderror" name="jumlah_total" value="{{ old('jumlah_total', $legalisir->jumlah_total) }}" required>
+                                            @error('jumlah_total')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>

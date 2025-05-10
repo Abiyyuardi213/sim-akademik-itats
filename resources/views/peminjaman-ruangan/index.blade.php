@@ -66,7 +66,7 @@
                                                 <td>{{ $peminjaman->prodi->nama_prodi ?? '-' }}</td>
                                                 <td>{{ $peminjaman->keperluan_peminjaman }}</td>
                                                 <td>{{ $peminjaman->waktu_peminjaman }} - {{ $peminjaman->waktu_berakhir_peminjaman }}</td>
-                                                <td>
+                                                <td class="text-center">
                                                     <a href="{{ route('peminjaman-ruangan.show', $peminjaman->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i>
                                                     </a>

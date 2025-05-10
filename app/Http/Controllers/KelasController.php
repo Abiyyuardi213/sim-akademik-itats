@@ -81,7 +81,6 @@ class KelasController extends Controller
         try {
             $kelas = Kelas::findOrFail($id);
 
-            // Ubah berdasarkan nilai yang dikirim dari checkbox
             $kelas->kelas_status = $request->input('kelas_status', !$kelas->kelas_status);
             $kelas->save();
 

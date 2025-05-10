@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class RoleSeeder extends Seeder
 {
@@ -13,7 +13,8 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::insert([
+        DB::table('role')->insert([
+            'id' => (string) Str::uuid(), // isi ID manual karena UUID
             'role_name' => 'admin',
             'role_description' => 'pengelola',
             'role_status' => 1,

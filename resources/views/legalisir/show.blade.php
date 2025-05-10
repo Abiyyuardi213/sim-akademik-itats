@@ -37,51 +37,55 @@
             </div>
 
             <section class="content">
-                <div class="container d-flex justify-content-center">
-                    <div class="card shadow-lg" style="width: 60%;">
-                        <div class="card-header bg-primary text-white">
-                            <h3 class="card-title mb-0">Informasi Detail Legalisir</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered table-striped">
-                                <tr>
-                                    <th width="40%">Tanggal Legalisir</th>
-                                    <td>{{ $legalisir->tanggal }}</td>
-                                </tr>
-                                <tr>
-                                    <th>No. Legalisir</th>
-                                    <td>{{ $legalisir->no_legalisir }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Nama</th>
-                                    <td>{{ $legalisir->nama }}</td>
-                                </tr>
-                                <tr>
-                                    <th>NPM</th>
-                                    <td>{{ $legalisir->npm }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Jumlah Ijazah</th>
-                                    <td>{{ $legalisir->jumlah_ijazah }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Jumlah Transkip</th>
-                                    <td>{{ $legalisir->jumlah_transkip }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Jumlah Lain-lain</th>
-                                    <td>{{ $legalisir->jumlah_lain }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Jumlah Total</th>
-                                    <td>{{ $legalisir->jumlah_total }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="card-footer text-right">
-                            <a href="{{ route('legalisir.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Kembali
-                            </a>
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-8 col-lg-6">
+                            <div class="card shadow-lg">
+                                <div class="card-header bg-primary text-white">
+                                    <h3 class="card-title mb-0">Informasi Detail Legalisir</h3>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-striped">
+                                        <tr>
+                                            <th width="40%">Tanggal Legalisir</th>
+                                            <td>{{ $legalisir->tanggal }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>No. Legalisir</th>
+                                            <td>{{ $legalisir->no_legalisir }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <td>{{ $legalisir->nama }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>NPM</th>
+                                            <td>{{ $legalisir->npm }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Ijazah</th>
+                                            <td>{{ $legalisir->jumlah_ijazah }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Transkip</th>
+                                            <td>{{ $legalisir->jumlah_transkip }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Lain-lain</th>
+                                            <td>{{ $legalisir->jumlah_lain }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Total</th>
+                                            <td>{{ $legalisir->jumlah_total }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="card-footer text-right">
+                                    <a href="{{ route('legalisir.index') }}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> Kembali
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

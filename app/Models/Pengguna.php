@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable; // Gunakan Authenticatable dari Laravel
 use Illuminate\Database\Eloquent\Model;
-use NunoMaduro\Collision\Adapters\Phpunit\State;
 use Illuminate\Support\Str;
 
-class Pengguna extends Model
+class Pengguna extends Authenticatable // Extends Authenticatable
 {
     protected $table = 'pengguna';
     protected $keyType = 'string';
     public $incrementing = false;
+
     protected $fillable = [
         'nama_pengguna',
         'username',
@@ -63,5 +64,10 @@ class Pengguna extends Model
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function getAuthIdentifierName()
+    {
+        return 'username';
     }
 }

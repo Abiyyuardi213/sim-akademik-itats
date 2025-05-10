@@ -27,75 +27,84 @@
 
             <section class="content">
                 <div class="container-fluid">
-                    <div class="card">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-plus-circle"></i> Form Tambah Data Legalisir</h3>
+                        </div>
                         <div class="card-body">
                             @if(session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
                             <form action="{{ route('legalisir.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <div class="form-group">
-                                    <label for="nama_periode">Tanggal Legalisir</label>
-                                    <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal" value="{{ old('tanggal') }}" required>
-                                    @error('tanggal')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tanggal">Tanggal Legalisir</label>
+                                            <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal" value="{{ old('tanggal') }}" required>
+                                            @error('tanggal')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="no_legalisir">No. Legalisir</label>
-                                    <input type="text" class="form-control @error('no_legalisir') is-invalid @enderror" name="no_legalisir" value="{{ old('no_legalisir') }}" placeholder="contoh : 01/LGR/FTETI/IV/2023" required>
-                                    @error('no_legalisir')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                        <div class="form-group">
+                                            <label for="no_legalisir">No. Legalisir</label>
+                                            <input type="text" class="form-control @error('no_legalisir') is-invalid @enderror" name="no_legalisir" value="{{ old('no_legalisir') }}" placeholder="contoh : 01/LGR/FTETI/IV/2023" required>
+                                            @error('no_legalisir')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="akhir_cuti">Nama</label>
-                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ old('nama') }}" required>
-                                    @error('nama')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                        <div class="form-group">
+                                            <label for="nama">Nama</label>
+                                            <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ old('nama') }}" required>
+                                            @error('nama')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="npm">NPM</label>
-                                    <input type="text" class="form-control @error('npm') is-invalid @enderror" name="npm" value="{{ old('npm') }}" required>
-                                    @error('npm')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                        <div class="form-group">
+                                            <label for="npm">NPM</label>
+                                            <input type="text" class="form-control @error('npm') is-invalid @enderror" name="npm" value="{{ old('npm') }}" required>
+                                            @error('npm')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="jumlah_ijazah">Jumlah Ijazah</label>
-                                    <input type="text" class="form-control @error('jumlah_ijazah') is-invalid @enderror" name="jumlah_ijazah" value="{{ old('jumlah_ijazah') }}">
-                                    @error('jumlah_ijazah')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="jumlah_ijazah">Jumlah Ijazah</label>
+                                            <input type="text" class="form-control @error('jumlah_ijazah') is-invalid @enderror" name="jumlah_ijazah" value="{{ old('jumlah_ijazah') }}">
+                                            @error('jumlah_ijazah')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="jumlah_transkip">Jumlah Transkip</label>
-                                    <input type="text" class="form-control @error('jumlah_transkip') is-invalid @enderror" name="jumlah_transkip" value="{{ old('jumlah_transkip') }}">
-                                    @error('jumlah_transkip')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                        <div class="form-group">
+                                            <label for="jumlah_transkip">Jumlah Transkip</label>
+                                            <input type="text" class="form-control @error('jumlah_transkip') is-invalid @enderror" name="jumlah_transkip" value="{{ old('jumlah_transkip') }}">
+                                            @error('jumlah_transkip')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="jumlah_lain">Jumlah Lain Lain</label>
-                                    <input type="text" class="form-control @error('jumlah_lain') is-invalid @enderror" name="jumlah_lain" value="{{ old('jumlah_lain') }}">
-                                    @error('jumlah_lain')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                        <div class="form-group">
+                                            <label for="jumlah_lain">Jumlah Lain Lain</label>
+                                            <input type="text" class="form-control @error('jumlah_lain') is-invalid @enderror" name="jumlah_lain" value="{{ old('jumlah_lain') }}">
+                                            @error('jumlah_lain')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="jumlah_total">Jumlah Keseluruhan</label>
-                                    <input type="text" class="form-control @error('jumlah_total') is-invalid @enderror" name="jumlah_total" value="{{ old('jumlah_total') }}">
-                                    @error('jumlah_total')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                        <div class="form-group">
+                                            <label for="jumlah_total">Jumlah Keseluruhan</label>
+                                            <input type="text" class="form-control @error('jumlah_total') is-invalid @enderror" name="jumlah_total" value="{{ old('jumlah_total') }}">
+                                            @error('jumlah_total')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
