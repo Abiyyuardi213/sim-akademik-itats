@@ -23,19 +23,21 @@ Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-// Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
-    Route::resource('user', UserController::class);
+    Route::middleware('checkRole:admin,dosen')->group(function () {
+        Route::resource('user', UserController::class);
 
-    Route::post('role/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('role.toggleStatus');
-    Route::resource('role', RoleController::class);
+        Route::post('role/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('role.toggleStatus');
+        Route::resource('role', RoleController::class);
+
+        Route::post('prodi/{id}/toggle-status', [ProdiController::class, 'toggleStatus'])->name('prodi.toggleStatus');
+        Route::resource('prodi', ProdiController::class);
+    });
 
     Route::post('periode/{id}/toggle-status', [PeriodeCutiController::class, 'toggleStatus'])->name('periode.toggleStatus');
     Route::resource('periode', PeriodeCutiController::class);
-
-    Route::post('prodi/{id}/toggle-status', [ProdiController::class, 'toggleStatus'])->name('prodi.toggleStatus');
-    Route::resource('prodi', ProdiController::class);
 
     Route::get('/mahasiswa-cuti/dashboard', [DashboardCutiController::class, 'index'])->name('mahasiswa-cuti.dashboard');
     Route::get('mahasiswa-cuti/export', [MahasiswaCutiController::class, 'exportCsv'])->name('mahasiswa-cuti.export');
@@ -57,4 +59,4 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::resource('peminjaman-ruangan', PeminjamanRuanganController::class);
 
     Route::get('fasilitas/dashboard', [DashboardFasilitasController::class, 'index'])->name('fasilitas.dashboard');
-// });
+});

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademik WR 1 - Dashboard</title>
-    <link rel="icon" href="{{ asset('assets/itats-icon.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
@@ -47,6 +47,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
+                    @can('akses-admin-dosen')
                     <div class="col-lg-3 col-6">
                         <div class="small-box bg-info">
                             <div class="inner">
@@ -85,6 +86,7 @@
                             <a href="{{ url('divisi') }}" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
+                    @endcan
 
                     <div class="col-lg-3 col-6">
                         <div class="small-box bg-primary">

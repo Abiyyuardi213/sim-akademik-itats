@@ -17,18 +17,18 @@
         <!-- User Info -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
             <div class="image">
-                <img src="{{ asset('uploads/profile_pictures/' . session('profile_picture', 'default.png')) }}"
-                     class="img-circle elevation-2"
-                     alt="User Image"
-                     style="width: 45px; height: 45px; object-fit: cover; border: 2px solid white;">
+                <img src="{{ asset('uploads/profile/' . (Auth::user()->profile_picture ?? 'default.png')) }}"
+                    class="img-circle elevation-2"
+                    alt="User Image"
+                    style="width: 45px; height: 45px; object-fit: cover; border: 2px solid white;">
             </div>
             <div class="info">
                 <a href="#" class="d-block text-white font-weight-bold">
-                    {{ session('nama_user') }}
+                    {{ Auth::user()->username }}
                 </a>
                 <span class="badge badge-success">Online</span>
                 <span class="d-block" style="color: #f39c12; font-size: 14px; font-weight: 600;">
-                    {{ session('role_name', 'Unknown') }}
+                    {{ Auth::user()->role->role_name ?? 'Unknown' }}
                 </span>
             </div>
         </div>
@@ -43,6 +43,7 @@
                     </a>
                 </li>
 
+                @can('akses-admin-dosen')
                 <li class="nav-item">
                     <a href="{{ route('role.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-user-shield"></i>
@@ -63,6 +64,7 @@
                         <p>Program Studi</p>
                     </a>
                 </li>
+                @endcan
 
                 @php
                     $isCuti = request()->is('cuti*');

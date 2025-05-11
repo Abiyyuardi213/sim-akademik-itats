@@ -14,10 +14,24 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         DB::table('role')->insert([
-            'id' => (string) Str::uuid(), // isi ID manual karena UUID
-            'role_name' => 'admin',
-            'role_description' => 'pengelola',
-            'role_status' => 1,
+            [
+                'id' => (string) Str::uuid(),
+                'role_name' => 'admin',
+                'role_description' => 'pengelola',
+                'role_status' => 1,
+            ],
+            [
+                'id' => (string) Str::uuid(),
+                'role_name' => 'dosen',
+                'role_description' => 'pengajar',
+                'role_status' => 1,
+            ],
+            [
+                'id' => (string) Str::uuid(),
+                'role_name' => 'CSR',
+                'role_description' => 'Tata Usaha Bag Akademik',
+                'role_status' => 1,
+            ],
         ]);
     }
 }
