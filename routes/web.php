@@ -13,6 +13,7 @@ use App\Http\Controllers\LegalisirController;
 use App\Http\Controllers\GedungController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\PeminjamanRuanganController;
+use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -59,4 +60,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('peminjaman-ruangan', PeminjamanRuanganController::class);
 
     Route::get('fasilitas/dashboard', [DashboardFasilitasController::class, 'index'])->name('fasilitas.dashboard');
+
+    Route::resource('pengumuman', PengumumanController::class);
 });
