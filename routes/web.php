@@ -16,9 +16,7 @@ use App\Http\Controllers\PeminjamanRuanganController;
 use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthController::class, 'login'])->name('login');
 
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);

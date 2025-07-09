@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'no_telepon'      => '081234567890',
                 'password'        => Hash::make('admin123'),
                 'profile_picture' => null,
-                'role_id'         => '5126bfd2-7eb2-4654-8d09-fd4a9a8645dc', // contoh UUID
+                'role_id'         => '5126bfd2-7eb2-4654-8d09-fd4a9a8645dc',
             ],
             [
                 'id'              => (string) Str::uuid(),
