@@ -22,6 +22,7 @@ class ProdiController extends Controller
     {
         $request->validate([
             'nama_prodi' => 'required|string|max:255',
+            'kode_prodi' => 'nullable|string|max:50',
             'prodi_description' => 'nullable|string',
             'prodi_status' => 'required|boolean',
         ]);
@@ -41,6 +42,7 @@ class ProdiController extends Controller
     {
         $request->validate([
             'nama_prodi' => 'required|string|max:255',
+            'kode_prodi' => 'nullable|string|max:50',
             'prodi_description' => 'nullable|string',
             'prodi_status' => 'required|boolean',
         ]);

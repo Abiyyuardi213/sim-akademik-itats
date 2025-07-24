@@ -40,6 +40,10 @@
                                     <input type="text" class="form-control" name="nama_prodi" value="{{ old('nama_prodi', $prodi->nama_prodi) }}" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="kode_prodi">Kode Program Studi</label>
+                                    <input type="text" class="form-control" name="kode_prodi" value="{{ old('kode_prodi', $prodi->kode_prodi) }}" required>
+                                </div>
+                                <div class="form-group">
                                     <label for="prodi_description">Deskripsi Program Studi</label>
                                     <textarea class="form-control" name="prodi_description" required>{{ old('prodi_description', $prodi->prodi_description) }}</textarea>
                                 </div>

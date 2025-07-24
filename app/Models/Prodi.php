@@ -13,6 +13,7 @@ class Prodi extends Model
 
     protected $fillable = [
         'nama_prodi',
+        'kode_prodi',
         'prodi_description',
         'prodi_status',
     ];
@@ -30,6 +31,7 @@ class Prodi extends Model
     {
         return self::create([
             'nama_prodi' => $data['nama_prodi'],
+            'kode_prodi' => $data['kode_prodi'],
             'prodi_description' => $data['prodi_description'] ?? null,
             'prodi_status' => $data['prodi_status'] ?? true,
         ]);
@@ -39,6 +41,7 @@ class Prodi extends Model
     {
         $this->update([
             'nama_prodi' => $data['nama_prodi'],
+            'kode_prodi' => $data['kode_prodi'],
             'prodi_description' => $data['prodi_description'] ?? $this->prodi_description,
             'prodi_status' => $data['prodi_status'] ?? $this->prodi_status,
         ]);

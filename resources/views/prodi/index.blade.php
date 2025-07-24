@@ -79,6 +79,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>ID</th>
+                                            <th>Kode Prodi</th>
                                             <th>Nama Program Studi</th>
                                             <th>Deskripsi</th>
                                             <th>Status Prodi</th>
@@ -95,6 +96,7 @@
                                                         <i class="fas fa-copy"></i>
                                                     </button>
                                                 </td>
+                                                <td>{{ $prodi->kode_prodi }}</td>
                                                 <td>{{ $prodi->nama_prodi }}</td>
                                                 <td>{{ $prodi->prodi_description }}</td>
                                                 <td class="text-center">

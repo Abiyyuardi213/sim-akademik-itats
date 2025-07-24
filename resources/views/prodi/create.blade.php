@@ -42,6 +42,10 @@
                                     <input type="text" class="form-control" name="nama_prodi" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="kode_prodi">Kode Program Studi</label>
+                                    <input type="text" class="form-control" name="kode_prodi" required>
+                                </div>
+                                <div class="form-group">
                                     <label for="prodi_description">Deskripsi Program Studi</label>
                                     <textarea class="form-control" name="prodi_description" required></textarea>
                                 </div>
