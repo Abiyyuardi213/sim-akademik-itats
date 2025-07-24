@@ -84,7 +84,7 @@
                                                 @foreach($prodis as $prodi)
                                                     <option value="{{ $prodi->id }}"
                                                         {{ old('prodi_id', $peminjaman->prodi_id) == $prodi->id ? 'selected' : '' }}>
-                                                        {{ $prodi->nama_prodi }}
+                                                        {{ $prodi->kode_prodi ?? '--' }} | {{ strtoupper($prodi->nama_prodi) }}
                                                     </option>
                                                 @endforeach
                                             </select>

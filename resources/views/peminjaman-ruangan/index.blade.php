@@ -54,6 +54,7 @@
                                             <th>Ruangan</th>
                                             <th>Peminjam</th>
                                             <th>Waktu Peminjaman</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -66,6 +67,21 @@
                                                 <td>{{ $peminjaman->kelas->nama_kelas ?? '-' }}</td>
                                                 <td>{{ $peminjaman->prodi->nama_prodi ?? '-' }}</td>
                                                 <td>{{ $peminjaman->waktu_peminjaman }} - {{ $peminjaman->waktu_berakhir_peminjaman }}</td>
+                                                <td>
+                                                    @php
+                                                        $today = \Carbon\Carbon::today();
+                                                        $start = \Carbon\Carbon::parse($peminjaman->tanggal_peminjaman);
+                                                        $end = \Carbon\Carbon::parse($peminjaman->tanggal_berakhir_peminjaman);
+                                                    @endphp
+
+                                                    @if ($today->lt($start))
+                                                        <span class="badge badge-warning">Belum Aktif</span>
+                                                    @elseif ($today->between($start, $end))
+                                                        <span class="badge badge-success">Aktif</span>
+                                                    @else
+                                                        <span class="badge badge-secondary">Selesai</span>
+                                                    @endif
+                                                </td>
                                                 <td class="text-center">
                                                     <a href="{{ route('peminjaman-ruangan.show', $peminjaman->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i>

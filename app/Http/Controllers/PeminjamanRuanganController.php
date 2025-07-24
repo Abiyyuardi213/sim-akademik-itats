@@ -18,7 +18,7 @@ class PeminjamanRuanganController extends Controller
     public function create()
     {
         $kelass = Kelas::orderBy('nama_kelas', 'asc')->get(); // urut berdasarkan nama
-        $prodis = Prodi::all();
+        $prodis = Prodi::orderBy('kode_prodi', 'asc')->get();
         return view('peminjaman-ruangan.create', compact('kelass', 'prodis'));
     }
 
@@ -44,7 +44,7 @@ class PeminjamanRuanganController extends Controller
     {
         $peminjaman = PeminjamanRuangan::findOrFail($id);
         $kelass = Kelas::orderBy('nama_kelas', 'asc')->get(); // urut juga saat edit
-        $prodis = Prodi::all();
+        $prodis = Prodi::orderBy('kode_prodi', 'asc')->get();
         return view('peminjaman-ruangan.edit', compact('peminjaman', 'kelass', 'prodis'));
     }
 

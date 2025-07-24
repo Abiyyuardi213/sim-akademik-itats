@@ -77,8 +77,8 @@
                                             <select name="prodi_id" id="prodi_id" class="form-control @error('prodi_id') is-invalid @enderror" required>
                                                 <option value="">-- Pilih Program Studi --</option>
                                                 @foreach($prodis as $prodi)
-                                                    <option value="{{ $prodi->id }}" {{ old('prodi_id') == $prodi->id ? 'selected' : '' }}>
-                                                        {{ $prodi->nama_prodi }}
+                                                    <option value="{{ $prodi->id }}" {{ old('prodi_id', optional($peminjaman ?? null)) == $prodi->id ? 'selected' : '' }}>
+                                                        {{ $prodi->kode_prodi ?? '--' }} | {{ strtoupper($prodi->nama_prodi) }}
                                                     </option>
                                                 @endforeach
                                             </select>
