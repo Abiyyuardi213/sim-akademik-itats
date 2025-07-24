@@ -50,6 +50,16 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="tanggal_berakhir_peminjaman">Tanggal Berakhir Peminjaman Ruangan</label>
+                                            <input type="date" class="form-control @error('tanggal_berakhir_peminjaman') is-invalid @enderror"
+                                                name="tanggal_berakhir_peminjaman"
+                                                value="{{ old('tanggal_berakhir_peminjaman', $peminjaman->tanggal_berakhir_peminjaman) }}" required>
+                                            @error('tanggal_berakhir_peminjaman')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="kelas_id">Ruang Kelas</label>
                                             <select name="kelas_id" id="kelas_id"
                                                 class="form-control @error('kelas_id') is-invalid @enderror" required>

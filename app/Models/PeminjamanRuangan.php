@@ -12,6 +12,7 @@ class PeminjamanRuangan extends Model
     public $incrementing = false;
     protected $fillable = [
         'tanggal_peminjaman',
+        'tanggal_berakhir_peminjaman',
         'waktu_peminjaman',
         'waktu_berakhir_peminjaman',
         'kelas_id',
@@ -32,6 +33,7 @@ class PeminjamanRuangan extends Model
     {
         return self::create([
             'tanggal_peminjaman' => $data['tanggal_peminjaman'],
+            'tanggal_berakhir_peminjaman' => $data['tanggal_berakhir_peminjaman'],
             'waktu_peminjaman' => $data['waktu_peminjaman'],
             'waktu_berakhir_peminjaman' => $data['waktu_berakhir_peminjaman'],
             'kelas_id' => $data['kelas_id'],
@@ -44,6 +46,7 @@ class PeminjamanRuangan extends Model
     {
         return $this->update([
             'tanggal_peminjaman' => $data['tanggal_peminjaman'] ?? $this->tanggal_peminjaman,
+            'tanggal_berakhir_peminjaman' => $data['tanggal_berakhir_peminjaman'] ?? $this->tanggal_berakhir_peminjaman,
             'waktu_peminjaman' => $data['waktu_peminjaman'] ?? $this->waktu_peminjaman,
             'waktu_berakhir_peminjaman' => $data['waktu_berakhir_peminjaman'] ?? $this->waktu_berakhir_peminjaman,
             'kelas_id' => $data['kelas_id'] ?? $this->kelas_id,

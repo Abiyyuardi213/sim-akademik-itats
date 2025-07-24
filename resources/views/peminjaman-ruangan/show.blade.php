@@ -52,6 +52,10 @@
                                                 <td>{{ $peminjaman->tanggal_peminjaman }}</td>
                                             </tr>
                                             <tr>
+                                                <th width="40%">Tanggal Berakhir Peminjaman</th>
+                                                <td>{{ $peminjaman->tanggal_berakhir_peminjaman }}</td>
+                                            </tr>
+                                            <tr>
                                                 <th>Penanggung Jawab Peminjaman</th>
                                                 <td>{{ $peminjaman->prodi ? $peminjaman->prodi->nama_prodi : '-' }}</td>
                                             </tr>

@@ -49,10 +49,10 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Tanggal</th>
+                                            <th>Tanggal Mulai</th>
+                                            <th>Tanggal Akhir</th>
                                             <th>Ruangan</th>
                                             <th>Peminjam</th>
-                                            <th>Keperluan</th>
                                             <th>Waktu Peminjaman</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -62,9 +62,9 @@
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $peminjaman->tanggal_peminjaman }}</td>
+                                                <td>{{ $peminjaman->tanggal_berakhir_peminjaman }}</td>
                                                 <td>{{ $peminjaman->kelas->nama_kelas ?? '-' }}</td>
                                                 <td>{{ $peminjaman->prodi->nama_prodi ?? '-' }}</td>
-                                                <td>{{ $peminjaman->keperluan_peminjaman }}</td>
                                                 <td>{{ $peminjaman->waktu_peminjaman }} - {{ $peminjaman->waktu_berakhir_peminjaman }}</td>
                                                 <td class="text-center">
                                                     <a href="{{ route('peminjaman-ruangan.show', $peminjaman->id) }}" class="btn btn-info btn-sm">

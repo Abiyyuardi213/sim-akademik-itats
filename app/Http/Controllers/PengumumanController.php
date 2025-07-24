@@ -11,7 +11,7 @@ class PengumumanController extends Controller
 {
     public function index()
     {
-        $pengumumans = Pengumuman::with('author')->orderBy('created_at', 'desc')->get();
+        $pengumumans = Pengumuman::with('author')->orderBy('tanggal_dibuat', 'desc')->get();
         return view('pengumuman.index', compact('pengumumans'));
     }
 

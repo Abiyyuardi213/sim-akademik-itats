@@ -17,7 +17,7 @@ class PeminjamanRuanganController extends Controller
 
     public function create()
     {
-        $kelass = Kelas::all();
+        $kelass = Kelas::orderBy('nama_kelas', 'asc')->get(); // urut berdasarkan nama
         $prodis = Prodi::all();
         return view('peminjaman-ruangan.create', compact('kelass', 'prodis'));
     }
@@ -26,6 +26,7 @@ class PeminjamanRuanganController extends Controller
     {
         $request->validate([
             'tanggal_peminjaman' => 'required|date',
+            'tanggal_berakhir_peminjaman' => 'required|date',
             'waktu_peminjaman' => 'required|date_format:H:i',
             'waktu_berakhir_peminjaman' => 'required|date_format:H:i',
             'kelas_id' => 'required|exists:kelas,id',
@@ -42,7 +43,7 @@ class PeminjamanRuanganController extends Controller
     public function edit($id)
     {
         $peminjaman = PeminjamanRuangan::findOrFail($id);
-        $kelass = Kelas::all();
+        $kelass = Kelas::orderBy('nama_kelas', 'asc')->get(); // urut juga saat edit
         $prodis = Prodi::all();
         return view('peminjaman-ruangan.edit', compact('peminjaman', 'kelass', 'prodis'));
     }
@@ -53,6 +54,7 @@ class PeminjamanRuanganController extends Controller
 
         $request->validate([
             'tanggal_peminjaman' => 'required|date',
+            'tanggal_berakhir_peminjaman' => 'required|date',
             'waktu_peminjaman' => 'required|date_format:H:i',
             'waktu_berakhir_peminjaman' => 'required|date_format:H:i|after:waktu_peminjaman',
             'kelas_id' => 'required|exists:kelas,id',
@@ -64,6 +66,7 @@ class PeminjamanRuanganController extends Controller
 
         $peminjaman->update([
             'tanggal_peminjaman' => $request->tanggal_peminjaman,
+            'tanggal_berakhir_peminjaman' => $request->tanggal_berakhir_peminjaman,
             'waktu_peminjaman' => $request->waktu_peminjaman,
             'waktu_berakhir_peminjaman' => $request->waktu_berakhir_peminjaman,
             'kelas_id' => $request->kelas_id,
