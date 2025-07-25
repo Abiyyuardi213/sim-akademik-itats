@@ -87,7 +87,9 @@ class PeminjamanRuanganController extends Controller
     public function destroy($id)
     {
         $peminjaman = PeminjamanRuangan::findOrFail($id);
-        $peminjaman->deletepPeminjamanRuangan();
-        return redirect('peminjaman-ruangan.index')->with('success', 'Data peminjaman ruangan berhasil dihapus');
+        $peminjaman->deletePeminjamanRuangan();
+
+        return redirect()->route('peminjaman-ruangan.index')
+            ->with('success', 'Data peminjaman ruangan berhasil dihapus');
     }
 }
