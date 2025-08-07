@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -15,6 +16,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('users')->delete();
+
         User::insert([
             [
                 'id'              => (string) Str::uuid(),
@@ -43,6 +46,16 @@ class UserSeeder extends Seeder
                 'email'           => 'adenanda@gmail.com',
                 'no_telepon'      => '083344556677',
                 'password'        => Hash::make('Adenanda123'),
+                'profile_picture' => null,
+                'role_id'         => 'fc767fc4-c044-4f62-aded-bd04a4f53c8c',
+            ],
+            [
+                'id'              => (string) Str::uuid(),
+                'name'            => 'Csr Tambahan WR 1',
+                'username'        => 'csrwr1',
+                'email'           => 'csrwr1@gmail.com',
+                'no_telepon'      => '083344555555',
+                'password'        => Hash::make('password'),
                 'profile_picture' => null,
                 'role_id'         => 'fc767fc4-c044-4f62-aded-bd04a4f53c8c',
             ],

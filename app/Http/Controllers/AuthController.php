@@ -30,7 +30,7 @@ class AuthController extends Controller
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             Log::info('Login berhasil untuk: ' . $request->username);
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->route('dashboard');
         }
 
         Log::warning('Login gagal untuk: ' . $request->username);

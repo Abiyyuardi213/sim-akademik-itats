@@ -14,7 +14,7 @@ class DashboardController extends Controller
     public function index()
     {
         $totalPeran     = Role::count();
-        $totalPengguna  = Pengguna::count();
+        $totalPengguna  = User::count();
         $totalDivisi    = Prodi::count();
         $totalLegalisir = Legalisir::count();
 

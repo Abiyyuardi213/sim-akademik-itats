@@ -2,92 +2,88 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akademik WR 1 - Login</title>
+    <title>Login | Akademik WR 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icheck-bootstrap@3.0.1/icheck-bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .bg-image {
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            background: url('{{ asset('image/gedungA.jpg') }}') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
+            z-index: 0;
         }
 
-        .card-custom {
-            backdrop-filter: blur(5px);
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            max-width: 400px;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+        .background-overlay::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Ini yang membuatnya lebih gelap */
         }
 
-        .card-custom .form-control {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .card-custom .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .card-custom .form-control:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .invalid-feedback {
-            font-size: 0.875rem;
+        .login-box {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
-<body>
+<body class="hold-transition login-page">
 
-    {{-- Background --}}
-    <div class="bg-image d-flex align-items-center justify-content-center min-vh-100"
-         style="background-image: url('{{ asset('image/gedungA.jpg') }}');">
+    {{-- Overlay background --}}
+    <div class="background-overlay"></div>
 
-        {{-- Form Card --}}
-        <div class="card card-custom w-100">
-            <div class="card-body p-4">
+    <div class="login-box">
+        {{-- Card --}}
+        <div class="card">
+            <div class="card-body login-card-body">
 
-                {{-- Logo --}}
+                {{-- Logo di dalam card --}}
                 <div class="text-center mb-3">
-                    <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" class="img-fluid" style="max-height: 40px;">
+                    <a href="#">
+                        <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" style="height: 40px;">
+                    </a>
                 </div>
 
-                {{-- Judul --}}
-                <h4 class="text-center text-warning mb-3">Login Admin WR 1</h4>
-                <p class="text-center text-light mb-4">Masuk untuk kelola manajemen lingkup WR 1</p>
+                <h4 class="login-box-msg text-warning">Login Admin WR 1</h4>
+                <p class="text-center text-muted mb-4">Masuk untuk kelola manajemen lingkup WR 1</p>
 
-                {{-- Error flash --}}
-                @if(session('error'))
+                {{-- Flash error --}}
+                @if (session('error'))
                     <div class="alert alert-danger">
                         {{ session('error') }}
                     </div>
                 @endif
 
-                {{-- Form --}}
-                <form method="POST" action="{{ route('login') }}">
+                {{-- Validation error --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <strong>{{ $errors->first() }}</strong>
+                    </div>
+                @endif
+
+                {{-- Form login --}}
+                <form action="{{ route('login') }}" method="POST">
                     @csrf
 
-                    <div class="mb-3">
-                        <label for="username" class="form-label text-white">Username</label>
-                        <input type="text"
-                               class="form-control @error('username') is-invalid @enderror"
-                               id="username"
-                               name="username"
-                               required
-                               autofocus
-                               placeholder="Masukkan username"
-                               value="{{ old('username') }}">
+                    {{-- Username --}}
+                    <div class="input-group mb-3">
+                        <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                               placeholder="Username" value="{{ old('username') }}" required autofocus>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
                         @error('username')
                             <div class="invalid-feedback d-block text-danger">
                                 {{ $message }}
@@ -95,14 +91,15 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="password" class="form-label text-white">Password</label>
-                        <input type="password"
-                               class="form-control @error('password') is-invalid @enderror"
-                               id="password"
-                               name="password"
-                               required
-                               placeholder="Masukkan password">
+                    {{-- Password --}}
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                               placeholder="Password" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
                         @error('password')
                             <div class="invalid-feedback d-block text-danger">
                                 {{ $message }}
@@ -110,26 +107,22 @@
                         @enderror
                     </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-warning text-dark">Masuk</button>
+                    {{-- Tombol login --}}
+                    <div class="row">
+                        <div class="col-8"></div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-warning btn-block text-dark">Masuk</button>
+                        </div>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
 
-    {{-- Bootstrap JS --}}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            @if (session('success') || session('error'))
-                $('#toastNotification').toast({
-                    delay: 3000,
-                    autohide: true
-                }).toast('show');
-            @endif
-        });
-    </script>
+    {{-- Script --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 </body>
 </html>

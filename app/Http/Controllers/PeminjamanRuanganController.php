@@ -11,7 +11,7 @@ class PeminjamanRuanganController extends Controller
 {
     public function index()
     {
-        $peminjamans = PeminjamanRuangan::orderBy('created_at', 'asc')->with('kelas')->with('prodi')->get();
+        $peminjamans = PeminjamanRuangan::orderBy('created_at', 'desc')->with('kelas')->with('prodi')->get();
         return view('peminjaman-ruangan.index', compact('peminjamans'));
     }
 
