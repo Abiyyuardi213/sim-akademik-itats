@@ -44,7 +44,7 @@ class Kelas extends Model
             'gedung_id' => $data['gedung_id'] ?? $this->gedung_id,
             'nama_kelas' => $data['nama_kelas'] ?? $this->nama_kelas,
             'kapasitas_mahasiswa' => $data['kapasitas_mahasiswa'] ?? $this->kapasitas_mahasiswa,
-            'keterangan' => $data['keterangan'] ?? $this->keterangan,
+            'keterangan' => array_key_exists('keterangan', $data) ? $data['keterangan'] : $this->keterangan,
             'kelas_status' => $data['kelas_status'] ?? $this->kelas_status,
         ]);
     }

@@ -62,4 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('fasilitas/dashboard', [DashboardFasilitasController::class, 'index'])->name('fasilitas.dashboard');
 
     Route::resource('pengumuman', PengumumanController::class);
+
+    Route::get('profile', [UserController::class, 'editProfile'])->name('profile.edit');
+    Route::put('profile', [UserController::class, 'updateProfile'])->name('profile.update');
 });
