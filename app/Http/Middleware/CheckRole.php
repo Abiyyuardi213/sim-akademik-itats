@@ -21,8 +21,11 @@ class CheckRole
     {
         $user = Auth::user();
 
-        // Cek apakah user tidak login atau tidak memiliki role yang valid
-        if (!$user || !$user->role || !in_array($user->role->role_name, $roles)) {
+        if (
+            !$user ||
+            !$user->role ||
+            !in_array(strtolower($user->role->role_name), array_map('strtolower', $roles))
+        ) {
             abort(403, 'Akses ditolak.');
         }
 

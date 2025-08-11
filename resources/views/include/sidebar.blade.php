@@ -24,7 +24,7 @@
             </div>
             <div class="info">
                 <a href="#" class="d-block text-white font-weight-bold">
-                    {{ Auth::user()->username }}
+                    {{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->username : Auth::guard('users')->user()->username }}
                 </a>
                 <span class="badge badge-success">Online</span>
                 <span class="d-block" style="color: #f39c12; font-size: 14px; font-weight: 600;">
@@ -67,7 +67,9 @@
                 @endcan
 
                 @php
-                    $isCuti = request()->is('cuti*');
+                    $isCuti = request()->is('cuti*') ||
+                              request()->is('mahasiswa-cuti*') ||
+                              request()->is('periode*');
                 @endphp
                 <li class="nav-item has-treeview {{ $isCuti ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $isCuti ? 'active' : '' }}">
@@ -85,7 +87,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('periode.index') }}" class="nav-link">
+                            <a href="{{ route('admin.periode.index') }}" class="nav-link">
                                 <i class="fas fa-calendar-alt nav-icon text-success"></i>
                                 <p>Periode Cuti</p>
                             </a>
@@ -118,21 +120,21 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('gedung.index') }}" class="nav-link">
+                            <a href="{{ route('admin.gedung.index') }}" class="nav-link">
                             {{-- <a href="{{ route('gedung/index') }}" class="nav-link"> --}}
                                 <i class="nav-icon fas fa-building"></i>
                                 <p>Gedung</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('kelas.index') }}" class="nav-link">
+                            <a href="{{ route('admin.kelas.index') }}" class="nav-link">
                             {{-- <a href="{{ route('kelas/index') }}" class="nav-link"> --}}
                                 <i class="nav-icon fas fa-chalkboard"></i>
                                 <p>Ruang Kelas</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('peminjaman-ruangan.index') }}" class="nav-link">
+                            <a href="{{ route('admin.peminjaman-ruangan.index') }}" class="nav-link">
                             {{-- <a href="{{ route('peminjaman-ruangan/index') }}" class="nav-link"> --}}
                                 <i class="nav-icon fas fa-calendar-check"></i>
                                 <p>Peminjaman Kelas</p>

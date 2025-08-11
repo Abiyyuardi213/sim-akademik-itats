@@ -11,12 +11,12 @@ class GedungController extends Controller
     public function index()
     {
         $gedungs = Gedung::orderBy('created_at', 'asc')->get();
-        return view('gedung.index', compact('gedungs'));
+        return view('admin.gedung.index', compact('gedungs'));
     }
 
     public function create()
     {
-        return view('gedung.create');
+        return view('admin.gedung.create');
     }
 
     public function store(Request $request)
@@ -29,13 +29,13 @@ class GedungController extends Controller
 
         Gedung::createGedung($request->all());
 
-        return redirect()->route('gedung.index')->with('success', 'Gedung berhasil ditambahkan');
+        return redirect()->route('admin.gedung.index')->with('success', 'Gedung berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         $gedung = Gedung::findOrFail($id);
-        return view('gedung.edit', compact('gedung'));
+        return view('admin.gedung.edit', compact('gedung'));
     }
 
     public function update(Request $request, $id)
@@ -49,7 +49,7 @@ class GedungController extends Controller
         $gedung = Gedung::findOrFail($id);
         $gedung->updateGedung($request->all());
 
-        return redirect()->route('gedung.index')->with('success', 'Gedung berhasil diupdate');
+        return redirect()->route('admin.gedung.index')->with('success', 'Gedung berhasil diupdate');
     }
 
     public function destroy($id)
@@ -57,7 +57,7 @@ class GedungController extends Controller
         $gedung = Gedung::findOrFail($id);
         $gedung->deleteGedung();
 
-        return redirect()->route('gedung.index')->with('success', 'Gedung berhasil dihapus.');
+        return redirect()->route('admin.gedung.index')->with('success', 'Gedung berhasil dihapus.');
     }
 
     public function toggleStatus($id)

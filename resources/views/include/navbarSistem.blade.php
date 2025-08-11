@@ -9,7 +9,7 @@
         <!-- Tombol Profile (dropdown) -->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-user-circle"></i> {{ Auth::user()->username }}
+                <i class="fas fa-user-circle"></i> {{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->username : Auth::guard('users')->user()->username }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="userDropdown">
                 <li>
@@ -18,7 +18,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                    <a class="dropdown-item" href="{{ route('admin.profile.edit') }}">
                         <i class="fas fa-user"></i> Profile
                     </a>
                 </li>

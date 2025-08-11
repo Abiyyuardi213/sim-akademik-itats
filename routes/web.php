@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardCutiController;
 use App\Http\Controllers\DashboardFasilitasController;
+use App\Http\Controllers\DashboardGuestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PeriodeCutiController;
@@ -21,11 +22,15 @@ Route::get('/', function () {
 });
 
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'adminLogin'])->name('login.admin');
+
+Route::get('login-guest', [AuthController::class, 'showLoginGuestForm'])->name('login.guest');
+Route::post('login-guest', [AuthController::class, 'userLogin'])->name('login.user');
+
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::name('admin.')->middleware('admin')->group(function () {
+    Route::get('/dashboard-admin', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware('checkRole:admin,dosen')->group(function () {
         Route::resource('user', UserController::class);
@@ -65,4 +70,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('profile', [UserController::class, 'editProfile'])->name('profile.edit');
     Route::put('profile', [UserController::class, 'updateProfile'])->name('profile.update');
+});
+
+Route::name('users.')->middleware('users')->group(function () {
+    Route::get('/dashboard-user', [DashboardGuestController::class, 'index'])->name('dashboard');
 });

@@ -19,13 +19,13 @@ class KelasController extends Controller
         $kelass = $query->orderBy('created_at', 'asc')->get(); // atau 'desc' untuk terbaru di atas
         $gedungs = Gedung::all();
 
-        return view('kelas.index', compact('kelass', 'gedungs'));
+        return view('admin.kelas.index', compact('kelass', 'gedungs'));
     }
 
     public function create()
     {
         $gedungs = Gedung::all();
-        return view('kelas.create', compact('gedungs'));
+        return view('admin.kelas.create', compact('gedungs'));
     }
 
     public function store(Request $request)
@@ -41,14 +41,14 @@ class KelasController extends Controller
         $data = $request->all();
         Kelas::createKelas($request->all());
 
-        return redirect()->route('kelas.index')->with('success', 'Kelas berhasil ditambahkan');
+        return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         $kelas = Kelas::findOrFail($id);
         $gedungs = Gedung::all();
-        return view('kelas.edit', compact('kelas', 'gedungs'));
+        return view('admin.kelas.edit', compact('kelas', 'gedungs'));
     }
 
     public function update(Request $request, $id)
@@ -67,13 +67,13 @@ class KelasController extends Controller
 
         $kelas->updateKelas($data);
 
-        return redirect()->route('kelas.index')->with('success', 'Data kelas berhasil diperbarui.');
+        return redirect()->route('admin.kelas.index')->with('success', 'Data kelas berhasil diperbarui.');
     }
 
     public function show($id)
     {
         $kelas = Kelas::with('gedung')->findOrFail($id);
-        return view('kelas.show', compact('kelas'));
+        return view('admin.kelas.show', compact('kelas'));
     }
 
     public function toggleStatus(Request $request, $id)

@@ -35,7 +35,7 @@
                             @if(session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
-                            <form action="{{ route('mahasiswa-cuti.store') }}" method="POST">
+                            <form action="{{ route('admin.mahasiswa-cuti.store') }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <!-- Kolom Kiri -->
@@ -117,7 +117,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-                                <a href="{{ route('mahasiswa-cuti.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.mahasiswa-cuti.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>

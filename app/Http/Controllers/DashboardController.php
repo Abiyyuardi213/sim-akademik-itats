@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $totalDivisi    = Prodi::count();
         $totalLegalisir = Legalisir::count();
 
-        return view('dashboard', compact(
+        return view('admin.dashboard', compact(
             'totalPeran',
             'totalPengguna',
             'totalDivisi',

@@ -35,7 +35,7 @@
                             @if(session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
-                            <form action="{{ route('periode.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.periode.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label for="nama_periode">Nama Periode</label>
@@ -78,7 +78,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-                                <a href="{{ route('periode.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.periode.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>

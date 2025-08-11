@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akademik WR 1 - Gedung</title>
+    <title>Akademik WR 1 - Periode Cuti</title>
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -57,7 +57,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Manajemen Gedung</h1>
+                            <h1 class="m-0">Manajemen Periode Cuti</h1>
                         </div>
                     </div>
                 </div>
@@ -67,42 +67,54 @@
                 <div class="container-fluid">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">Daftar Gedung</h3>
-                            <a href="{{ route('gedung.create') }}" class="btn btn-primary btn-sm ml-auto">
-                                <i class="fas fa-plus"></i> Tambah Gedung
+                            <h3 class="card-title">Daftar Periode Cuti</h3>
+                            <a href="{{ route('admin.periode.create') }}" class="btn btn-primary btn-sm ml-auto">
+                                <i class="fas fa-plus"></i> Tambah Periode
                             </a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="gedungTable" class="table table-bordered table-striped">
+                                <table id="periodeTable" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Gedung</th>
-                                            <th>Deskripsi</th>
-                                            <th>Status Gedung</th>
+                                            <th>ID</th>
+                                            <th>Nama Periode</th>
+                                            <th>Awal Cuti</th>
+                                            <th>Akhir Cuti</th>
+                                            <th>Status Periode</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($gedungs as $index => $gedung)
+                                        @foreach($periodes as $index => $periode)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $gedung->nama_gedung }}</td>
-                                                <td>{{ $gedung->gedung_description }}</td>
+                                                <td>
+                                                    <span class="badge badge-secondary">{{ Str::limit($periode->id, 8, '...') }}</span>
+                                                    <button class="btn btn-sm btn-light copy-id-btn" data-id="{{ $periode->id }}" title="Salin ID">
+                                                        <i class="fas fa-copy"></i>
+                                                    </button>
+                                                </td>
+                                                <td>{{ $periode->nama_periode }}</td>
+                                                <td>{{ $periode->awal_cuti }}</td>
+                                                <td>{{ $periode->akhir_cuti }}</td>
                                                 <td class="text-center">
                                                     <input type="checkbox" class="toggle-status"
-                                                        data-gedung-id="{{ $gedung->id }}"
-                                                        {{ $gedung->gedung_status ? 'checked' : '' }}>
+                                                        data-periode-id="{{ $periode->id }}"
+                                                        {{ $periode->periode_status ? 'checked' : '' }}>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('gedung.edit', $gedung->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('admin.periode.show', $periode->id) }}" class="btn btn-info btn-sm">
+                                                        <i class="fas fa-eye"></i> Detail
+                                                    </a>
+                                                    <a href="{{ route('admin.periode.edit', $periode->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
-                                                    <button class="btn btn-danger btn-sm delete-gedung-btn"
+                                                    <button class="btn btn-danger btn-sm delete-periode-btn"
                                                         data-toggle="modal"
-                                                        data-target="#deleteGedungModal"
-                                                        data-gedung-id="{{ $gedung->id }}">
+                                                        data-target="#deletePeriodeModal"
+                                                        data-periode-id="{{ $periode->id }}">
                                                         <i class="fas fa-trash"></i> Hapus
                                                     </button>
                                                 </td>
@@ -122,17 +134,17 @@
     </div>
 
     <!-- Modal Konfirmasi Hapus -->
-    <div class="modal fade" id="deleteGedungModal" tabindex="-1" aria-labelledby="deleteGedungModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deletePeriodeModal" tabindex="-1" aria-labelledby="deletePeriodeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteGedungModalLabel"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h5>
+                    <h5 class="modal-title" id="deletePeriodeModalLabel"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus gedung ini? Tindakan ini tidak dapat dibatalkan.
+                    Apakah Anda yakin ingin menghapus periode ini? Tindakan ini tidak dapat dibatalkan.
                 </div>
                 <form id="deleteForm" method="POST">
                     @csrf
@@ -157,7 +169,7 @@
     <script src="{{ asset('js/ToastScript.js') }}"></script>
     <script>
         $(document).ready(function () {
-            $("#gedungTable").DataTable({
+            $("#periodeTable").DataTable({
                 "paging": true,
                 "lengthChange": false,
                 "searching": true,
@@ -169,21 +181,36 @@
         });
 
         $(document).ready(function () {
-            $('.delete-gedung-btn').click(function () {
-                let gedungId = $(this).data('gedung-id');
-                let deleteUrl = "{{ url('gedung') }}/" + gedungId;
+            $('.delete-periode-btn').click(function () {
+                let periodeId = $(this).data('periode-id');
+                let deleteUrl = "{{ url('periode') }}/" + periodeId;
                 $('#deleteForm').attr('action', deleteUrl);
             });
         });
 
         $(document).ready(function () {
+            $('.copy-id-btn').click(function () {
+                const id = $(this).data('id');
+                navigator.clipboard.writeText(id)
+                    .then(() => {
+                        $(".toast-body").text('ID berhasil disalin ke clipboard');
+                        $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
+                    })
+                    .catch(() => {
+                        $(".toast-body").text('Gagal menyalin ID');
+                        $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
+                    });
+            });
+        });
+
+        $(document).ready(function () {
             $(".toggle-status").change(function () {
-                let gedungId = $(this).data("gedung-id");
+                let periodeId = $(this).data("periode-id");
                 let status = $(this).prop("checked") ? 1 : 0;
 
-                $.post("{{ url('gedung') }}/" + gedungId + "/toggle-status", {
+                $.post("{{ url('periode') }}/" + periodeId + "/toggle-status", {
                     _token: '{{ csrf_token() }}',
-                    gedung_status: status
+                    periode_status: status
                 }, function (res) {
                     if (res.success) {
                         $(".toast-body").text(res.message);

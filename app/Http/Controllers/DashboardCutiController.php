@@ -13,7 +13,7 @@ class DashboardCutiController extends Controller
         $totalPeriode = PeriodeCuti::count();
         $totalMahasiswaCuti = MahasiswaCuti::count();
 
-        return view('mahasiswa-cuti.dashboard', compact(
+        return view('admin.mahasiswa-cuti.dashboard', compact(
             'totalPeriode',
             'totalMahasiswaCuti',
         ));

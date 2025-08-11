@@ -32,7 +32,7 @@
                             <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Data Cuti</h3>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('mahasiswa-cuti.update', $mahasiswa->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.mahasiswa-cuti.update', $mahasiswa->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
@@ -103,7 +103,7 @@
 
                                 <!-- Tombol Simpan -->
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                                <a href="{{ route('mahasiswa-cuti.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.mahasiswa-cuti.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>

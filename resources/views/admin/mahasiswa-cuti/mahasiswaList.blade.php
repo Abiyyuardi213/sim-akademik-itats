@@ -3,47 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akademik WR 1 - Peran</title>
+    <title>Akademik WR 1 - Mahasiswa Cuti</title>
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        .toggle-status {
-            width: 50px;
-            height: 24px;
-            appearance: none;
-            background: #ddd;
-            border-radius: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .toggle-status:checked {
-            background: linear-gradient(90deg, #28a745, #2ecc71);
-        }
-
-        .toggle-status::before {
-            content: "❌";
-            position: absolute;
-            top: 3px;
-            left: 4px;
-            width: 18px;
-            height: 18px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            text-align: center;
-            font-size: 12px;
-            line-height: 18px;
-        }
-
-        .toggle-status:checked::before {
-            content: "✔️";
-            transform: translateX(26px);
-            color: #28a745;
+        .card-header .d-flex.justify-content-end {
+            margin-left: auto;
         }
     </style>
 </head>
@@ -57,7 +25,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Manajemen Peran</h1>
+                            <h1 class="m-0">Manajemen Mahasiswa Cuti</h1>
                         </div>
                     </div>
                 </div>
@@ -67,42 +35,62 @@
                 <div class="container-fluid">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">Daftar Peran</h3>
-                            <a href="{{ route('role.create') }}" class="btn btn-primary btn-sm ml-auto">
-                                <i class="fas fa-plus"></i> Tambah Peran
-                            </a>
+                            <h3 class="card-title">Daftar Mahasiswa Cuti</h3>
+                            <div class="d-flex justify-content-end gap-2">
+                                <!-- Form Import CSV -->
+                                <form action="{{ route('admin.mahasiswa-cuti.import') }}" method="POST" enctype="multipart/form-data" id="importCsvForm" class="mr-2">
+                                    @csrf
+                                    <input type="file" name="csv_file" id="csv_file" accept=".csv" class="d-none" required onchange="document.getElementById('importCsvForm').submit();">
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('csv_file').click();">
+                                        <i class="fas fa-upload"></i> Import CSV
+                                    </button>
+                                </form>
+
+                                <!-- Export CSV -->
+                                <a href="{{ url('mahasiswa-cuti/export') }}" class="btn btn-success btn-sm mr-2">
+                                    <i class="fas fa-download"></i> Export CSV
+                                </a>
+
+                                <!-- Tambah Data -->
+                                <a href="{{ route('admin.mahasiswa-cuti.create') }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i> Tambah Data Cuti
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="roleTable" class="table table-bordered table-striped">
+                                <table id="mahasiswaTable" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Peran</th>
-                                            <th>Deskripsi</th>
-                                            <th>Status Peran</th>
+                                            <th>Nama Mahasiswa</th>
+                                            <th>NPM</th>
+                                            <th>Nomor Cuti</th>
+                                            <th>Periode Cuti</th>
+                                            <th>Keterangan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($roles as $index => $role)
+                                        @foreach($mahasiswas as $index => $mahasiswa)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $role->role_name }}</td>
-                                                <td>{{ $role->role_description }}</td>
-                                                <td class="text-center">
-                                                    <input type="checkbox" class="toggle-status"
-                                                        data-role-id="{{ $role->id }}"
-                                                        {{ $role->role_status ? 'checked' : '' }}>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('role.edit', $role->id) }}" class="btn btn-info btn-sm">
+                                                <td>{{ $mahasiswa->nama_mahasiswa }}</td>
+                                                <td>{{ $mahasiswa->npm }}</td>
+                                                <td>{{ $mahasiswa->nomor_cuti }}</td>
+                                                <td>{{ $mahasiswa->periode ? $mahasiswa->periode->nama_periode : '-' }}</td>
+                                                <td>{{ $mahasiswa->keterangan }}</td>
+                                                <td>
+                                                    <a href="{{ route('admin.mahasiswa-cuti.show', $mahasiswa->id) }}" class="btn btn-info btn-sm">
+                                                        <i class="fas fa-eye"></i> Detail
+                                                    </a>
+                                                    <a href="{{ route('admin.mahasiswa-cuti.edit', $mahasiswa->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
-                                                    <button class="btn btn-danger btn-sm delete-role-btn"
+                                                    <button class="btn btn-danger btn-sm delete-mahasiswa-btn"
                                                         data-toggle="modal"
-                                                        data-target="#deleteRoleModal"
-                                                        data-role-id="{{ $role->id }}">
+                                                        data-target="#deleteMahasiswaModal"
+                                                        data-mahasiswa-id="{{ $mahasiswa->id }}">
                                                         <i class="fas fa-trash"></i> Hapus
                                                     </button>
                                                 </td>
@@ -122,17 +110,17 @@
     </div>
 
     <!-- Modal Konfirmasi Hapus -->
-    <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteMahasiswaModal" tabindex="-1" aria-labelledby="deleteMahasiswaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteRoleModalLabel"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h5>
+                    <h5 class="modal-title" id="deleteMahasiswaModalLabel"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus peran ini? Tindakan ini tidak dapat dibatalkan.
+                    Apakah Anda yakin ingin menghapus data mahasiswa cuti ini?
                 </div>
                 <form id="deleteForm" method="POST">
                     @csrf
@@ -157,7 +145,7 @@
     <script src="{{ asset('js/ToastScript.js') }}"></script>
     <script>
         $(document).ready(function () {
-            $("#roleTable").DataTable({
+            $("#mahasiswaTable").DataTable({
                 "paging": true,
                 "lengthChange": false,
                 "searching": true,
@@ -169,31 +157,10 @@
         });
 
         $(document).ready(function () {
-            $('.delete-role-btn').click(function () {
-                let roleId = $(this).data('role-id');
-                let deleteUrl = "{{ url('role') }}/" + roleId;
+            $('.delete-mahasiswa-btn').click(function () {
+                let mahasiswaId = $(this).data('mahasiswa-id');
+                let deleteUrl = "{{ url('mahasiswa-cuti') }}/" + mahasiswaId;
                 $('#deleteForm').attr('action', deleteUrl);
-            });
-        });
-
-        $(document).ready(function () {
-            $(".toggle-status").change(function () {
-                let roleId = $(this).data("role-id");
-                let status = $(this).prop("checked") ? 1 : 0;
-
-                $.post("{{ url('role') }}/" + roleId + "/toggle-status", {
-                    _token: '{{ csrf_token() }}',
-                    role_status: status
-                }, function (res) {
-                    if (res.success) {
-                        $(".toast-body").text(res.message);
-                        $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
-                    } else {
-                        alert("Gagal memperbarui status.");
-                    }
-                }).fail(function () {
-                    alert("Terjadi kesalahan dalam mengubah status.");
-                });
             });
         });
 

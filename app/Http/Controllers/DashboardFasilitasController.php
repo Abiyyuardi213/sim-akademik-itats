@@ -14,7 +14,7 @@ class DashboardFasilitasController extends Controller
         $totalGedung = Gedung::count();
         $totalKelas = Kelas::count();
 
-        return view('dashboardFasilitas', compact(
+        return view('admin.dashboardFasilitas', compact(
             'totalGedung',
             'totalKelas',
         ));

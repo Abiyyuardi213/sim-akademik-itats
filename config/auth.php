@@ -11,6 +11,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users', // pakai provider "users" karena admin juga ada di tabel users
+        ],
+
+        'users' => [
+            'driver' => 'session',
+            'provider' => 'users', // user biasa juga di tabel users
+        ],
     ],
 
     'providers' => [
@@ -30,5 +40,4 @@ return [
     ],
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
-
 ];

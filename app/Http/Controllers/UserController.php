@@ -148,7 +148,7 @@ class UserController extends Controller
 
         $user->updatePengguna($data);
 
-        return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('admin.profile.edit')->with('success', 'Profil berhasil diperbarui.');
     }
 
     public function destroy($id)

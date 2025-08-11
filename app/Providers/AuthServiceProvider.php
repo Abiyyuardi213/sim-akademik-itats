@@ -24,19 +24,16 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // Gate untuk admin dan dosen
         Gate::define('akses-admin-dosen', function (User $user) {
-            return in_array($user->role->role_name, ['admin', 'dosen']);
+            return in_array(strtolower($user->role->role_name), ['admin', 'dosen']);
         });
 
-        // Gate khusus admin saja
         Gate::define('akses-admin-saja', function (User $user) {
-            return $user->role->role_name === 'admin';
+            return strtolower($user->role->role_name) === 'admin';
         });
 
-        // Gate untuk CSR
         Gate::define('akses-csr', function (User $user) {
-            return $user->role->role_name === 'csr';
+            return strtolower($user->role->role_name) === 'csr';
         });
     }
 }

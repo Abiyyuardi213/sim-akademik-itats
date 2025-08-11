@@ -32,6 +32,12 @@ class RoleSeeder extends Seeder
                 'role_description' => 'Tata Usaha Bag Akademik',
                 'role_status' => 1,
             ],
+            [
+                'id' => (string) Str::uuid(),
+                'role_name' => 'guest',
+                'role_description' => 'Peminjam ruangan',
+                'role_status' => 1,
+            ],
         ]);
     }
 }

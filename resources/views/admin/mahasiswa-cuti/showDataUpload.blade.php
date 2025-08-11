@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         <div class="card-footer text-right">
-                            <a href="{{ route('mahasiswa-cuti.index') }}" class="btn btn-secondary">Batal</a>
+                            <a href="{{ route('admin.mahasiswa-cuti.index') }}" class="btn btn-secondary">Batal</a>
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan ke Database</button>
                         </div>
                     </div>

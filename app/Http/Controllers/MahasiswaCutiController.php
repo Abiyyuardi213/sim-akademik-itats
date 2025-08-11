@@ -15,14 +15,14 @@ class MahasiswaCutiController extends Controller
     public function index()
     {
         $mahasiswas = MahasiswaCuti::orderBy('created_at', 'asc')->with('prodi')->get();
-        return view('mahasiswa-cuti.mahasiswaList', compact('mahasiswas'));
+        return view('admin.mahasiswa-cuti.mahasiswaList', compact('mahasiswas'));
     }
 
     public function create()
     {
         $prodis = Prodi::all();
         $periodes = PeriodeCuti::all();
-        return view('mahasiswa-cuti.create', compact('prodis', 'periodes'));
+        return view('admin.mahasiswa-cuti.create', compact('prodis', 'periodes'));
     }
 
     public function store(Request $request)
@@ -41,7 +41,7 @@ class MahasiswaCutiController extends Controller
 
         MahasiswaCuti::createMahasiswaCuti($data);
 
-        return redirect()->route('mahasiswa-cuti.index')->with('success', 'Data mahasiswa cuti berhasil ditambahkan');
+        return redirect()->route('admin.mahasiswa-cuti.index')->with('success', 'Data mahasiswa cuti berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -49,7 +49,7 @@ class MahasiswaCutiController extends Controller
         $mahasiswa = MahasiswaCuti::findOrFail($id);
         $prodis = Prodi::all();
         $periodes = PeriodeCuti::all();
-        return view('mahasiswa-cuti.edit', compact('mahasiswa', 'prodis', 'periodes'));
+        return view('admin.mahasiswa-cuti.edit', compact('mahasiswa', 'prodis', 'periodes'));
     }
 
     public function update(Request $request, $id)
@@ -69,13 +69,13 @@ class MahasiswaCutiController extends Controller
         $data = $request->all();
         $mahasiswa->updateMahasiswaCuti($data);
 
-        return redirect()->route('mahasiswa-cuti.index')->with('success', 'Data mahasiswa cuti berhasil diubah');
+        return redirect()->route('admin.mahasiswa-cuti.index')->with('success', 'Data mahasiswa cuti berhasil diubah');
     }
 
     public function show($id)
     {
         $mahasiswa = MahasiswaCuti::with(['prodi', 'periode'])->findOrFail($id);
-        return view('mahasiswa-cuti.show', compact('mahasiswa'));
+        return view('admin.mahasiswa-cuti.show', compact('mahasiswa'));
     }
 
     public function destroy($id)
@@ -83,7 +83,7 @@ class MahasiswaCutiController extends Controller
         $mahasiswa = MahasiswaCuti::findOrFail($id);
         $mahasiswa->deleteMahasiswaCuti();
 
-        return redirect()->route('mahasiswa-cuti.index')->with('success', 'Data mahasiswa cuti berhasil di hapus');
+        return redirect()->route('admin.mahasiswa-cuti.index')->with('success', 'Data mahasiswa cuti berhasil di hapus');
     }
 
     public function exportCsv()
@@ -150,7 +150,7 @@ class MahasiswaCutiController extends Controller
             ];
         }
 
-        return view('mahasiswa-cuti.showDataUpload', ['data' => $data]);
+        return view('admin.mahasiswa-cuti.showDataUpload', ['data' => $data]);
     }
 
     public function importConfirm(Request $request)
@@ -169,6 +169,6 @@ class MahasiswaCutiController extends Controller
             ]);
         }
 
-        return redirect()->route('mahasiswa-cuti.index')->with('success', 'Data berhasil diimpor!');
+        return redirect()->route('admin.mahasiswa-cuti.index')->with('success', 'Data berhasil diimpor!');
     }
 }

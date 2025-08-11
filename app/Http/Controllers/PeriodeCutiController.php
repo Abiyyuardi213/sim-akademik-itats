@@ -10,12 +10,12 @@ class PeriodeCutiController extends Controller
     public function index()
     {
         $periodes = PeriodeCuti::orderBy('created_at', 'asc')->get();
-        return view('periode.index', compact('periodes'));
+        return view('admin.periode.index', compact('periodes'));
     }
 
     public function create()
     {
-        return view('periode.create');
+        return view('admin.periode.create');
     }
 
     public function store(Request $request)
@@ -30,19 +30,19 @@ class PeriodeCutiController extends Controller
 
         PeriodeCuti::createPeriode($request->all());
 
-        return redirect()->route('periode.index')->with('success', 'Periode berhasil ditambahkan.');
+        return redirect()->route('admin.periode.index')->with('success', 'Periode berhasil ditambahkan.');
     }
 
     public function show($id)
     {
         $periode = PeriodeCuti::findOrFail($id);
-        return view('periode.show', compact('periode'));
+        return view('admin.periode.show', compact('periode'));
     }
 
     public function edit($id)
     {
         $periode = PeriodeCuti::findOrFail($id);
-        return view('periode.edit', compact('periode'));
+        return view('admin.periode.edit', compact('periode'));
     }
 
     public function update(Request $request, $id)
@@ -58,7 +58,7 @@ class PeriodeCutiController extends Controller
         $periode = PeriodeCuti::findOrFail($id);
         $periode->updatePeriode($request->all());
 
-        return redirect()->route('periode.index')->with('success', 'Periode berhasil diperbarui.');
+        return redirect()->route('admin.periode.index')->with('success', 'Periode berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -66,7 +66,7 @@ class PeriodeCutiController extends Controller
         $periode = PeriodeCuti::findOrFail($id);
         $periode->deletePeriode();
 
-        return redirect()->route('periode.index')->with('success', 'Periode berhasil dihapus.');
+        return redirect()->route('admin.periode.index')->with('success', 'Periode berhasil dihapus.');
     }
 
     public function toggleStatus($id)

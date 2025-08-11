@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubah Periode</title>
+    <title>Tambah Gedung</title>
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -19,7 +19,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Ubah Periode</h1>
+                            <h1 class="m-0">Tambah Data Gedung</h1>
                         </div>
                     </div>
                 </div>
@@ -27,39 +27,33 @@
 
             <section class="content">
                 <div class="container-fluid">
-                    <div class="card card-warning">
+                    <div class="card card-info">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Data Periode</h3>
+                            <h3 class="card-title"><i class="fas fa-plus-circle"></i> Form Tambah Data Gedung</h3>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('periode.update', $periode->id) }}" method="POST">
+                            @if(session('error'))
+                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @endif
+                            <form action="{{ route('admin.gedung.store') }}" method="POST">
                                 @csrf
-                                @method('PUT')
                                 <div class="form-group">
-                                    <label for="nama_periode">Nama Periode</label>
-                                    <input type="text" class="form-control" name="nama_periode" value="{{ old('nama_periode', $periode->nama_periode) }}" required>
+                                    <label for="nama_gedung">Nama Gedung</label>
+                                    <input type="text" class="form-control" name="nama_gedung" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="awal_cuti">Awal Cuti</label>
-                                    <input type="month" class="form-control" name="awal_cuti" value="{{ old('awal_cuti', $periode->awal_cuti) }}" required>
+                                    <label for="gedung_description">Deskripsi Gedung</label>
+                                    <textarea class="form-control" name="gedung_description" required></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="akhir_cuti">Akhir Cuti</label>
-                                    <input type="month" class="form-control" name="akhir_cuti" value="{{ old('akhir_cuti', $periode->akhir_cuti) }}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="bulan_her">Bulan Wajib HER</label>
-                                    <input type="month" class="form-control" name="bulan_her" value="{{ old('bulan_her', $periode->bulan_her) }}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="periode_status">Status Periode</label>
-                                    <select class="form-control" name="periode_status">
-                                        <option value="1" {{ $periode->periode_status == 1 ? 'selected' : '' }}>Aktif</option>
-                                        <option value="0" {{ $periode->periode_status == 0 ? 'selected' : '' }}>Nonaktif</option>
+                                    <label for="gedung_status">Status Gedung</label>
+                                    <select class="form-control" name="gedung_status">
+                                        <option value="1">Aktif</option>
+                                        <option value="0">Nonaktif</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                                <a href="{{ route('periode.index') }}" class="btn btn-secondary">Batal</a>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+                                <a href="{{ route('admin.gedung.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>
@@ -75,6 +69,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
             $('[data-widget="treeview"]').Treeview('init');

@@ -59,6 +59,16 @@ class UserSeeder extends Seeder
                 'profile_picture' => null,
                 'role_id'         => 'fc767fc4-c044-4f62-aded-bd04a4f53c8c',
             ],
+            [
+                'id'              => (string) Str::uuid(),
+                'name'            => 'Guest Peminjaman Testing',
+                'username'        => 'guest',
+                'email'           => 'guest@gmail.com',
+                'no_telepon'      => '083344555544',
+                'password'        => Hash::make('password'),
+                'profile_picture' => null,
+                'role_id'         => '5bc94b64-7d35-4973-97fe-db0e2a528741',
+            ],
         ]);
     }
 }
