@@ -27,6 +27,16 @@
     @include('include.navbarSistem')
     @include('include.sidebar')
 
+    {{-- @php
+        if (Auth::guard('admin')->check()) {
+            dd(Auth::guard('admin')->user());
+        }
+
+        if (Auth::guard('users')->check()) {
+            dd(Auth::guard('users')->user());
+        }
+    @endphp --}}
+
     <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
@@ -47,8 +57,15 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    @can('akses-admin-dosen')
-                    <div class="col-lg-3 col-6">
+                    {{-- @can('akses-admin-dosen') --}}
+                    @php
+                        $currentUser = Auth::guard('admin')->check()
+                            ? Auth::guard('admin')->user()
+                            : Auth::guard('users')->user();
+                    @endphp
+
+                    @if($currentUser->role->role_name !== 'CSR')
+                    <div class="col-lg-2 col-6">
                         <div class="small-box bg-info">
                             <div class="inner">
                                 <h3>{{ $totalPeran ?? 0 }}</h3>
@@ -61,7 +78,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-2 col-6">
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $totalPengguna ?? 0 }}</h3>
@@ -74,7 +91,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-2 col-6">
                         <div class="small-box bg-warning text-white">
                             <div class="inner">
                                 <h3>{{ $totalDivisi ?? 0 }}</h3>
@@ -83,12 +100,13 @@
                             <div class="icon">
                                 <i class="fas fa-university"></i>
                             </div>
-                            <a href="{{ url('divisi') }}" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ url('prodi') }}" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
-                    @endcan
+                    @endif
+                    {{-- @endcan --}}
 
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-2 col-6">
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>Cuti</h3>
@@ -101,7 +119,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-2 col-6">
                         <div class="small-box bg-purple">
                             <div class="inner">
                                 <h3>Fasilitas</h3>
@@ -114,7 +132,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-2 col-6">
                         <div class="small-box bg-danger">
                             <div class="inner">
                                 <h3>{{ $totalLegalisir ?? 0 }}</h3>

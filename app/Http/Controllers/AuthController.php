@@ -27,25 +27,6 @@ class AuthController extends Controller
         return view('auth.login-guest');
     }
 
-    // public function login(Request $request)
-    // {
-    //     $request->validate([
-    //         'username' => 'required|string',
-    //         'password' => 'required|string|min:6',
-    //     ]);
-
-    //     if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-    //         Log::info('Login berhasil untuk: ' . $request->username);
-    //         $request->session()->regenerate();
-    //         return redirect()->route('dashboard');
-    //     }
-
-    //     Log::warning('Login gagal untuk: ' . $request->username);
-    //     throw ValidationException::withMessages([
-    //         'username' => ['Username atau password salah.'],
-    //     ]);
-    // }
-
     public function adminLogin(Request $request)
     {
         $request->validate([
@@ -55,8 +36,8 @@ class AuthController extends Controller
 
         $user = User::where('username', $request->username)->with('role')->first();
 
-        if (!$user || !in_array($user->role?->role_name, ['admin', 'csr'])) {
-            return back()->with('error', 'Username tidak ditemukan atau bukan admin.')->withInput($request->only('username'));
+        if (!$user || !in_array($user->role?->role_name, ['admin', 'CSR'])) {
+            return back()->with('error', 'Username tidak ditemukan atau bukan admin dan csr.')->withInput($request->only('username'));
         }
 
         if (!Hash::check($request->password, $user->password)) {
@@ -69,25 +50,6 @@ class AuthController extends Controller
 
         return redirect()->route('admin.dashboard');
     }
-
-    // public function loginGuest(Request $request)
-    // {
-    //     $request->validate([
-    //         'username' => 'required|string',
-    //         'password' => 'required|string|min:6',
-    //     ]);
-
-    //     if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-    //         Log::info('Login berhasil untuk: ' . $request->username);
-    //         $request->session()->regenerate();
-    //         return redirect()->route('dashboard.user');
-    //     }
-
-    //     Log::warning('Login gagal untuk: ' . $request->username);
-    //     throw ValidationException::withMessages([
-    //         'username' => ['Username atau password salah.'],
-    //     ]);
-    // }
 
     public function userLogin(Request $request)
     {
@@ -115,43 +77,6 @@ class AuthController extends Controller
             'email' => 'Email atau password salah.',
         ])->withInput();
     }
-
-    // public function login(Request $request)
-    // {
-    //     $request->validate([
-    //         'username' => 'required|string',
-    //         'password' => 'required|string|min:6',
-    //     ]);
-
-    //     if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-    //         $request->session()->regenerate();
-
-    //         $user = Auth::user();
-
-    //         $roleName = $user->role?->role_name;
-
-    //         Log::info("Login berhasil: {$user->username} sebagai {$roleName}");
-
-    //         if ($roleName === 'guest') {
-    //             return redirect()->route('dashboard.user');
-    //         }
-
-    //         return redirect()->route('dashboard');
-    //     }
-
-    //     Log::warning('Login gagal untuk: ' . $request->username);
-    //     throw ValidationException::withMessages([
-    //         'username' => ['Username atau password salah.'],
-    //     ]);
-    // }
-
-    // public function logout(Request $request)
-    // {
-    //     Auth::logout();
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-    //     return redirect('/login');
-    // }
 
     public function logout(Request $request)
     {

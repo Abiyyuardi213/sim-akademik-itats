@@ -21,18 +21,21 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AuthController::class, 'adminLogin'])->name('login.admin');
+Route::middleware('guest:admin')->group(function () {
+    Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AuthController::class, 'adminLogin'])->name('login.admin');
+});
 
-Route::get('login-guest', [AuthController::class, 'showLoginGuestForm'])->name('login.guest');
-Route::post('login-guest', [AuthController::class, 'userLogin'])->name('login.user');
+Route::middleware('guest:users')->group(function () {
+    Route::get('login-guest', [AuthController::class, 'showLoginGuestForm'])->name('login.guest');
+    Route::post('login-guest', [AuthController::class, 'userLogin'])->name('login.user');
+});
 
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::name('admin.')->middleware(['auth:admin'])->group(function () {
     Route::get('/dashboard-admin', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Hanya admin (bukan csr) boleh manage user, role, prodi
     Route::middleware('ensure.admin:admin')->group(function () {
         Route::resource('user', UserController::class);
         Route::post('role/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('role.toggleStatus');
@@ -76,4 +79,3 @@ Route::name('admin.')->middleware(['auth:admin'])->group(function () {
 Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
     Route::get('/dashboard-user', [DashboardGuestController::class, 'index'])->name('dashboard');
 });
-

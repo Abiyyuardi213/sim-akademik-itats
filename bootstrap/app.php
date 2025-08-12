@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'ensure.admin' => \App\Http\Middleware\EnsureAdminAuthenticated::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'users' => \App\Http\Middleware\EnsureUserAuthenticated::class,
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

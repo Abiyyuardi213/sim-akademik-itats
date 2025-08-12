@@ -53,7 +53,14 @@
                     </a>
                 </li>
 
+                @php
+                    $currentUser = Auth::guard('admin')->check()
+                        ? Auth::guard('admin')->user()
+                        : Auth::guard('users')->user();
+                @endphp
+
                 {{-- @can('akses-admin-dosen') --}}
+                @if($currentUser->role->role_name !== 'CSR')
                 <li class="nav-item">
                     <a href="{{ route('admin.role.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-user-shield"></i>
@@ -74,6 +81,7 @@
                         <p>Program Studi</p>
                     </a>
                 </li>
+                @endif
                 {{-- @endcan --}}
 
                 @php
