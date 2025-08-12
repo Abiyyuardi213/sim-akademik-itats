@@ -10,12 +10,12 @@ class ProdiController extends Controller
     public function index()
     {
         $prodis = Prodi::orderBy('created_at', 'asc')->get();
-        return view('prodi.index', compact('prodis'));
+        return view('admin.prodi.index', compact('prodis'));
     }
 
     public function create()
     {
-        return view('prodi.create');
+        return view('admin.prodi.create');
     }
 
     public function store(Request $request)
@@ -29,13 +29,13 @@ class ProdiController extends Controller
 
         Prodi::createProdi($request->all());
 
-        return redirect()->route('prodi.index')->with('success', 'Program Studi berhasil ditambahkan.');
+        return redirect()->route('admin.prodi.index')->with('success', 'Program Studi berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
         $prodi = Prodi::findOrFail($id);
-        return view('prodi.edit', compact('prodi'));
+        return view('admin.prodi.edit', compact('prodi'));
     }
 
     public function update(Request $request, $id)
@@ -50,7 +50,7 @@ class ProdiController extends Controller
         $prodi = Prodi::findOrFail($id);
         $prodi->updateProdi($request->all());
 
-        return redirect()->route('prodi.index')->with('success', 'Program Studi berhasil diperbarui.');
+        return redirect()->route('admin.prodi.index')->with('success', 'Program Studi berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -58,7 +58,7 @@ class ProdiController extends Controller
         $prodi = Prodi::findOrFail($id);
         $prodi->deleteProdi();
 
-        return redirect()->route('prodi.index')->with('success', 'Program Studi berhasil dihapus.');
+        return redirect()->route('admin.prodi.index')->with('success', 'Program Studi berhasil dihapus.');
     }
 
     public function toggleStatus($id)

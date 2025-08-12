@@ -16,9 +16,16 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        // Pastikan login sebagai admin guard
-        if (!Auth::guard('admin')->check()) {
+        $user = Auth::user() ?? Auth::guard('admin')->user();
+
+        // Pastikan user login
+        if (!$user) {
             return redirect()->route('login')->with('error', 'Harus login sebagai admin.');
+        }
+
+        // Pastikan role user adalah admin
+        if (!$user->role || $user->role->role_name !== 'admin') {
+            abort(403, 'Akses ditolak. Anda bukan admin.');
         }
 
         return $next($request);

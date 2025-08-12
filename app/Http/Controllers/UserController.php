@@ -13,13 +13,13 @@ class UserController extends Controller
     public function index()
     {
         $users = User::orderBy('created_at', 'asc')->with('role')->get();
-        return view('user.userList', compact('users'));
+        return view('admin.user.userList', compact('users'));
     }
 
     public function create()
     {
         $roles = Role::all();
-        return view('user.create', compact('roles'));
+        return view('admin.user.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -46,14 +46,14 @@ class UserController extends Controller
 
         User::createPengguna($data);
 
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan');
+        return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
         $roles = Role::all();
-        return view('user.edit', compact('user', 'roles'));
+        return view('admin.user.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, $id)
@@ -95,19 +95,32 @@ class UserController extends Controller
 
         $user->updatePengguna($data);
 
-        return redirect()->route('user.index')->with('success', 'User berhasil diperbarui.');
+        return redirect()->route('admin.user.index')->with('success', 'User berhasil diperbarui.');
     }
 
     public function show($id)
     {
         $user = User::with('role')->findOrFail($id);
-        return view('user.show', compact('user'));
+        return view('admin.user.show', compact('user'));
     }
+
+    // public function editProfile()
+    // {
+    //     $user = auth()->user()->load('role');
+    //     return view('admin.user.profile', compact('user'));
+    // }
 
     public function editProfile()
     {
-        $user = auth()->user()->load('role');
-        return view('user.profile', compact('user'));
+        if (auth()->guard('admin')->check()) {
+            $user = auth()->guard('admin')->user()->load('role');
+        } elseif (auth()->guard('users')->check()) {
+            $user = auth()->guard('users')->user()->load('role');
+        } else {
+            abort(403, 'Tidak ada user yang login');
+        }
+
+        return view('admin.user.profile', compact('user'));
     }
 
     public function updateProfile(Request $request)
@@ -156,6 +169,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->deletePengguna();
 
-        return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('admin.user.index')->with('success', 'User berhasil dihapus.');
     }
 }

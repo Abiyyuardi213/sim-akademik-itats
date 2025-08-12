@@ -13,7 +13,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="userDropdown">
                 <li>
-                    <a class="dropdown-item" href="{{ url('dashboard') }}">
+                    <a class="dropdown-item" href="{{ url('dashboard-admin') }}">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
                 </li>

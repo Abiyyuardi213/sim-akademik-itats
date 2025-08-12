@@ -12,14 +12,14 @@ class PeminjamanRuanganController extends Controller
     public function index()
     {
         $peminjamans = PeminjamanRuangan::orderBy('created_at', 'desc')->with('kelas')->with('prodi')->get();
-        return view('peminjaman-ruangan.index', compact('peminjamans'));
+        return view('admin.peminjaman-ruangan.index', compact('peminjamans'));
     }
 
     public function create()
     {
         $kelass = Kelas::orderBy('nama_kelas', 'asc')->get(); // urut berdasarkan nama
         $prodis = Prodi::orderBy('kode_prodi', 'asc')->get();
-        return view('peminjaman-ruangan.create', compact('kelass', 'prodis'));
+        return view('admin.peminjaman-ruangan.create', compact('kelass', 'prodis'));
     }
 
     public function store(Request $request)
@@ -37,7 +37,7 @@ class PeminjamanRuanganController extends Controller
         $data = $request->all();
 
         PeminjamanRuangan::createPeminjamanRuangan($data);
-        return redirect()->route('peminjaman-ruangan.index')->with('success', 'Data peminjaman ruangan berhasil ditambahkan');
+        return redirect()->route('admin.peminjaman-ruangan.index')->with('success', 'Data peminjaman ruangan berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -45,7 +45,7 @@ class PeminjamanRuanganController extends Controller
         $peminjaman = PeminjamanRuangan::findOrFail($id);
         $kelass = Kelas::orderBy('nama_kelas', 'asc')->get(); // urut juga saat edit
         $prodis = Prodi::orderBy('kode_prodi', 'asc')->get();
-        return view('peminjaman-ruangan.edit', compact('peminjaman', 'kelass', 'prodis'));
+        return view('admin.peminjaman-ruangan.edit', compact('peminjaman', 'kelass', 'prodis'));
     }
 
     public function update(Request $request, $id)
@@ -74,14 +74,14 @@ class PeminjamanRuanganController extends Controller
             'keperluan_peminjaman' => $request->keperluan_peminjaman,
         ]);
 
-        return redirect()->route('peminjaman-ruangan.index')
+        return redirect()->route('admin.peminjaman-ruangan.index')
             ->with('success', 'Data peminjaman ruangan berhasil diupdate.');
     }
 
     public function show($id)
     {
         $peminjaman = PeminjamanRuangan::with(['kelas', 'prodi'])->findOrFail($id);
-        return view('peminjaman-ruangan.show', compact('peminjaman'));
+        return view('admin.peminjaman-ruangan.show', compact('peminjaman'));
     }
 
     public function destroy($id)
@@ -89,7 +89,7 @@ class PeminjamanRuanganController extends Controller
         $peminjaman = PeminjamanRuangan::findOrFail($id);
         $peminjaman->deletePeminjamanRuangan();
 
-        return redirect()->route('peminjaman-ruangan.index')
+        return redirect()->route('admin.peminjaman-ruangan.index')
             ->with('success', 'Data peminjaman ruangan berhasil dihapus');
     }
 }

@@ -57,7 +57,7 @@
                                 <input type="file" name="profile_picture" id="profile_picture" class="d-none" accept="image/*">
                             </div>
 
-                            <form class="mt-4 text-left" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                            <form class="mt-4 text-left" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="cropped_image" id="cropped_image">
@@ -68,9 +68,15 @@
                                             <div class="alert alert-success">{{ session('success') }}</div>
                                         @endif
 
+                                        @php
+                                            $currentUser = Auth::guard('admin')->check()
+                                                ? Auth::guard('admin')->user()
+                                                : Auth::guard('users')->user();
+                                        @endphp
+
                                         <div class="form-group">
                                             <label for="role">Role</label>
-                                            <input type="text" class="form-control" value="{{ $user->role->role_name ?? '-' }}" disabled>
+                                            <input type="text" class="form-control" value="{{ $currentUser->role->role_name ?? '-' }}" disabled>
                                         </div>
 
                                         <!-- Form fields -->
@@ -106,7 +112,7 @@
 
                                         <div class="text-center mt-4">
                                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                                            <a href="{{ route('dashboard') }}" class="btn btn-secondary">Kembali</a>
+                                            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                 </div>

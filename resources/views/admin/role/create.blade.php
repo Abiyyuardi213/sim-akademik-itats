@@ -39,7 +39,7 @@
                             <div class="alert alert-danger">{{ session('error') }}</div>
                         @endif
 
-                        <form action="{{ route('role.store') }}" method="POST">
+                        <form action="{{ route('admin.role.store') }}" method="POST">
                             @csrf
 
                             <div class="form-group">
@@ -76,7 +76,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-save"></i> Simpan
                                 </button>
-                                <a href="{{ route('role.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.role.index') }}" class="btn btn-secondary">Batal</a>
                             </div>
                         </form>
                     </div>

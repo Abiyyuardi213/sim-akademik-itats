@@ -38,7 +38,7 @@
                             <h3 class="card-title">Daftar Legalisir</h3>
                             <div class="d-flex justify-content-end gap-2">
                                 <!-- Form Import CSV -->
-                                <form action="{{ route('legalisir.import') }}" method="POST" enctype="multipart/form-data" id="importCsvForm" class="mr-2">
+                                <form action="{{ route('admin.legalisir.import') }}" method="POST" enctype="multipart/form-data" id="importCsvForm" class="mr-2">
                                     @csrf
                                     <input type="file" name="csv_file" id="csv_file" accept=".csv" class="d-none" required onchange="document.getElementById('importCsvForm').submit();">
                                     <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('csv_file').click();">
@@ -52,7 +52,7 @@
                                 </a>
 
                                 <!-- Tambah Data -->
-                                <a href="{{ route('legalisir.create') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('admin.legalisir.create') }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus"></i> Tambah Data Legalisir
                                 </a>
                             </div>
@@ -79,10 +79,10 @@
                                                 <td>{{ $legalisir->nama }}</td>
                                                 <td>{{ $legalisir->npm }}</td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('legalisir.show', $legalisir->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('admin.legalisir.show', $legalisir->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
-                                                    <a href="{{ route('legalisir.edit', $legalisir->id) }}" class="btn btn-warning btn-sm">
+                                                    <a href="{{ route('admin.legalisir.edit', $legalisir->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-legalisir-btn"

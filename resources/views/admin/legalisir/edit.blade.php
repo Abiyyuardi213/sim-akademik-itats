@@ -32,7 +32,7 @@
                             <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Data Legalisir</h3>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('legalisir.update', $legalisir->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.legalisir.update', $legalisir->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
@@ -107,7 +107,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                                <a href="{{ route('legalisir.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.legalisir.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>

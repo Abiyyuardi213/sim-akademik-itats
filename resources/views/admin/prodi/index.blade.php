@@ -68,7 +68,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="card-title">Daftar Program Studi</h3>
-                            <a href="{{ route('prodi.create') }}" class="btn btn-primary btn-sm ml-auto">
+                            <a href="{{ route('admin.prodi.create') }}" class="btn btn-primary btn-sm ml-auto">
                                 <i class="fas fa-plus"></i> Tambah Prodi
                             </a>
                         </div>
@@ -105,7 +105,7 @@
                                                         {{ $prodi->prodi_status ? 'checked' : '' }}>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('prodi.edit', $prodi->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('admin.prodi.edit', $prodi->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-prodi-btn"

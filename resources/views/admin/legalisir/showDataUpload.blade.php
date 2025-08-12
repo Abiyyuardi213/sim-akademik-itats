@@ -25,7 +25,7 @@
 
         <section class="content">
             <div class="container-fluid">
-                <form action="{{ route('legalisir.import.confirm') }}" method="POST">
+                <form action="{{ route('admin.legalisir.import.confirm') }}" method="POST">
                     @csrf
                     <input type="hidden" name="data" value="{{ base64_encode(serialize($data)) }}">
 
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         <div class="card-footer text-right">
-                            <a href="{{ route('legalisir.index') }}" class="btn btn-secondary">Batal</a>
+                            <a href="{{ route('admin.legalisir.index') }}" class="btn btn-secondary">Batal</a>
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan ke Database</button>
                         </div>
                     </div>

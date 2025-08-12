@@ -16,12 +16,12 @@ class LegalisirController extends Controller
     public function index()
     {
         $legalisirs = Legalisir::orderBy('created_at', 'asc')->get();
-        return view('legalisir.index', compact('legalisirs'));
+        return view('admin.legalisir.index', compact('legalisirs'));
     }
 
     public function create()
     {
-        return view('legalisir.create');
+        return view('admin.legalisir.create');
     }
 
     public function store(Request $request)
@@ -39,17 +39,17 @@ class LegalisirController extends Controller
 
         Legalisir::createLegalisir($request->all());
 
-        return redirect()->route('legalisir.index')->with('success', 'Data legalisir berhasil ditambahkan.');
+        return redirect()->route('admin.legalisir.index')->with('success', 'Data legalisir berhasil ditambahkan.');
     }
 
     public function show(Legalisir $legalisir)
     {
-        return view('legalisir.show', compact('legalisir'));
+        return view('admin.legalisir.show', compact('legalisir'));
     }
 
     public function edit(Legalisir $legalisir)
     {
-        return view('legalisir.edit', compact('legalisir'));
+        return view('admin.legalisir.edit', compact('legalisir'));
     }
 
     public function update(Request $request, Legalisir $legalisir)
@@ -67,14 +67,14 @@ class LegalisirController extends Controller
 
         $legalisir->updateLegalisir($request->all());
 
-        return redirect()->route('legalisir.index')->with('success', 'Data legalisir berhasil diperbarui.');
+        return redirect()->route('admin.legalisir.index')->with('success', 'Data legalisir berhasil diperbarui.');
     }
 
     public function destroy(Legalisir $legalisir)
     {
         $legalisir->deleteLegalisir();
 
-        return redirect()->route('legalisir.index')->with('success', 'Data legalisir berhasil dihapus.');
+        return redirect()->route('admin.legalisir.index')->with('success', 'Data legalisir berhasil dihapus.');
     }
 
     public function exportCsv()
@@ -157,7 +157,7 @@ class LegalisirController extends Controller
                 return redirect()->back()->with('error', 'Baris gagal divalidasi: ' . implode(', ', $failed));
             }
 
-            return view('legalisir.showDataUpload', compact('data'));
+            return view('admin.legalisir.showDataUpload', compact('data'));
 
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengimpor file.');
@@ -181,6 +181,6 @@ class LegalisirController extends Controller
             ]);
         }
 
-        return redirect()->route('legalisir.index')->with('success', 'Data berhasil diimport!');
+        return redirect()->route('admin.legalisir.index')->with('success', 'Data berhasil diimport!');
     }
 }

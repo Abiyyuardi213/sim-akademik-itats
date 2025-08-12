@@ -35,7 +35,7 @@
                             @if(session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
-                            <form action="{{ route('prodi.store') }}" method="POST">
+                            <form action="{{ route('admin.prodi.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
                                     <label for="nama_prodi">Nama Program Studi</label>
@@ -57,7 +57,7 @@
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-                                <a href="{{ route('prodi.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.prodi.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>

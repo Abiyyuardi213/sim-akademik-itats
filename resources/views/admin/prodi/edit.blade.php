@@ -32,7 +32,7 @@
                             <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Data Program Studi</h3>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('prodi.update', $prodi->id) }}" method="POST">
+                            <form action="{{ route('admin.prodi.update', $prodi->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
@@ -55,7 +55,7 @@
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                                <a href="{{ route('prodi.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.prodi.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>

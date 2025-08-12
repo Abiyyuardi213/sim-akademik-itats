@@ -35,7 +35,7 @@
                             @if(session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
-                            <form action="{{ route('legalisir.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.legalisir.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6">
@@ -108,7 +108,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-                                <a href="{{ route('legalisir.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.legalisir.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>

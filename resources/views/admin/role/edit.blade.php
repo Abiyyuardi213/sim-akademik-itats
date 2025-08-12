@@ -35,7 +35,7 @@
                         <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Peran</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('role.update', $role->id) }}" method="POST">
+                        <form action="{{ route('admin.role.update', $role->id) }}" method="POST">
                             @csrf
                             @method('PUT')
 
@@ -72,7 +72,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-save"></i> Simpan Perubahan
                                 </button>
-                                <a href="{{ route('role.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.role.index') }}" class="btn btn-secondary">Batal</a>
                             </div>
                         </form>
                     </div>

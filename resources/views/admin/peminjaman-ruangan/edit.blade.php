@@ -32,7 +32,7 @@
                             <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Data Peminjaman Ruangan</h3>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('peminjaman-ruangan.update', $peminjaman->id) }}" method="POST">
+                            <form action="{{ route('admin.peminjaman-ruangan.update', $peminjaman->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
@@ -128,7 +128,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                                <a href="{{ route('peminjaman-ruangan.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.peminjaman-ruangan.index') }}" class="btn btn-secondary">Batal</a>
                             </form>
                         </div>
                     </div>

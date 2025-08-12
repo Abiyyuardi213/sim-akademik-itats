@@ -38,7 +38,7 @@
                             <h3 class="card-title">Daftar Peminjaman Ruangan</h3>
                             <div class="d-flex justify-content-end gap-2">
                                 <!-- Tambah Data -->
-                                <a href="{{ route('peminjaman-ruangan.create') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('admin.peminjaman-ruangan.create') }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus"></i> Tambah Data Peminjaman
                                 </a>
                             </div>
@@ -83,10 +83,10 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('peminjaman-ruangan.show', $peminjaman->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('admin.peminjaman-ruangan.show', $peminjaman->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('peminjaman-ruangan.edit', $peminjaman->id) }}" class="btn btn-warning btn-sm">
+                                                    <a href="{{ route('admin.peminjaman-ruangan.edit', $peminjaman->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-peminjaman-btn"

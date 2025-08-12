@@ -17,7 +17,12 @@
         <!-- User Info -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
             <div class="image">
-                <img src="{{ asset('uploads/profile/' . (Auth::user()->profile_picture ?? 'default.png')) }}"
+                @php
+                    $currentUser = Auth::guard('admin')->check()
+                        ? Auth::guard('admin')->user()
+                        : Auth::guard('users')->user();
+                @endphp
+                <img src="{{ asset('uploads/profile/' . ($currentUser->profile_picture ?? 'default.png')) }}"
                     class="img-circle elevation-2"
                     alt="User Image"
                     style="width: 45px; height: 45px; object-fit: cover; border: 2px solid white;">
@@ -27,8 +32,13 @@
                     {{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->username : Auth::guard('users')->user()->username }}
                 </a>
                 <span class="badge badge-success">Online</span>
+                @php
+                    $currentUser = Auth::guard('admin')->check()
+                        ? Auth::guard('admin')->user()
+                        : Auth::guard('users')->user();
+                @endphp
                 <span class="d-block" style="color: #f39c12; font-size: 14px; font-weight: 600;">
-                    {{ Auth::user()->role->role_name ?? 'Unknown' }}
+                    {{ $currentUser->role->role_name ?? 'Unknown' }}
                 </span>
             </div>
         </div>
@@ -37,15 +47,15 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" data-accordion="false" role="menu">
                 <li class="nav-item">
-                    <a href="{{ url('dashboard') }}" class="nav-link">
+                    <a href="{{ url('dashboard-admin') }}" class="nav-link">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
-                @can('akses-admin-dosen')
+                {{-- @can('akses-admin-dosen') --}}
                 <li class="nav-item">
-                    <a href="{{ route('role.index') }}" class="nav-link">
+                    <a href="{{ route('admin.role.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-user-shield"></i>
                         <p>Peran Pengguna</p>
                     </a>
@@ -64,7 +74,7 @@
                         <p>Program Studi</p>
                     </a>
                 </li>
-                @endcan
+                {{-- @endcan --}}
 
                 @php
                     $isCuti = request()->is('cuti*') ||

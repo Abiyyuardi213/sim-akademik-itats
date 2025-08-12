@@ -75,7 +75,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer text-right">
-                                    <a href="{{ route('peminjaman-ruangan.index') }}" class="btn btn-secondary">
+                                    <a href="{{ route('admin.peminjaman-ruangan.index') }}" class="btn btn-secondary">
                                         <i class="fas fa-arrow-left"></i> Kembali
                                     </a>
                                 </div>

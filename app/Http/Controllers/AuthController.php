@@ -53,19 +53,18 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        $user = User::where('username', $request->username)->with('role')->first();
 
-        if (!$user || $user->role_id !== '5126bfd2-7eb2-4654-8d09-fd4a9a8645dc') {
-            return back()->with('error', 'Username tidak ditemukan atau bukan admin.')
-                        ->withInput($request->only('username'));
+        if (!$user || !in_array($user->role?->role_name, ['admin', 'csr'])) {
+            return back()->with('error', 'Username tidak ditemukan atau bukan admin.')->withInput($request->only('username'));
         }
 
         if (!Hash::check($request->password, $user->password)) {
-            return back()->with('error', 'Password salah.')
-                        ->withInput($request->only('username'));
+            return back()->with('error', 'Password salah.')->withInput($request->only('username'));
         }
 
         Auth::guard('admin')->login($user);
+
         $request->session()->regenerate();
 
         return redirect()->route('admin.dashboard');
@@ -92,27 +91,29 @@ class AuthController extends Controller
 
     public function userLogin(Request $request)
     {
-        $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        $user = User::where('username', $request->username)->with('role')->first();
+        if (Auth::guard('users')->attempt($credentials)) {
+            $request->session()->regenerate();
 
-        if (!$user || $user->role->role_name !== 'guest') {
-            return back()->with('error', 'Username tidak ditemukan atau bukan user biasa.')
-                        ->withInput($request->only('username'));
+            $user = Auth::guard('users')->user();
+
+            if (!$user->role || strtolower($user->role->role_name) !== 'guest') {
+                Auth::guard('users')->logout();
+                return back()->withErrors([
+                    'email' => 'Akun ini tidak memiliki izin sebagai Guest.',
+                ])->withInput();
+            }
+
+            return redirect()->intended(route('users.dashboard'));
         }
 
-        if (!Hash::check($request->password, $user->password)) {
-            return back()->with('error', 'Password salah.')
-                        ->withInput($request->only('username'));
-        }
-
-        Auth::guard('users')->login($user);
-        $request->session()->regenerate();
-
-        return redirect()->route('users.dashboard');
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->withInput();
     }
 
     // public function login(Request $request)

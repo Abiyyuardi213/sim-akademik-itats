@@ -31,7 +31,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="card-title">Daftar Pengguna</h3>
-                            <a href="{{ route('user.create') }}" class="btn btn-primary btn-sm ml-auto">
+                            <a href="{{ route('admin.user.create') }}" class="btn btn-primary btn-sm ml-auto">
                                 <i class="fas fa-plus"></i> Tambah Pengguna
                             </a>
                         </div>
@@ -57,10 +57,10 @@
                                                 <td>{{ $user->no_telepon }}</td>
                                                 <td>{{ $user->role->role_name ?? '-' }}</td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('user.show', $user->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('admin.user.show', $user->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
-                                                    <a href="{{ route('user.edit', $user->id) }}" class="btn btn-warning btn-sm">
+                                                    <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-user-btn"
