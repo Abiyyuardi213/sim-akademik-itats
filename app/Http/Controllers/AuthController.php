@@ -51,31 +51,32 @@ class AuthController extends Controller
         return redirect()->route('admin.dashboard');
     }
 
-    public function userLogin(Request $request)
+    public function guestLogin(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        if (Auth::guard('users')->attempt($credentials)) {
-            $request->session()->regenerate();
+        $user = User::where('username', $request->username)
+            ->with('role')
+            ->first();
 
-            $user = Auth::guard('users')->user();
-
-            if (!$user->role || strtolower($user->role->role_name) !== 'guest') {
-                Auth::guard('users')->logout();
-                return back()->withErrors([
-                    'email' => 'Akun ini tidak memiliki izin sebagai Guest.',
-                ])->withInput();
-            }
-
-            return redirect()->intended(route('users.dashboard'));
+        if (!$user || strtolower($user->role?->role_name) !== 'guest') {
+            return back()->with('error', 'Username tidak ditemukan atau bukan Guest.')
+                ->withInput($request->only('username'));
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->withInput();
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->with('error', 'Password salah.')
+                ->withInput($request->only('username'));
+        }
+
+        Auth::guard('users')->login($user);
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('users.dashboard'));
     }
 
     public function logout(Request $request)

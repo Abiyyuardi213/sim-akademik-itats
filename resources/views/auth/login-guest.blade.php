@@ -72,7 +72,7 @@
                 @endif
 
                 {{-- Form login --}}
-                <form action="{{ route('login') }}" method="POST">
+                <form action="{{ route('login.guest.post') }}" method="POST">
                     @csrf
 
                     {{-- Username --}}

@@ -28,7 +28,7 @@ Route::middleware('guest:admin')->group(function () {
 
 Route::middleware('guest:users')->group(function () {
     Route::get('login-guest', [AuthController::class, 'showLoginGuestForm'])->name('login.guest');
-    Route::post('login-guest', [AuthController::class, 'userLogin'])->name('login.user');
+    Route::post('login-guest', [AuthController::class, 'guestLogin'])->name('login.guest.post');
 });
 
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
@@ -44,7 +44,7 @@ Route::name('admin.')->middleware(['auth:admin'])->group(function () {
         Route::resource('prodi', ProdiController::class);
     });
 
-    Route::middleware('ensure.admin:admin,csr')->group(function () {
+    Route::middleware('ensure.admin:admin,CSR')->group(function () {
         Route::post('periode/{id}/toggle-status', [PeriodeCutiController::class, 'toggleStatus'])->name('periode.toggleStatus');
         Route::resource('periode', PeriodeCutiController::class);
 
