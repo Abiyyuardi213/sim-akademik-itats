@@ -16,7 +16,7 @@ class KelasController extends Controller
             $query->where('gedung_id', $request->gedung_id);
         }
 
-        $kelass = $query->orderBy('created_at', 'asc')->get(); // atau 'desc' untuk terbaru di atas
+        $kelass = $query->orderBy('created_at', 'asc')->get();
         $gedungs = Gedung::all();
 
         return view('admin.kelas.index', compact('kelass', 'gedungs'));
@@ -35,11 +35,20 @@ class KelasController extends Controller
             'nama_kelas' => 'required|string|max:255',
             'kapasitas_mahasiswa' => 'required|integer',
             'keterangan' => 'nullable|string',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'kelas_status' => 'required|boolean',
         ]);
 
         $data = $request->all();
-        Kelas::createKelas($request->all());
+
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/kelas'), $filename);
+            $data['gambar'] = $filename;
+        }
+
+        Kelas::createKelas($data);
 
         return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil ditambahkan');
     }
@@ -60,10 +69,18 @@ class KelasController extends Controller
             'nama_kelas' => 'required|string|max:255',
             'kapasitas_mahasiswa' => 'required|integer',
             'keterangan' => 'nullable|string',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'kelas_status' => 'required|boolean',
         ]);
 
         $data = $request->all();
+
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/kelas'), $filename);
+            $data['gambar'] = $filename;
+        }
 
         $kelas->updateKelas($data);
 

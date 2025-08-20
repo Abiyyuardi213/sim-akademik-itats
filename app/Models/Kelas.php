@@ -15,6 +15,7 @@ class Kelas extends Model
         'nama_kelas',
         'kapasitas_mahasiswa',
         'keterangan',
+        'gambar',
         'kelas_status',
     ];
 
@@ -34,6 +35,7 @@ class Kelas extends Model
             'nama_kelas' => $data['nama_kelas'],
             'kapasitas_mahasiswa' => $data['kapasitas_mahasiswa'],
             'keterangan' => $data['keterangan'] ?? '',
+            'gambar' => $data['gambar'] ?? null,
             'kelas_status' => $data['kelas_status'] ?? true,
         ]);
     }
@@ -45,6 +47,7 @@ class Kelas extends Model
             'nama_kelas' => $data['nama_kelas'] ?? $this->nama_kelas,
             'kapasitas_mahasiswa' => $data['kapasitas_mahasiswa'] ?? $this->kapasitas_mahasiswa,
             'keterangan' => array_key_exists('keterangan', $data) ? $data['keterangan'] : $this->keterangan,
+            'gambar' => $data['gambar'] ?? $this->gambar,
             'kelas_status' => $data['kelas_status'] ?? $this->kelas_status,
         ]);
     }

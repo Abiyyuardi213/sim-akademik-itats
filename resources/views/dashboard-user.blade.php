@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akademik WR 1 - Client Dashboard</title>
-    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -72,7 +72,7 @@
                         <a href="#permohonan-peminjaman" class="btn btn-light btn-lg">
                             <i class="fas fa-plus me-2"></i>Ajukan Peminjaman
                         </a>
-                        <a href="#daftar-ruangan" class="btn btn-outline-light btn-lg">
+                        <a href="{{ route('users.pengajuan.index') }}" class="btn btn-outline-light btn-lg">
                             <i class="fas fa-search me-2"></i>Lihat Ruangan
                         </a>
                     </div>

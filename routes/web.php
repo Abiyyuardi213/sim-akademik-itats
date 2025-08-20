@@ -14,6 +14,7 @@ use App\Http\Controllers\LegalisirController;
 use App\Http\Controllers\GedungController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\PeminjamanRuanganController;
+use App\Http\Controllers\PengajuanPeminjamanController;
 use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
 
@@ -78,4 +79,12 @@ Route::name('admin.')->middleware(['auth:admin'])->group(function () {
 
 Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
     Route::get('/dashboard-user', [DashboardGuestController::class, 'index'])->name('dashboard');
+
+    Route::prefix('pengajuan')->name('pengajuan.')->group(function () {
+        Route::get('/', [PengajuanPeminjamanController::class, 'index'])->name('index');
+        // ubah: create menerima parameter kelas
+        Route::get('/create/{kelas}', [PengajuanPeminjamanController::class, 'create'])->name('create');
+        Route::post('/', [PengajuanPeminjamanController::class, 'store'])->name('store');
+        Route::get('/{id}', [PengajuanPeminjamanController::class, 'show'])->name('show');
+    });
 });

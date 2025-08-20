@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+    <style>
+        #preview-img {
+            max-width: 100%;
+            max-height: 300px;
+            display: block;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -61,6 +71,14 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="keterangan">Keterangan</label>
+                                            <textarea class="form-control @error('keterangan') is-invalid @enderror" name="keterangan">{{ old('keterangan', $kelas->keterangan) }}</textarea>
+                                            @error('keterangan')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Kolom Kanan -->
@@ -83,15 +101,18 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <label for="keterangan">Keterangan</label>
-                                    <textarea class="form-control @error('keterangan') is-invalid @enderror" name="keterangan">{{ old('keterangan', $kelas->keterangan) }}</textarea>
-                                    @error('keterangan')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                        <div class="form-group">
+                                            <label for="gambar">Unggah / Ubah Gambar Kelas (opsional)</label>
+                                            <input type="file" class="form-control @error('gambar') is-invalid @enderror" id="gambar" name="gambar" accept="image/*">
+                                            @error('gambar')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+
+                                            <!-- Preview Gambar (menampilkan gambar lama jika ada) -->
+                                            <img id="preview-img" src="{{ $kelas->gambar ? asset('storage/'.$kelas->gambar) : '#' }}" alt="Preview Gambar" style="{{ $kelas->gambar ? '' : 'display:none;' }}">
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
@@ -111,9 +132,66 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script>
         $(document).ready(function () {
             $('[data-widget="treeview"]').Treeview('init');
+        });
+
+        let cropper;
+        const gambarInput = document.getElementById('gambar');
+        const previewImg = document.getElementById('preview-img');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (previewImg.src && previewImg.style.display !== 'none') {
+                cropper = new Cropper(previewImg, {
+                    aspectRatio: 16 / 9,
+                    viewMode: 1,
+                    movable: true,
+                    zoomable: true,
+                    rotatable: true,
+                    scalable: true,
+                });
+            }
+        });
+
+        gambarInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    previewImg.style.display = 'block';
+
+                    if (cropper) cropper.destroy();
+
+                    cropper = new Cropper(previewImg, {
+                        aspectRatio: 16 / 9,
+                        viewMode: 1,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                    });
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            if (cropper) {
+                e.preventDefault();
+                cropper.getCroppedCanvas().toBlob((blob) => {
+                    const fileInput = new File([blob], gambarInput.files[0].name, { type: 'image/png' });
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(fileInput);
+                    gambarInput.files = dataTransfer.files;
+
+                    form.submit();
+                }, 'image/png', 0.9);
+            }
         });
     </script>
 </body>

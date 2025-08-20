@@ -112,6 +112,9 @@
                                                         {{ $kelas->kelas_status ? 'checked' : '' }}>
                                                 </td>
                                                 <td class="text-center">
+                                                    <a href="{{ route('admin.kelas.show', $kelas->id) }}" class="btn btn-success btn-sm">
+                                                        <i class="fas fa-eye"></i> Detail
+                                                    </a>
                                                     <a href="{{ route('admin.kelas.edit', $kelas->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
@@ -180,7 +183,8 @@
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true
+                "responsive": true,
+                "stateSave": true
             });
         });
 
