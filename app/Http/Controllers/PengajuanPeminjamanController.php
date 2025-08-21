@@ -104,4 +104,43 @@ class PengajuanPeminjamanController extends Controller
 
         return view('user.pengajuan.status', compact('statuses'));
     }
+
+    public function indexAdmin()
+    {
+        $pengajuans = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.pengajuan-ruangan.index', compact('pengajuans'));
+    }
+
+    public function approve($id)
+    {
+        $pengajuan = PengajuanPeminjamanRuangan::findOrFail($id);
+        $pengajuan->status = 'disetujui';
+        $pengajuan->catatan_admin = request('catatan_admin');
+        $pengajuan->save();
+
+        return redirect()->route('admin.pengajuan-ruangan.index')
+            ->with('success', 'Pengajuan berhasil disetujui');
+    }
+
+    public function reject($id)
+    {
+        $pengajuan = PengajuanPeminjamanRuangan::findOrFail($id);
+        $pengajuan->status = 'ditolak'; // pastikan konsisten dengan badge di Blade kamu
+        $pengajuan->catatan_admin = request('catatan_admin');
+        $pengajuan->save();
+
+        return redirect()->route('admin.pengajuan-ruangan.index')
+            ->with('success', 'Pengajuan berhasil ditolak');
+    }
+
+    public function showAdmin($id)
+    {
+        $pengajuan = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
+            ->findOrFail($id);
+
+        return view('admin.pengajuan-ruangan.show', compact('pengajuan'));
+    }
 }

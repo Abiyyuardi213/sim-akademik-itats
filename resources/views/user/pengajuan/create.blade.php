@@ -133,6 +133,7 @@
                 @csrf
                 <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
                 <input type="hidden" name="tanggal_peminjaman" id="selectedDate">
+                <input type="hidden" name="tanggal_berakhir_peminjaman" id="selectedEndDate">
                 <input type="hidden" name="waktu_peminjaman" id="selectedStartTime">
                 <input type="hidden" name="waktu_berakhir_peminjaman" id="selectedEndTime">
 
@@ -244,35 +245,60 @@
                 const isAvailable = isDateAvailable(dateStr);
                 const isToday = index === 0;
 
+                const isStart = startDate === dateStr;
+                const isEnd = endDate === dateStr;
+                const inRange = startDate && endDate && new Date(dateStr) > new Date(startDate) && new Date(dateStr) < new Date(endDate);
+
                 return `
                     <button
                         onclick="selectDate('${dateStr}')"
-                        class="p-4 rounded-xl text-center transition-all duration-200 transform hover:scale-105 ${
-                            selectedDate === dateStr
-                                ? 'gradient-bg text-white shadow-lg'
-                                : isAvailable
-                                    ? 'bg-gray-50 hover:bg-blue-50 text-gray-900 border-2 border-gray-200 hover:border-blue-300'
-                                    : 'bg-red-50 text-red-400 cursor-not-allowed border-2 border-red-200'
-                        }"
+                        class="p-4 rounded-xl text-center transition-all duration-200 transform hover:scale-105
+                            ${isStart || isEnd ? 'bg-blue-600 text-white shadow-lg'
+                                : inRange ? 'bg-blue-100 text-blue-800'
+                                : isAvailable ? 'bg-gray-50 hover:bg-blue-50 text-gray-900 border-2 border-gray-200 hover:border-blue-300'
+                                : 'bg-red-50 text-red-400 cursor-not-allowed border-2 border-red-200'}"
                         ${!isAvailable ? 'disabled' : ''}
                     >
-                        <div class="text-xs font-semibold mb-1 ${selectedDate === dateStr ? 'text-blue-100' : 'text-gray-500'}">${dateDisplay.day}</div>
+                        <div class="text-xs font-semibold mb-1 ${isStart || isEnd ? 'text-blue-100' : 'text-gray-500'}">${dateDisplay.day}</div>
                         <div class="text-2xl font-bold mb-1">${dateDisplay.date}</div>
-                        <div class="text-sm font-medium ${selectedDate === dateStr ? 'text-blue-100' : 'text-gray-600'}">${dateDisplay.month}</div>
-                        ${!isAvailable ? '<div class="text-xs mt-2 font-semibold">Penuh</div>' : ''}
-                        ${isToday ? '<div class="text-xs mt-1 font-semibold ' + (selectedDate === dateStr ? 'text-blue-100' : 'text-blue-600') + '">Hari ini</div>' : ''}
+                        <div class="text-sm font-medium ${isStart || isEnd ? 'text-blue-100' : 'text-gray-600'}">${dateDisplay.month}</div>
+                        ${isStart ? '<div class="text-xs mt-2 font-semibold">Mulai</div>' : ''}
+                        ${isEnd ? '<div class="text-xs mt-2 font-semibold">Selesai</div>' : ''}
+                        ${isToday ? '<div class="text-xs mt-1 font-semibold ' + (isStart || isEnd ? 'text-blue-100' : 'text-blue-600') + '">Hari ini</div>' : ''}
                     </button>
                 `;
             }).join('');
-
-            const firstAvailable = dates.find(date => isDateAvailable(formatDate(date, 'full')));
-            if (firstAvailable && !selectedDate) {
-                selectDate(formatDate(firstAvailable, 'full'));
-            }
         }
 
+        // function selectDate(dateStr) {
+        //     selectedDate = dateStr;
+        //     renderDateNavigation();
+        //     renderTimeSlots();
+        // }
+
+        let startDate = null;
+        let endDate = null;
+
         function selectDate(dateStr) {
-            selectedDate = dateStr;
+            if (!startDate) {
+                startDate = dateStr;
+                endDate = null;
+            } else if (!endDate) {
+                endDate = dateStr;
+                // kalau user pilih mundur, swap
+                if (new Date(endDate) < new Date(startDate)) {
+                    [startDate, endDate] = [endDate, startDate];
+                }
+                selectedDate = startDate;
+                document.getElementById('selectedDate').value = startDate;
+                document.getElementById('selectedEndDate').value = endDate;
+            } else {
+                // reset kalau klik lagi
+                startDate = dateStr;
+                endDate = null;
+                document.getElementById('selectedEndDate').value = "";
+            }
+
             renderDateNavigation();
             renderTimeSlots();
         }
@@ -324,20 +350,21 @@
         function selectTimeSlot(startTime, endTime) {
             selectedTimeSlot = { start: startTime, end: endTime };
 
-            document.getElementById('selectedDate').value = selectedDate;
+            document.getElementById('selectedDate').value = startDate;
+            document.getElementById('selectedEndDate').value = endDate || startDate;
             document.getElementById('selectedStartTime').value = startTime;
             document.getElementById('selectedEndTime').value = endTime;
 
-            const dateObj = new Date(selectedDate);
-            const dateDisplay = dateObj.toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+            const startObj = new Date(startDate);
+            const endObj = endDate ? new Date(endDate) : startObj;
+
+            const startDisplay = startObj.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const endDisplay = endObj.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             document.getElementById('selectedTimeDisplay').textContent =
-                `${dateDisplay}, ${startTime} - ${endTime}`;
+                (startDate === endDate || !endDate)
+                    ? `${startDisplay}, ${startTime} - ${endTime}`
+                    : `${startDisplay} s/d ${endDisplay}, ${startTime} - ${endTime}`;
 
             document.getElementById('bookingModal').classList.remove('hidden');
         }

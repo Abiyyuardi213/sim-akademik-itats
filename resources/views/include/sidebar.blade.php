@@ -32,11 +32,6 @@
                     {{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->username : Auth::guard('users')->user()->username }}
                 </a>
                 <span class="badge badge-success">Online</span>
-                @php
-                    $currentUser = Auth::guard('admin')->check()
-                        ? Auth::guard('admin')->user()
-                        : Auth::guard('users')->user();
-                @endphp
                 <span class="d-block" style="color: #f39c12; font-size: 14px; font-weight: 600;">
                     {{ $currentUser->role->role_name ?? 'Unknown' }}
                 </span>
@@ -46,44 +41,39 @@
         <!-- Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" data-accordion="false" role="menu">
+                <!-- Dashboard -->
                 <li class="nav-item">
-                    <a href="{{ url('dashboard-admin') }}" class="nav-link">
+                    <a href="{{ url('dashboard-admin') }}" class="nav-link {{ request()->is('dashboard-admin') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
-                @php
-                    $currentUser = Auth::guard('admin')->check()
-                        ? Auth::guard('admin')->user()
-                        : Auth::guard('users')->user();
-                @endphp
-
-                {{-- @can('akses-admin-dosen') --}}
+                <!-- Role & User (jika bukan CSR) -->
                 @if($currentUser->role->role_name !== 'CSR')
                 <li class="nav-item">
-                    <a href="{{ route('admin.role.index') }}" class="nav-link">
+                    <a href="{{ route('admin.role.index') }}" class="nav-link {{ request()->is('role*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-shield"></i>
                         <p>Peran Pengguna</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ url('user') }}" class="nav-link">
+                    <a href="{{ url('user') }}" class="nav-link {{ request()->is('user*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>Pengguna</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ url('prodi') }}" class="nav-link">
+                    <a href="{{ url('prodi') }}" class="nav-link {{ request()->is('prodi*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-university"></i>
                         <p>Program Studi</p>
                     </a>
                 </li>
                 @endif
-                {{-- @endcan --}}
 
+                <!-- Menu Cuti -->
                 @php
                     $isCuti = request()->is('cuti*') ||
                               request()->is('mahasiswa-cuti*') ||
@@ -99,19 +89,19 @@
                     </a>
                     <ul class="nav nav-treeview" style="{{ $isCuti ? 'display: block;' : '' }}">
                         <li class="nav-item">
-                            <a href="{{ url('mahasiswa-cuti/dashboard') }}" class="nav-link">
+                            <a href="{{ url('mahasiswa-cuti/dashboard') }}" class="nav-link {{ request()->is('mahasiswa-cuti/dashboard') ? 'active' : '' }}">
                                 <i class="fas fa-chart-bar nav-icon"></i>
                                 <p>Dashboard Rekap Cuti</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.periode.index') }}" class="nav-link">
+                            <a href="{{ route('admin.periode.index') }}" class="nav-link {{ request()->is('periode*') ? 'active' : '' }}">
                                 <i class="fas fa-calendar-alt nav-icon text-success"></i>
                                 <p>Periode Cuti</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('mahasiswa-cuti') }}" class="nav-link">
+                            <a href="{{ url('mahasiswa-cuti') }}" class="nav-link {{ request()->is('mahasiswa-cuti') ? 'active' : '' }}">
                                 <i class="fas fa-user-graduate nav-icon text-info"></i>
                                 <p>List Mahasiswa Cuti</p>
                             </a>
@@ -119,8 +109,13 @@
                     </ul>
                 </li>
 
+                <!-- Menu Fasilitas -->
                 @php
-                    $isFasilitas = request()->is('fasilitas*') || request()->is('gedung*') || request()->is('kelas*') || request()->is('peminjaman-ruangan*');
+                    $isFasilitas = request()->is('fasilitas*') ||
+                                   request()->is('gedung*') ||
+                                   request()->is('kelas*') ||
+                                   request()->is('peminjaman-ruangan*') ||
+                                   request()->is('pengajuan-ruangan*');
                 @endphp
                 <li class="nav-item has-treeview {{ $isFasilitas ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $isFasilitas ? 'active' : '' }}">
@@ -132,37 +127,41 @@
                     </a>
                     <ul class="nav nav-treeview" style="{{ $isFasilitas ? 'display: block;' : '' }}">
                         <li class="nav-item">
-                            <a href="{{ url('fasilitas/dashboard') }}" class="nav-link">
+                            <a href="{{ url('fasilitas/dashboard') }}" class="nav-link {{ request()->is('fasilitas/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-chart-bar"></i>
                                 <p>Dashboard Fasilitas</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.gedung.index') }}" class="nav-link">
-                            {{-- <a href="{{ route('gedung/index') }}" class="nav-link"> --}}
-                                <i class="nav-icon fas fa-building"></i>
+                            <a href="{{ route('admin.gedung.index') }}" class="nav-link {{ request()->is('gedung*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-building text-success"></i>
                                 <p>Gedung</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.kelas.index') }}" class="nav-link">
-                            {{-- <a href="{{ route('kelas/index') }}" class="nav-link"> --}}
-                                <i class="nav-icon fas fa-chalkboard"></i>
+                            <a href="{{ route('admin.kelas.index') }}" class="nav-link {{ request()->is('kelas*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-chalkboard text-info"></i>
                                 <p>Ruang Kelas</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.peminjaman-ruangan.index') }}" class="nav-link">
-                            {{-- <a href="{{ route('peminjaman-ruangan/index') }}" class="nav-link"> --}}
-                                <i class="nav-icon fas fa-calendar-check"></i>
+                            <a href="{{ route('admin.peminjaman-ruangan.index') }}" class="nav-link {{ request()->is('peminjaman-ruangan*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-calendar-check text-warning"></i>
                                 <p>Peminjaman Kelas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.pengajuan-ruangan.index') }}" class="nav-link {{ request()->is('pengajuan-ruangan*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-paper-plane text-purple"></i>
+                                <p>Permohonan</p>
                             </a>
                         </li>
                     </ul>
                 </li>
 
+                <!-- Legalisir -->
                 <li class="nav-item">
-                    <a href="{{ url('legalisir') }}" class="nav-link">
+                    <a href="{{ url('legalisir') }}" class="nav-link {{ request()->is('legalisir*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-file-signature"></i>
                         <p>Legalisir</p>
                     </a>

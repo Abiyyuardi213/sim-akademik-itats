@@ -77,6 +77,18 @@ Route::name('admin.')->middleware(['auth:admin'])->group(function () {
     Route::put('profile', [UserController::class, 'updateProfile'])->name('profile.update');
 });
 
+Route::name('admin.')->middleware('ensure.admin:admin,CSR')->group(function () {
+    Route::get('pengajuan-ruangan', [PengajuanPeminjamanController::class, 'indexAdmin'])
+        ->name('pengajuan-ruangan.index');
+    Route::get('pengajuan-ruangan/{id}', [PengajuanPeminjamanController::class, 'showAdmin'])
+        ->name('pengajuan-ruangan.show');
+
+    Route::post('pengajuan-ruangan/{id}/approve', [PengajuanPeminjamanController::class, 'approve'])
+        ->name('pengajuan-ruangan.approve');
+    Route::post('pengajuan-ruangan/{id}/reject', [PengajuanPeminjamanController::class, 'reject'])
+        ->name('pengajuan-ruangan.reject');
+});
+
 Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
     Route::get('/dashboard-user', [DashboardGuestController::class, 'index'])->name('dashboard');
 
