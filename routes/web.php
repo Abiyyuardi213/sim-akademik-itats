@@ -85,6 +85,8 @@ Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
         // ubah: create menerima parameter kelas
         Route::get('/create/{kelas}', [PengajuanPeminjamanController::class, 'create'])->name('create');
         Route::post('/', [PengajuanPeminjamanController::class, 'store'])->name('store');
+        Route::get('/riwayat', [PengajuanPeminjamanController::class, 'riwayat'])->name('riwayat');
+        Route::get('/status', [PengajuanPeminjamanController::class, 'status'])->name('status');
         Route::get('/{id}', [PengajuanPeminjamanController::class, 'show'])->name('show');
     });
 });

@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <img src="{{ asset('image/gedungA.jpg') }}" alt="Room Booking" class="img-fluid rounded shadow">
+                    <img src="{{ asset('image/d1.jpg') }}" alt="Room Booking" class="img-fluid rounded shadow">
                 </div>
             </div>
         </div>

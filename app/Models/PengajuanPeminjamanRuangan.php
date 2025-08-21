@@ -21,7 +21,7 @@ class PengajuanPeminjamanRuangan extends Model
         'waktu_berakhir_peminjaman',
         'keperluan_peminjaman',
         'status',
-        'catatan_admin',
+        'catatan_admin',    
     ];
 
     protected static function booted()

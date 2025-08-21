@@ -36,12 +36,12 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item dropdown-item-custom" href="#permohonan-peminjaman">
-                                <i class="fas fa-file-alt me-3"></i>Permohonan Peminjaman
+                            <a class="dropdown-item dropdown-item-custom" href="{{ route('users.pengajuan.riwayat') }}">
+                                <i class="fas fa-file-alt me-3"></i> Permohonan Peminjaman
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item dropdown-item-custom" href="#status-permohonan">
+                            <a class="dropdown-item dropdown-item-custom" href="{{ route('users.pengajuan.status') }}">
                                 <i class="fas fa-clock me-3"></i>Status Permohonan
                             </a>
                         </li>
@@ -106,7 +106,7 @@
     }
 
     .navbar-logo {
-        height: 45px;
+        height: 30px;
         width: auto;
     }
 

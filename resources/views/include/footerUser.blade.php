@@ -4,7 +4,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="footer-brand">
                     <div class="footer-logo-section">
-                        <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" class="footer-logo">
+                        <img src="{{ asset('image/logo-itats-putih.png') }}" alt="Logo ITATS" class="footer-logo">
                         <div class="footer-brand-text">
                             <h5 class="footer-title">Sistem Peminjaman Ruangan</h5>
                             {{-- <p class="footer-subtitle">Institut Teknologi Adhi Tama Surabaya</p> --}}
@@ -141,7 +141,6 @@
         height: 50px;
         width: auto;
         margin-right: 1rem;
-        filter: brightness(0) invert(1);
     }
 
     .footer-brand-text {

@@ -16,7 +16,7 @@
             left: 0;
             height: 100vh;
             width: 100vw;
-            background: url('{{ asset('image/graha-itats.jpeg') }}') no-repeat center center fixed;
+            background: url('{{ asset('image/d1.jpg') }}') no-repeat center center fixed;
             background-size: cover;
             z-index: 0;
         }
