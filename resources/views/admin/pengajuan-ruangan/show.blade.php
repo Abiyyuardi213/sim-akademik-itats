@@ -21,11 +21,6 @@
                     <div class="col-sm-6">
                         <h1 class="m-0">Detail Permohonan</h1>
                     </div>
-                    <div class="col-sm-6 text-right">
-                        <a href="{{ route('admin.pengajuan-ruangan.index') }}" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-arrow-left"></i> Kembali
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -86,6 +81,12 @@
                                 </button>
                             </form>
                         @endif
+
+                        <div class="col-sm-6 text-right">
+                        <a href="{{ route('admin.pengajuan-ruangan.index') }}" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </a>
+                    </div>
                     </div>
                 </div>
             </div>

@@ -12,14 +12,25 @@ use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\MahasiswaCutiController;
 use App\Http\Controllers\LegalisirController;
 use App\Http\Controllers\GedungController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\PeminjamanRuanganController;
 use App\Http\Controllers\PengajuanPeminjamanController;
 use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('home');
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/about', [HomeController::class, 'about'])->name('about');
 });
 
 Route::middleware('guest:admin')->group(function () {
@@ -101,4 +112,23 @@ Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
         Route::get('/status', [PengajuanPeminjamanController::class, 'status'])->name('status');
         Route::get('/{id}', [PengajuanPeminjamanController::class, 'show'])->name('show');
     });
+});
+
+Route::middleware(['auth:users'])->group(function () {
+    Route::get('/notifications/{id}/go', function ($id, Request $request) {
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return redirect($notification->data['url']);
+    })->name('notifications.go');
+
+    Route::post('/notifications/{id}/read', function ($id, Request $request) {
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return back();
+    })->name('notifications.read');
+
+    Route::post('/notifications/read-all', function (Request $request) {
+        $request->user()->unreadNotifications->markAsRead();
+        return back();
+    })->name('notifications.readAll');
 });

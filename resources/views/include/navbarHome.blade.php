@@ -19,33 +19,15 @@
             <ul class="navbar-nav mx-auto">
                 <!-- Beranda -->
                 <li class="nav-item">
-                    <a class="nav-link nav-link-custom" href="{{ url('dashboard-user') }}">
+                    <a class="nav-link nav-link-custom" href="{{ url('home') }}">
                         <i class="fas fa-home me-2"></i>Beranda
                     </a>
                 </li>
 
-                <!-- Menu Dropdown -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link nav-link-custom dropdown-toggle" href="#" id="menuDropdown" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-th-list me-2"></i>Menu
+                <li class="nav-item">
+                    <a class="nav-link nav-link-custom" href="{{ url('about') }}">
+                        <i class="fas fa-info-circle me-2"></i>Tentang
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-custom">
-                        <li>
-                            <a class="dropdown-item dropdown-item-custom" href="{{ route('users.pengajuan.index') }}">
-                                <i class="fas fa-door-open me-3"></i>Daftar Ruangan
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item dropdown-item-custom" href="{{ route('users.pengajuan.riwayat') }}">
-                                <i class="fas fa-file-alt me-3"></i> Permohonan Peminjaman
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item dropdown-item-custom" href="{{ route('users.pengajuan.status') }}">
-                                <i class="fas fa-clock me-3"></i>Status Permohonan
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <!-- Pengumuman -->
@@ -53,52 +35,6 @@
                     <a class="nav-link nav-link-custom" href="#pengumuman">
                         <i class="fas fa-bullhorn me-2"></i>Pengumuman
                     </a>
-                </li>
-            </ul>
-
-            <!-- Profile Dropdown -->
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link nav-link-custom dropdown-toggle profile-dropdown" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
-                        <div class="profile-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <span class="d-none d-lg-inline ms-2">{{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->username : Auth::guard('users')->user()->username }}</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-custom dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item dropdown-item-custom" href="#profil-pengguna">
-                                <i class="fas fa-user me-3"></i>Profil Pengguna
-                            </a>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item dropdown-item-custom text-danger" href="#logout" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt me-3"></i>Logout
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link nav-link-custom dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-bell"></i>
-                        @if(Auth::guard('users')->check() && Auth::guard('users')->user()->unreadNotifications->count())
-                            <span class="badge bg-danger">{{ Auth::guard('users')->user()->unreadNotifications->count() }}</span>
-                        @endif
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-custom dropdown-menu-end">
-                        @forelse(Auth::guard('users')->user()->unreadNotifications as $notification)
-                            <li>
-                                <a class="dropdown-item dropdown-item-custom" href="{{ route('notifications.go', $notification->id) }}">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    {{ $notification->data['message'] }}
-                                </a>
-                            </li>
-                        @empty
-                            <li class="dropdown-item text-muted">Tidak ada notifikasi</li>
-                        @endforelse
-                    </ul>
                 </li>
             </ul>
         </div>

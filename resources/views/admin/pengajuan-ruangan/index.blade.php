@@ -59,9 +59,9 @@
                                         <td>
                                             @if($pengajuan->status == 'pending')
                                                 <span class="badge badge-warning">Menunggu</span>
-                                            @elseif($pengajuan->status == 'approved')
+                                            @elseif($pengajuan->status == 'disetujui')
                                                 <span class="badge badge-success">Disetujui</span>
-                                            @elseif($pengajuan->status == 'rejected')
+                                            @elseif($pengajuan->status == 'ditolak')
                                                 <span class="badge badge-danger">Ditolak</span>
                                             @endif
                                         </td>

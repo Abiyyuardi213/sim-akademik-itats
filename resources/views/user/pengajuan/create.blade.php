@@ -132,10 +132,10 @@
             <form action="{{ route('users.pengajuan.store') }}" method="POST" class="p-6 space-y-6">
                 @csrf
                 <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
-                <input type="hidden" name="tanggal_peminjaman" id="selectedDate">
-                <input type="hidden" name="tanggal_berakhir_peminjaman" id="selectedEndDate">
-                <input type="hidden" name="waktu_peminjaman" id="selectedStartTime">
-                <input type="hidden" name="waktu_berakhir_peminjaman" id="selectedEndTime">
+                <input type="hidden" name="tanggal_peminjaman" id="selectedDate" required>
+                <input type="hidden" name="tanggal_berakhir_peminjaman" id="selectedEndDate" required>
+                <input type="hidden" name="waktu_peminjaman" id="selectedStartTime" required>
+                <input type="hidden" name="waktu_berakhir_peminjaman" id="selectedEndTime" required>
 
                 <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
                     <div class="flex items-center gap-3">
@@ -291,7 +291,7 @@
                 }
                 selectedDate = startDate;
                 document.getElementById('selectedDate').value = startDate;
-                document.getElementById('selectedEndDate').value = endDate;
+                document.getElementById('selectedEndDate').value = endDate || startDate;
             } else {
                 // reset kalau klik lagi
                 startDate = dateStr;

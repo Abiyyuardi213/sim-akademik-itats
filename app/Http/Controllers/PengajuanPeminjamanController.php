@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kelas;
 use App\Models\PengajuanPeminjamanRuangan;
 use App\Models\Prodi;
+use App\Notifications\StatusPengajuanNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -20,13 +21,35 @@ class PengajuanPeminjamanController extends Controller
         return view('user.pengajuan.index', compact('kelas'));
     }
 
+    // public function create(Kelas $kelas)
+    // {
+    //     $prodis = Prodi::all();
+
+    //     $bookings = PengajuanPeminjamanRuangan::where('kelas_id', $kelas->id)
+    //     ->whereIn('status', ['approved', 'pending'])
+    //         ->get(['tanggal_peminjaman', 'tanggal_berakhir_peminjaman']);
+
+    //     if (!$kelas->kelas_status) {
+    //         return redirect()->route('users.pengajuan.index')
+    //             ->with('error', 'Ruangan tidak tersedia untuk diajukan.');
+    //     }
+
+    //     return view('user.pengajuan.create', compact('kelas', 'prodis', 'bookings'));
+    // }
+
     public function create(Kelas $kelas)
     {
         $prodis = Prodi::all();
 
         $bookings = PengajuanPeminjamanRuangan::where('kelas_id', $kelas->id)
-            ->whereIn('status', ['approved', 'pending'])
-            ->get(['tanggal_peminjaman', 'tanggal_berakhir_peminjaman']);
+            ->whereIn('status', ['pending', 'disetujui'])
+            ->get([
+                'tanggal_peminjaman',
+                'tanggal_berakhir_peminjaman',
+                'waktu_peminjaman',
+                'waktu_berakhir_peminjaman',
+                'status'
+            ]);
 
         if (!$kelas->kelas_status) {
             return redirect()->route('users.pengajuan.index')
@@ -36,6 +59,34 @@ class PengajuanPeminjamanController extends Controller
         return view('user.pengajuan.create', compact('kelas', 'prodis', 'bookings'));
     }
 
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'kelas_id' => 'required|exists:kelas,id',
+    //         'prodi_id' => 'required|exists:prodi,id',
+    //         'tanggal_peminjaman' => 'required|date',
+    //         'tanggal_berakhir_peminjaman' => 'nullable|date|after_or_equal:tanggal_peminjaman',
+    //         'waktu_peminjaman' => 'required',
+    //         'waktu_berakhir_peminjaman' => 'required|after:waktu_peminjaman',
+    //         'keperluan_peminjaman' => 'required|string',
+    //     ]);
+
+    //     PengajuanPeminjamanRuangan::create([
+    //         'id' => Str::uuid(),
+    //         'user_id' => Auth::user()->id,
+    //         'kelas_id' => $request->kelas_id,
+    //         'prodi_id' => $request->prodi_id,
+    //         'tanggal_peminjaman' => $request->tanggal_peminjaman,
+    //         'tanggal_berakhir_peminjaman' => $request->tanggal_berakhir_peminjaman,
+    //         'waktu_peminjaman' => $request->waktu_peminjaman,
+    //         'waktu_berakhir_peminjaman' => $request->waktu_berakhir_peminjaman,
+    //         'keperluan_peminjaman' => $request->keperluan_peminjaman,
+    //         'status' => 'pending',
+    //     ]);
+
+    //     return redirect()->route('users.pengajuan.index')->with('success', 'Pengajuan peminjaman berhasil diajukan.');
+    // }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -43,20 +94,42 @@ class PengajuanPeminjamanController extends Controller
             'prodi_id' => 'required|exists:prodi,id',
             'tanggal_peminjaman' => 'required|date',
             'tanggal_berakhir_peminjaman' => 'nullable|date|after_or_equal:tanggal_peminjaman',
-            'waktu_peminjaman' => 'required',
-            'waktu_berakhir_peminjaman' => 'required|after:waktu_peminjaman',
+            'waktu_peminjaman' => 'required|date_format:H:i',
+            'waktu_berakhir_peminjaman' => 'required|date_format:H:i|after:waktu_peminjaman',
             'keperluan_peminjaman' => 'required|string',
         ]);
+
+        $startDate = $request->tanggal_peminjaman;
+        $endDate   = $request->tanggal_berakhir_peminjaman ?: $startDate;
+
+        $startTime = $request->waktu_peminjaman;
+        $endTime   = $request->waktu_berakhir_peminjaman;
+
+        $exists = PengajuanPeminjamanRuangan::where('kelas_id', $request->kelas_id)
+            ->whereIn('status', ['pending', 'disetujui'])
+            ->whereDate('tanggal_peminjaman', '<=', $endDate)
+            ->whereDate('tanggal_berakhir_peminjaman', '>=', $startDate)
+            ->where(function ($q) use ($startTime, $endTime) {
+                $q->whereTime('waktu_peminjaman', '<', $endTime)
+                  ->whereTime('waktu_berakhir_peminjaman', '>', $startTime);
+            })
+            ->exists();
+
+        if ($exists) {
+            return back()
+                ->withErrors(['waktu' => 'Ruangan sudah dipakai pada rentang tanggal/waktu tersebut.'])
+                ->withInput();
+        }
 
         PengajuanPeminjamanRuangan::create([
             'id' => Str::uuid(),
             'user_id' => Auth::user()->id,
             'kelas_id' => $request->kelas_id,
             'prodi_id' => $request->prodi_id,
-            'tanggal_peminjaman' => $request->tanggal_peminjaman,
-            'tanggal_berakhir_peminjaman' => $request->tanggal_berakhir_peminjaman,
-            'waktu_peminjaman' => $request->waktu_peminjaman,
-            'waktu_berakhir_peminjaman' => $request->waktu_berakhir_peminjaman,
+            'tanggal_peminjaman' => $startDate,
+            'tanggal_berakhir_peminjaman' => $endDate,
+            'waktu_peminjaman' => $startTime,
+            'waktu_berakhir_peminjaman' => $endTime,
             'keperluan_peminjaman' => $request->keperluan_peminjaman,
             'status' => 'pending',
         ]);
@@ -114,12 +187,26 @@ class PengajuanPeminjamanController extends Controller
         return view('admin.pengajuan-ruangan.index', compact('pengajuans'));
     }
 
+    // public function approve($id)
+    // {
+    //     $pengajuan = PengajuanPeminjamanRuangan::findOrFail($id);
+    //     $pengajuan->status = 'disetujui';
+    //     $pengajuan->catatan_admin = request('catatan_admin');
+    //     $pengajuan->save();
+
+    //     return redirect()->route('admin.pengajuan-ruangan.index')
+    //         ->with('success', 'Pengajuan berhasil disetujui');
+    // }
+
     public function approve($id)
     {
         $pengajuan = PengajuanPeminjamanRuangan::findOrFail($id);
         $pengajuan->status = 'disetujui';
         $pengajuan->catatan_admin = request('catatan_admin');
         $pengajuan->save();
+
+        // Kirim notifikasi ke user terkait
+        $pengajuan->user->notify(new StatusPengajuanNotification($pengajuan->status));
 
         return redirect()->route('admin.pengajuan-ruangan.index')
             ->with('success', 'Pengajuan berhasil disetujui');
@@ -131,6 +218,8 @@ class PengajuanPeminjamanController extends Controller
         $pengajuan->status = 'ditolak'; // pastikan konsisten dengan badge di Blade kamu
         $pengajuan->catatan_admin = request('catatan_admin');
         $pengajuan->save();
+
+        $pengajuan->user->notify(new StatusPengajuanNotification($pengajuan->status));
 
         return redirect()->route('admin.pengajuan-ruangan.index')
             ->with('success', 'Pengajuan berhasil ditolak');
