@@ -69,8 +69,29 @@
         <div class="container">
             <div class="row align-items-center mb-5">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="{{ asset('image/d1.jpg') }}" alt="Tentang Sistem" class="img-fluid rounded shadow">
+                    <!-- Slider Gambar -->
+                    <div id="aboutCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner rounded shadow">
+                            <div class="carousel-item active">
+                                <img src="{{ asset('image/d12.jpg') }}" class="d-block w-100" alt="Tentang Sistem 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ asset('image/d1interior.jpg') }}" class="d-block w-100" alt="Tentang Sistem 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ asset('image/joglo.jpg') }}" class="d-block w-100" alt="Tentang Sistem 3">
+                            </div>
+                        </div>
+                        <!-- Kontrol Navigasi -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#aboutCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#aboutCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
                 </div>
+
                 <div class="col-lg-6">
                     <h2 class="fw-bold mb-3">Apa itu Sistem Peminjaman Ruangan?</h2>
                     <p class="text-muted">
@@ -112,24 +133,45 @@
                     <h2 class="fw-bold">Tim Pengembang</h2>
                 </div>
                 <div class="col-md-4">
-                    <div class="card card-custom p-4">
-                        <img src="{{ asset('image/profile1.jpg') }}" class="rounded-circle mb-3 mx-auto" width="100" height="100" alt="Dev 1">
-                        <h6 class="fw-bold">Nama Developer 1</h6>
-                        <p class="text-muted">Backend Developer</p>
+                    <div class="card card-custom text-center p-4 shadow-sm border-0 rounded-3 h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <img src="{{ asset('image/default.png') }}"
+                                class="rounded-circle shadow-sm"
+                                width="100" height="100" alt="Dev 1">
+                        </div>
+                        <h6 class="fw-bold mb-1">R. Abiyyu Ardi Lian Permadi</h6>
+                        <p class="text-muted mb-0">
+                            Backend & Frontend Developer <br>
+                            <small>Teknik Informatika 2023</small>
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card card-custom p-4">
-                        <img src="{{ asset('image/profile2.jpg') }}" class="rounded-circle mb-3 mx-auto" width="100" height="100" alt="Dev 2">
-                        <h6 class="fw-bold">Nama Developer 2</h6>
-                        <p class="text-muted">Frontend Developer</p>
+                    <div class="card card-custom text-center p-4 shadow-sm border-0 rounded-3 h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <img src="{{ asset('image/default.png') }}"
+                                class="rounded-circle shadow-sm"
+                                width="100" height="100" alt="Dev 1">
+                        </div>
+                        <h6 class="fw-bold mb-1">Nama Developer 2</h6>
+                        <p class="text-muted mb-0">
+                            Frontend Developer <br>
+                            <small>Angkatan</small>
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card card-custom p-4">
-                        <img src="{{ asset('image/profile3.jpg') }}" class="rounded-circle mb-3 mx-auto" width="100" height="100" alt="Dev 3">
-                        <h6 class="fw-bold">Nama Developer 3</h6>
-                        <p class="text-muted">UI/UX Designer</p>
+                    <div class="card card-custom text-center p-4 shadow-sm border-0 rounded-3 h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <img src="{{ asset('image/default.png') }}"
+                                class="rounded-circle shadow-sm"
+                                width="100" height="100" alt="Dev 1">
+                        </div>
+                        <h6 class="fw-bold mb-1">Nama Developer 3</h6>
+                        <p class="text-muted mb-0">
+                            UI/UX Designer <br>
+                            <small>Angkatan</small>
+                        </p>
                     </div>
                 </div>
             </div>

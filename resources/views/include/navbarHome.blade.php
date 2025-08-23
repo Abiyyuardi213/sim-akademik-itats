@@ -37,6 +37,13 @@
                     </a>
                 </li>
             </ul>
+
+            <!-- Login Button -->
+            <div class="d-flex">
+                <a href="{{ url('login-guest') }}" class="btn btn-primary px-4 rounded-pill shadow-sm">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            </div>
         </div>
     </div>
 </nav>
