@@ -30,6 +30,12 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link nav-link-custom" href="{{ url('fasilitas') }}">
+                        <i class="fas fa-building me-2"></i>Fasilitas
+                    </a>
+                </li>
+
                 <!-- Pengumuman -->
                 <li class="nav-item">
                     <a class="nav-link nav-link-custom" href="#pengumuman">

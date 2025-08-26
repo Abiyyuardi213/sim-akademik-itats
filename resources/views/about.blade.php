@@ -153,7 +153,7 @@
                                 class="rounded-circle shadow-sm"
                                 width="100" height="100" alt="Dev 1">
                         </div>
-                        <h6 class="fw-bold mb-1">Nama Developer 2</h6>
+                        <h6 class="fw-bold mb-1">Developer 2</h6>
                         <p class="text-muted mb-0">
                             Frontend Developer <br>
                             <small>Angkatan</small>
@@ -167,7 +167,7 @@
                                 class="rounded-circle shadow-sm"
                                 width="100" height="100" alt="Dev 1">
                         </div>
-                        <h6 class="fw-bold mb-1">Nama Developer 3</h6>
+                        <h6 class="fw-bold mb-1">Developer 3</h6>
                         <p class="text-muted mb-0">
                             UI/UX Designer <br>
                             <small>Angkatan</small>

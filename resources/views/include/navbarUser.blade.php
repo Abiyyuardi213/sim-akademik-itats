@@ -63,11 +63,13 @@
                         <div class="profile-avatar">
                             <i class="fas fa-user"></i>
                         </div>
-                        <span class="d-none d-lg-inline ms-2">{{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->username : Auth::guard('users')->user()->username }}</span>
+                        <span class="d-none d-lg-inline ms-2">
+                            {{ Auth::guard('users')->user()->username }}
+                        </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-custom dropdown-menu-end">
                         <li>
-                            <a class="dropdown-item dropdown-item-custom" href="#profil-pengguna">
+                            <a class="dropdown-item dropdown-item-custom" href="{{ route('users.profile.edit') }}">
                                 <i class="fas fa-user me-3"></i>Profil Pengguna
                             </a>
                         </li>

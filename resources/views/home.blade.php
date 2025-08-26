@@ -154,47 +154,7 @@
         </div>
     </section>
 
-    <!-- Quick Actions Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row text-center mb-4">
-                <div class="col-12">
-                    <h3 class="fw-bold">Aksi Cepat</h3>
-                    <p class="text-muted">Akses fitur utama dengan satu klik</p>
-                </div>
-            </div>
-            <div class="row g-3 justify-content-center">
-                <div class="col-md-3 col-sm-6">
-                    <a href="#daftar-ruangan" class="btn btn-outline-primary w-100 py-3">
-                        <i class="fas fa-list fa-2x d-block mb-2"></i>
-                        <span>Daftar Ruangan</span>
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#permohonan-peminjaman" class="btn btn-primary w-100 py-3">
-                        <i class="fas fa-plus-circle fa-2x d-block mb-2"></i>
-                        <span>Ajukan Peminjaman</span>
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#status-permohonan" class="btn btn-outline-primary w-100 py-3">
-                        <i class="fas fa-clock fa-2x d-block mb-2"></i>
-                        <span>Cek Status</span>
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#pengumuman" class="btn btn-outline-primary w-100 py-3">
-                        <i class="fas fa-bullhorn fa-2x d-block mb-2"></i>
-                        <span>Pengumuman</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     @include('include.footerUser')
-    <!-- Logout Modal -->
     @include('services.LogoutModalUser')
 
     <!-- Bootstrap JS -->

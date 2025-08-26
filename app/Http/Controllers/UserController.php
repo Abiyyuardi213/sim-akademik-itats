@@ -123,6 +123,16 @@ class UserController extends Controller
         return view('admin.user.profile', compact('user'));
     }
 
+    public function editProfileUser()
+    {
+        if (auth()->guard('users')->check()) {
+            $user = auth()->guard('users')->user()->load('role');
+            return view('user.profile-user.profile', compact('user'));
+        }
+
+        abort(403, 'Hanya pengguna yang login sebagai user yang dapat mengakses halaman ini.');
+    }
+
     public function updateProfile(Request $request)
     {
         $user = auth()->user();

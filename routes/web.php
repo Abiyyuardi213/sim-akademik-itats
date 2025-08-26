@@ -20,10 +20,6 @@ use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-// Route::get('/', function () {
-//     return redirect()->route('login');
-// });
-
 Route::get('/', function () {
     return redirect()->route('home');
 });
@@ -31,6 +27,7 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/about', [HomeController::class, 'about'])->name('about');
+    Route::get('/fasilitas', [HomeController::class, 'fasilitas'])->name('fasilitas');
 });
 
 Route::middleware('guest:admin')->group(function () {
@@ -102,6 +99,9 @@ Route::name('admin.')->middleware('ensure.admin:admin,CSR')->group(function () {
 
 Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
     Route::get('/dashboard-user', [DashboardGuestController::class, 'index'])->name('dashboard');
+
+    Route::get('profile', [UserController::class, 'editProfileUser'])->name('profile.edit');
+    Route::put('profile', [UserController::class, 'updateProfileUser'])->name('profile.update');
 
     Route::prefix('pengajuan')->name('pengajuan.')->group(function () {
         Route::get('/', [PengajuanPeminjamanController::class, 'index'])->name('index');
