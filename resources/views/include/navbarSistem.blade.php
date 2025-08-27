@@ -18,7 +18,8 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="{{ route('admin.profile.edit') }}">
+                    <a class="dropdown-item"
+                    href="{{ Auth::guard('admin')->check() ? route('admin.profile.edit') : route('users.profile.edit') }}">
                         <i class="fas fa-user"></i> Profile
                     </a>
                 </li>

@@ -22,6 +22,8 @@ class ProdiController extends Controller
     {
         $request->validate([
             'nama_prodi' => 'required|string|max:255',
+            'nama_kaprodi' => 'required|string|max:255',
+            'nip_kaprodi' => 'nullable|string|max:50',
             'kode_prodi' => 'nullable|string|max:50',
             'prodi_description' => 'nullable|string',
             'prodi_status' => 'required|boolean',
@@ -42,6 +44,8 @@ class ProdiController extends Controller
     {
         $request->validate([
             'nama_prodi' => 'required|string|max:255',
+            'nama_kaprodi' => 'required|string|max:255',
+            'nip_kaprodi' => 'nullable|string|max:50',
             'kode_prodi' => 'nullable|string|max:50',
             'prodi_description' => 'nullable|string',
             'prodi_status' => 'required|boolean',
@@ -51,6 +55,12 @@ class ProdiController extends Controller
         $prodi->updateProdi($request->all());
 
         return redirect()->route('admin.prodi.index')->with('success', 'Program Studi berhasil diperbarui.');
+    }
+
+    public function show($id)
+    {
+        $prodi = Prodi::findOrFail($id);
+        return view('admin.prodi.show', compact('prodi'));
     }
 
     public function destroy($id)

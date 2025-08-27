@@ -206,7 +206,7 @@
                                         <div class="d-flex align-items-center">
                                             @if($item->status == 'pending')
                                                 <span class="status-badge status-pending"><i class="fas fa-clock"></i> Menunggu</span>
-                                            @elseif($item->status == 'diterima')
+                                            @elseif($item->status == 'disetujui')
                                                 <span class="status-badge status-diterima"><i class="fas fa-check-circle"></i> Diterima</span>
                                             @else
                                                 <span class="status-badge status-ditolak"><i class="fas fa-times-circle"></i> Ditolak</span>
@@ -214,8 +214,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
-                                    <i class="fas fa-hashtag me-2"></i>Permohonan {{ str_pad($index + 1, 3, '0', STR_PAD_LEFT) }}
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-hashtag me-2"></i>Permohonan {{ str_pad($index + 1, 3, '0', STR_PAD_LEFT) }}
+                                    </div>
+
+                                    @if($item->status == 'disetujui')
+                                        <a href="{{ route('users.pengajuan.cetakPdf', $item->id) }}"
+                                            target="_blank"
+                                            class="btn btn-sm btn-primary">
+                                            <i class="fas fa-file-pdf"></i> Cetak PDF
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

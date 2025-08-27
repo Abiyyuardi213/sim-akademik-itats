@@ -42,8 +42,8 @@ Route::middleware('guest:users')->group(function () {
 
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::name('admin.')->middleware(['auth:admin'])->group(function () {
-    Route::get('/dashboard-admin', [DashboardController::class, 'index'])->name('dashboard');
+Route::name('admin.')->prefix('admin')->middleware(['auth:admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware('ensure.admin:admin')->group(function () {
         Route::resource('user', UserController::class);
@@ -57,7 +57,7 @@ Route::name('admin.')->middleware(['auth:admin'])->group(function () {
         Route::post('periode/{id}/toggle-status', [PeriodeCutiController::class, 'toggleStatus'])->name('periode.toggleStatus');
         Route::resource('periode', PeriodeCutiController::class);
 
-        Route::get('/mahasiswa-cuti/dashboard', [DashboardCutiController::class, 'index'])->name('mahasiswa-cuti.dashboard');
+        Route::get('mahasiswa-cuti/dashboard', [DashboardCutiController::class, 'index'])->name('mahasiswa-cuti.dashboard');
         Route::get('mahasiswa-cuti/export', [MahasiswaCutiController::class, 'exportCsv'])->name('mahasiswa-cuti.export');
         Route::post('mahasiswa-cuti/import', [MahasiswaCutiController::class, 'importCsv'])->name('mahasiswa-cuti.import');
         Route::post('mahasiswa-cuti/import/confirm', [MahasiswaCutiController::class, 'importConfirm'])->name('mahasiswa-cuti.import.confirm');
@@ -111,6 +111,9 @@ Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
         Route::get('/riwayat', [PengajuanPeminjamanController::class, 'riwayat'])->name('riwayat');
         Route::get('/status', [PengajuanPeminjamanController::class, 'status'])->name('status');
         Route::get('/{id}', [PengajuanPeminjamanController::class, 'show'])->name('show');
+
+        Route::get('/{id}/cetak-pdf', [PengajuanPeminjamanController::class, 'cetakPdf'])
+            ->name('cetakPdf');
     });
 });
 

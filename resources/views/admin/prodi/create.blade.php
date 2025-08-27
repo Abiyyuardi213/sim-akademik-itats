@@ -46,6 +46,14 @@
                                     <input type="text" class="form-control" name="kode_prodi" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="nama_kaprodi">Nama Kaprodi</label>
+                                    <input type="text" class="form-control" name="nama_kaprodi" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nip_kaprodi">NIP Kaprodi</label>
+                                    <input type="text" class="form-control" name="nip_kaprodi" placeholder="Opsional">
+                                </div>
+                                <div class="form-group">
                                     <label for="prodi_description">Deskripsi Program Studi</label>
                                     <textarea class="form-control" name="prodi_description" required></textarea>
                                 </div>

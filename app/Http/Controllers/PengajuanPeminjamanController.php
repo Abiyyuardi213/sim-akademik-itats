@@ -9,6 +9,7 @@ use App\Notifications\StatusPengajuanNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PengajuanPeminjamanController extends Controller
 {
@@ -231,5 +232,23 @@ class PengajuanPeminjamanController extends Controller
             ->findOrFail($id);
 
         return view('admin.pengajuan-ruangan.show', compact('pengajuan'));
+    }
+
+    public function cetakPdf($id)
+    {
+        $pengajuan = PengajuanPeminjamanRuangan::with(['kelas.gedung', 'prodi', 'user'])
+            ->findOrFail($id);
+
+        if ($pengajuan->status !== 'disetujui') {
+            return redirect()->back()->with('error', 'PDF hanya bisa dibuat untuk pengajuan yang disetujui.');
+        }
+
+        $nama_kaprodi = $pengajuan->prodi->nama_kaprodi;
+        $nip_kaprodi  = $pengajuan->prodi->nip_kaprodi;
+
+        $pdf = Pdf::loadView('pdf.surat_peminjaman', compact('pengajuan', 'nama_kaprodi', 'nip_kaprodi'))
+            ->setPaper('A4', 'portrait');
+
+        return $pdf->download('surat_peminjaman_'.$pengajuan->id.'.pdf');
     }
 }

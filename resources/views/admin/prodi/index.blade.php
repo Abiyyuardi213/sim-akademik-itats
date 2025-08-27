@@ -105,7 +105,10 @@
                                                         {{ $prodi->prodi_status ? 'checked' : '' }}>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('admin.prodi.edit', $prodi->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('admin.prodi.show', $prodi->id) }}" class="btn btn-info btn-sm">
+                                                        <i class="fas fa-eye"></i> Detail
+                                                    </a>
+                                                    <a href="{{ route('admin.prodi.edit', $prodi->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-prodi-btn"
