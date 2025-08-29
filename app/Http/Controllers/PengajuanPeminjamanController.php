@@ -247,8 +247,16 @@ class PengajuanPeminjamanController extends Controller
         $nip_kaprodi  = $pengajuan->prodi->nip_kaprodi;
 
         $pdf = Pdf::loadView('pdf.surat_peminjaman', compact('pengajuan', 'nama_kaprodi', 'nip_kaprodi'))
-            ->setPaper('A4', 'portrait');
+            ->setPaper('A4', 'portrait')
+            ->setOptions([
+                'margin-top' => 0,
+                'margin-bottom' => 0,
+                'margin-left' => 0,
+                'margin-right' => 0,
+            ]);
 
-        return $pdf->download('surat_peminjaman_'.$pengajuan->id.'.pdf');
+        return response($pdf->output(), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="surat_peminjaman_'.$pengajuan->id.'.pdf"');
     }
 }

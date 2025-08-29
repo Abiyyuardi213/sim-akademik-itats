@@ -16,6 +16,7 @@ class Prodi extends Model
         'nama_kaprodi',
         'nip_kaprodi',
         'kode_prodi',
+        'alias_prodi',
         'prodi_description',
         'prodi_status',
     ];
@@ -36,6 +37,7 @@ class Prodi extends Model
             'nama_kaprodi' => $data['nama_kaprodi'],
             'nip_kaprodi' => $data['nip_kaprodi'],
             'kode_prodi' => $data['kode_prodi'],
+            'alias_prodi' => $data['alias_prodi'],
             'prodi_description' => $data['prodi_description'] ?? null,
             'prodi_status' => $data['prodi_status'] ?? true,
         ]);
@@ -48,6 +50,7 @@ class Prodi extends Model
             'nama_kaprodi' => $data['nama_kaprodi'],
             'nip_kaprodi' => $data['nip_kaprodi'],
             'kode_prodi' => $data['kode_prodi'],
+            'alias_prodi' => $data['alias_prodi'],
             'prodi_description' => $data['prodi_description'] ?? $this->prodi_description,
             'prodi_status' => $data['prodi_status'] ?? $this->prodi_status,
         ]);

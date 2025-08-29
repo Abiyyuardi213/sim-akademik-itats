@@ -56,6 +56,10 @@
                                                 <td>{{ $prodi->kode_prodi ?? '-' }}</td>
                                             </tr>
                                             <tr>
+                                                <th>Alias Prodi</th>
+                                                <td>{{ $prodi->alias_prodi ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
                                                 <th>Nama Kaprodi</th>
                                                 <td>{{ $prodi->nama_kaprodi }}</td>
                                             </tr>

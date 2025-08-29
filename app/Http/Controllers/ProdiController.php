@@ -25,6 +25,7 @@ class ProdiController extends Controller
             'nama_kaprodi' => 'required|string|max:255',
             'nip_kaprodi' => 'nullable|string|max:50',
             'kode_prodi' => 'nullable|string|max:50',
+            'alias_prodi' => 'nullable|string|max:50',
             'prodi_description' => 'nullable|string',
             'prodi_status' => 'required|boolean',
         ]);
@@ -47,6 +48,7 @@ class ProdiController extends Controller
             'nama_kaprodi' => 'required|string|max:255',
             'nip_kaprodi' => 'nullable|string|max:50',
             'kode_prodi' => 'nullable|string|max:50',
+            'alias_prodi' => 'nullable|string|max:50',
             'prodi_description' => 'nullable|string',
             'prodi_status' => 'required|boolean',
         ]);

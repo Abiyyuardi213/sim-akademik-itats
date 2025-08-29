@@ -220,8 +220,12 @@
                                     </div>
 
                                     @if($item->status == 'disetujui')
-                                        <a href="{{ route('users.pengajuan.cetakPdf', $item->id) }}"
+                                        {{-- <a href="{{ route('users.pengajuan.cetakPdf', $item->id) }}"
                                             target="_blank"
+                                            class="btn btn-sm btn-primary">
+                                            <i class="fas fa-file-pdf"></i> Cetak PDF
+                                        </a> --}}
+                                        <a href="{{ route('users.pengajuan.cetakPdf', $item->id) }}"
                                             class="btn btn-sm btn-primary">
                                             <i class="fas fa-file-pdf"></i> Cetak PDF
                                         </a>

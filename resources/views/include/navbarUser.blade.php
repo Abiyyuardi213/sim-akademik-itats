@@ -4,7 +4,7 @@
         <a class="navbar-brand d-flex align-items-center" href="#beranda">
             <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" class="navbar-logo me-3">
             <div class="brand-text d-none d-md-block">
-                <div class="brand-title">ITATS</div>
+                {{-- <div class="brand-title">ITATS</div> --}}
                 <div class="brand-subtitle">Peminjaman Ruangan</div>
             </div>
         </a>

@@ -201,11 +201,11 @@
                 let kelasId = $(this).data("kelas-id");
                 let status = $(this).prop("checked") ? 1 : 0;
 
-                $.post("{{ url('kelas') }}/" + kelasId + "/toggle-status", {
+                $.post("{{ url('admin/kelas') }}/" + kelasId + "/toggle-status", {
                     _token: '{{ csrf_token() }}',
                     kelas_status: status
-                }, function (res) {
-                    if (res.success) {
+                }, function(res) {
+                    if(res.success){
                         $(".toast-body").text(res.message);
                         $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
                     } else {

@@ -44,6 +44,10 @@
                                     <input type="text" class="form-control" name="kode_prodi" value="{{ old('kode_prodi', $prodi->kode_prodi) }}" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="alias_prodi">Alias Program Studi</label>
+                                    <input type="text" class="form-control" name="alias_prodi" value="{{ old('alias_prodi', $prodi->alias_prodi) }}" required>
+                                </div>
+                                <div class="form-group">
                                     <label for="nama_kaprodi">Nama Kaprodi</label>
                                     <input type="text" class="form-control" name="nama_kaprodi" value="{{ old('nama_kaprodi', $prodi->nama_kaprodi) }}" required>
                                 </div>

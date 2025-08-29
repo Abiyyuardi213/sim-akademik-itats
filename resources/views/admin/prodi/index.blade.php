@@ -82,6 +82,7 @@
                                             <th>Kode Prodi</th>
                                             <th>Nama Program Studi</th>
                                             <th>Deskripsi</th>
+                                            <th>Alias Prodi</th>
                                             <th>Status Prodi</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -99,6 +100,7 @@
                                                 <td>{{ $prodi->kode_prodi }}</td>
                                                 <td>{{ $prodi->nama_prodi }}</td>
                                                 <td>{{ $prodi->prodi_description }}</td>
+                                                <td>{{ $prodi->alias_prodi }}</td>
                                                 <td class="text-center">
                                                     <input type="checkbox" class="toggle-status"
                                                         data-prodi-id="{{ $prodi->id }}"
