@@ -80,7 +80,7 @@
                 <!-- Menu Cuti -->
                 @php
                     $isCuti = request()->routeIs('admin.periode.*') ||
-                              request()->is('mahasiswa-cuti*');
+                              request()->routeIs('admin.mahasiswa-cuti.*');
                 @endphp
                 <li class="nav-item has-treeview {{ $isCuti ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $isCuti ? 'active' : '' }}">
@@ -93,7 +93,7 @@
                     <ul class="nav nav-treeview" style="{{ $isCuti ? 'display: block;' : '' }}">
                         <li class="nav-item">
                             <a href="{{ route('admin.mahasiswa-cuti.dashboard') }}"
-                               class="nav-link {{ request()->routeIs('admin.mahasiswa-cuti.dashboard') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('admin.mahasiswa-cuti.dashboard') ? 'active' : '' }}">
                                 <i class="fas fa-chart-bar nav-icon"></i>
                                 <p>Dashboard Rekap Cuti</p>
                             </a>
@@ -107,7 +107,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.mahasiswa-cuti.index') }}"
-                               class="nav-link {{ request()->routeIs('admin.mahasiswa-cuti.*') ? 'active' : '' }}">
+                            class="nav-link {{ request()->routeIs('admin.mahasiswa-cuti.index') ? 'active' : '' }}">
                                 <i class="fas fa-user-graduate nav-icon text-info"></i>
                                 <p>List Mahasiswa Cuti</p>
                             </a>
@@ -117,10 +117,11 @@
 
                 <!-- Menu Fasilitas -->
                 @php
-                    $isFasilitas = request()->routeIs('admin.gedung.*') ||
-                                   request()->routeIs('admin.kelas.*') ||
-                                   request()->routeIs('admin.peminjaman-ruangan.*') ||
-                                   request()->routeIs('admin.pengajuan-ruangan.*');
+                    $isFasilitas = request()->routeIs('admin.fasilitas.dashboard') ||
+                                request()->routeIs('admin.gedung.*') ||
+                                request()->routeIs('admin.kelas.*') ||
+                                request()->routeIs('admin.peminjaman-ruangan.*') ||
+                                request()->routeIs('admin.pengajuan-ruangan.*');
                 @endphp
                 <li class="nav-item has-treeview {{ $isFasilitas ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $isFasilitas ? 'active' : '' }}">
@@ -133,35 +134,35 @@
                     <ul class="nav nav-treeview" style="{{ $isFasilitas ? 'display: block;' : '' }}">
                         <li class="nav-item">
                             <a href="{{ route('admin.fasilitas.dashboard') }}"
-                               class="nav-link {{ request()->routeIs('admin.fasilitas.dashboard') ? 'active' : '' }}">
+                            class="nav-link {{ request()->routeIs('admin.fasilitas.dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-chart-bar"></i>
                                 <p>Dashboard Fasilitas</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.gedung.index') }}"
-                               class="nav-link {{ request()->routeIs('admin.gedung.*') ? 'active' : '' }}">
+                            class="nav-link {{ request()->routeIs('admin.gedung.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-building text-success"></i>
                                 <p>Gedung</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.kelas.index') }}"
-                               class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
+                            class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-chalkboard text-info"></i>
                                 <p>Ruang Kelas</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.peminjaman-ruangan.index') }}"
-                               class="nav-link {{ request()->routeIs('admin.peminjaman-ruangan.*') ? 'active' : '' }}">
+                            class="nav-link {{ request()->routeIs('admin.peminjaman-ruangan.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-calendar-check text-warning"></i>
                                 <p>Peminjaman Kelas</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.pengajuan-ruangan.index') }}"
-                               class="nav-link {{ request()->routeIs('admin.pengajuan-ruangan.*') ? 'active' : '' }}">
+                            class="nav-link {{ request()->routeIs('admin.pengajuan-ruangan.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-paper-plane text-purple"></i>
                                 <p>Permohonan</p>
                             </a>

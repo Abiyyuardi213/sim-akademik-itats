@@ -217,12 +217,30 @@
             return !bookedDates.includes(dateStr);
         }
 
-        function generateTimeSlots() {
+        // function generateTimeSlots() {
+        //     const slots = [];
+        //     for (let hour = 7; hour <= 17; hour++) {
+        //         const startTime = `${hour.toString().padStart(2, '0')}:00`;
+        //         const endTime = `${(hour + 1).toString().padStart(2, '0')}:00`;
+        //         slots.push({ start: startTime, end: endTime });
+        //     }
+        //     return slots;
+        // }
+
+        function generateTimeSlots(minDuration = 5, maxDuration = 8) {
             const slots = [];
-            for (let hour = 7; hour <= 17; hour++) {
-                const startTime = `${hour.toString().padStart(2, '0')}:00`;
-                const endTime = `${(hour + 1).toString().padStart(2, '0')}:00`;
-                slots.push({ start: startTime, end: endTime });
+            const startHour = 7;
+            const endHour = 17;
+
+            for (let hour = startHour; hour <= endHour; hour++) {
+                for (let duration = minDuration; duration <= maxDuration; duration++) {
+                    const endTimeHour = hour + duration;
+                    if (endTimeHour <= endHour) {
+                        const startTime = `${hour.toString().padStart(2, '0')}:00`;
+                        const endTime = `${endTimeHour.toString().padStart(2, '0')}:00`;
+                        slots.push({ start: startTime, end: endTime, duration });
+                    }
+                }
             }
             return slots;
         }

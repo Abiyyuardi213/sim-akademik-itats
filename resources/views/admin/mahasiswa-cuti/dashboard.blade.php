@@ -56,7 +56,7 @@
                             <div class="icon">
                                 <i class="fas fa-user-tag"></i>
                             </div>
-                            <a href="{{ url('periode') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.periode.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -69,7 +69,7 @@
                             <div class="icon">
                                 <i class="fas fa-user-friends"></i>
                             </div>
-                            <a href="{{ url('mahasiswa-cuti') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.mahasiswa-cuti.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>

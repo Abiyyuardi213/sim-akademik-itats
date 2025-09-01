@@ -74,7 +74,7 @@
                             <div class="icon">
                                 <i class="fas fa-user-tag"></i>
                             </div>
-                            <a href="{{ url('role') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.role.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -87,7 +87,7 @@
                             <div class="icon">
                                 <i class="fas fa-user-friends"></i>
                             </div>
-                            <a href="{{ url('user') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.user.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@
                             <div class="icon">
                                 <i class="fas fa-university"></i>
                             </div>
-                            <a href="{{ url('prodi') }}" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.prodi.index') }}" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     @endif
@@ -115,7 +115,7 @@
                             <div class="icon">
                                 <i class="fas fa-calendar-check"></i>
                             </div>
-                            <a href="{{ url('mahasiswa-cuti/dashboard') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.mahasiswa-cuti.dashboard') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -128,7 +128,7 @@
                             <div class="icon">
                                 <i class="fas fa-building"></i>
                             </div>
-                            <a href="{{ url('fasilitas/dashboard') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.fasilitas.dashboard') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -141,7 +141,7 @@
                             <div class="icon">
                                 <i class="fas fa-file-signature"></i>
                             </div>
-                            <a href="{{ url('legalisir') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.legalisir.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>

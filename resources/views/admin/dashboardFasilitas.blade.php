@@ -56,7 +56,7 @@
                             <div class="icon">
                                 <i class="fas fa-building"></i>
                             </div>
-                            <a href="{{ url('gedung') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.gedung.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -69,7 +69,7 @@
                             <div class="icon">
                                 <i class="fas fa-door-open"></i>
                             </div>
-                            <a href="{{ url('kelas') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.kelas.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -82,7 +82,20 @@
                             <div class="icon">
                                 <i class="fas fa-calendar-check"></i>
                             </div>
-                            <a href="{{ url('peminjaman-ruangan') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.peminjaman-ruangan.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3><i class="fas fa-paper-plane"></i></h3>
+                                <p>List Permohonan Peminjaman</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <a href="{{ route('admin.pengajuan-ruangan.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>
