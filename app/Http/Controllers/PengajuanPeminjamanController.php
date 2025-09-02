@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class PengajuanPeminjamanController extends Controller
 {
@@ -242,6 +243,8 @@ class PengajuanPeminjamanController extends Controller
         if ($pengajuan->status !== 'disetujui') {
             return redirect()->back()->with('error', 'PDF hanya bisa dibuat untuk pengajuan yang disetujui.');
         }
+
+        Carbon::setLocale('id');
 
         $nama_kaprodi = $pengajuan->prodi->nama_kaprodi;
         $nip_kaprodi  = $pengajuan->prodi->nip_kaprodi;

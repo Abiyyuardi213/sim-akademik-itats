@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             font-family: "Times New Roman", Times, serif;
-            font-size: 15px;
+            font-size: 16px;
             line-height: 1.5;
         }
         .kop {
@@ -44,8 +44,12 @@
             margin-left: 2.5cm;
             margin-right: 2.5cm;
             margin-top: 30px;
-            text-align: right;
+            text-align: right; /* blok tetap di kanan */
             page-break-inside: avoid;
+        }
+        .ttd .inner {
+            display: inline-block;
+            text-align: left; /* isi rata kiri */
         }
         .tembusan {
             margin-left: 2.5cm;
@@ -57,6 +61,13 @@
             padding-left: 20px;
             margin-top: 5px;
         }
+        .tab1, .tab2 {
+            display: block;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .tab1 { margin-left: 30px; }
+        .tab2 { margin-left: 60px; }
     </style>
 </head>
 <body>
@@ -90,28 +101,49 @@
             @endphp
 
             <tr>
-                <td style="width: 60px;">No.</td>
+                <td style="width: 60px;">Nomor</td>
                 <td>
-                    : {{ $pengajuan->nomor_surat
-                        ?? '___ / '
-                        . strtoupper($pengajuan->prodi->alias_prodi)
-                        . ' / ITATS / ' . $bulanSekarang
-                        . ' / ' . now()->year }}
+                    : <strong>
+                        {{ $pengajuan->nomor_surat
+                            ?? '___ / '
+                            . strtoupper($pengajuan->prodi->alias_prodi)
+                            . ' / ITATS / ' . $bulanSekarang
+                            . ' / ' . now()->year }}
+                    </strong>
                 </td>
             </tr>
             <tr>
                 <td>Lampiran</td>
-                <td>: -</td>
+                <td>
+                    : <strong>
+                        -
+                    </strong>
+                </td>
             </tr>
             <tr>
-                <td>Hal</td>
-                <td>: Permohonan Peminjaman Ruang</td>
+                <td>Perihal</td>
+                <td>
+                    : <strong>
+                        Permohonan Peminjaman Ruangan
+                    </strong>
+                </td>
             </tr>
         </table>
 
-        <p>Kepada Yth.<br>
-        Wakil Rektor Bidang Akademik<br>
-        di - Tempat</p>
+        <p>
+            @if ($pengajuan->kelas->nama_kelas === 'A-303 SMART CLASSROOM')
+                <span class="tab1">Kepada Yth.</span>
+                <span class="tab2"><b>Pimpinan YPTS</b></span>
+                <span class="tab2"><b>Melalui Ka Bag Sarana dan Prasarana ITATS SBY</b></span>
+                <span class="tab1">di - Tempat</span>
+            @else
+                <span class="tab1">Kepada Yth.</span><br>
+                <span class="tab2">
+                    Wakil Rektor Bidang Akademik
+                </span><br>
+                <span class="tab1">di - Tempat</span>
+            @endif
+        </p>
 
         <p class="indent">
             Dengan hormat,<br>
@@ -131,7 +163,8 @@
             </tr>
             <tr>
                 <td>Pukul</td>
-                <td>: {{ $pengajuan->jam_mulai }} - {{ $pengajuan->jam_selesai }}</td>
+                <td>: {{ \Carbon\Carbon::parse($pengajuan->waktu_peminjaman)->format('H:i') }} -
+                    {{ \Carbon\Carbon::parse($pengajuan->waktu_berakhir_peminjaman)->format('H:i') }}</td>
             </tr>
             <tr>
                 <td>Tempat</td>
@@ -140,17 +173,23 @@
         </table>
 
         <p class="indent">
-            Demikian permohonan kami, atas perhatian sebelum dan sesudahnya diucapkan terima kasih.
+            Demikian surat permohonan kami buat. Atas perhatiannya, kami sampaikan terima kasih.
         </p>
     </div>
 
     <div class="ttd">
-        <p>Surabaya, {{ now()->translatedFormat('d F Y') }}<br>
-        Program Studi {{ $pengajuan->prodi->nama_prodi }}<br>
-        Kepala,</p>
-        <br><br><br>
-        <p><b><u>{{ $pengajuan->prodi->nama_kaprodi }}</u></b><br>
-        NIP. {{ $pengajuan->prodi->nip_kaprodi }}</p>
+        <div class="inner">
+            <p>
+                Surabaya, {{ now()->translatedFormat('d F Y') }}<br>
+                Program Studi {{ $pengajuan->prodi->nama_prodi }}<br>
+                <b>Kepala,</b>
+            </p>
+            <br><br><br>
+            <p>
+                <b><u>{{ $pengajuan->prodi->nama_kaprodi }}</u></b><br>
+                NIP. {{ $pengajuan->prodi->nip_kaprodi }}
+            </p>
+        </div>
     </div>
 
     <div class="tembusan">
