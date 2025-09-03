@@ -121,7 +121,8 @@
                                 request()->routeIs('admin.gedung.*') ||
                                 request()->routeIs('admin.kelas.*') ||
                                 request()->routeIs('admin.peminjaman-ruangan.*') ||
-                                request()->routeIs('admin.pengajuan-ruangan.*');
+                                request()->routeIs('admin.pengajuan-ruangan.*') ||
+                                request()->routeIs('admin.fasilitas-support.*');
                 @endphp
                 <li class="nav-item has-treeview {{ $isFasilitas ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $isFasilitas ? 'active' : '' }}">
@@ -151,6 +152,13 @@
                             class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-chalkboard text-info"></i>
                                 <p>Ruang Kelas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.fasilitas-support.index') }}"
+                            class="nav-link {{ request()->routeIs('admin.fasilitas-support.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-life-ring text-success"></i>
+                                <p>Support</p>
                             </a>
                         </li>
                         <li class="nav-item">

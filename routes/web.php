@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardCutiController;
 use App\Http\Controllers\DashboardFasilitasController;
 use App\Http\Controllers\DashboardGuestController;
+use App\Http\Controllers\FasilitasSupportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PeriodeCutiController;
@@ -73,6 +74,9 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:admin'])->group(functi
 
         Route::post('kelas/{id}/toggle-status', [KelasController::class, 'toggleStatus'])->name('kelas.toggleStatus');
         Route::resource('kelas', KelasController::class);
+
+        Route::post('fasilitas-support/{id}/toggle-status', [FasilitasSupportController::class, 'toggleStatus'])->name('fasilitas-support.toggleStatus');
+        Route::resource('fasilitas-support', FasilitasSupportController::class);
 
         Route::resource('peminjaman-ruangan', PeminjamanRuanganController::class);
 
