@@ -112,10 +112,10 @@
                                                         {{ $fasilitas->fasilitas_status ? 'checked' : '' }}>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('admin.fasilitas-support.show', $fasilitas->id) }}" class="btn btn-success btn-sm">
+                                                    <a href="{{ route('admin.fasilitas-support.show', $fasilitas->id) }}" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
-                                                    <a href="{{ route('admin.fasilitas-support.edit', $fasilitas->id) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('admin.fasilitas-support.edit', $fasilitas->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button class="btn btn-danger btn-sm delete-fasilitas-btn"
