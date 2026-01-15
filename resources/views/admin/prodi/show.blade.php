@@ -1,121 +1,94 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Program Studi</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Source Sans Pro', sans-serif !important;
-        }
-        .card {
-            border-radius: 10px;
-        }
-        .table th {
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        @include('include.navbarSistem')
-        @include('include.sidebar')
+@extends('layouts.admin')
 
-        <div class="content-wrapper">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Detail Informasi Program Studi</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
+@section('title', 'Detail Program Studi')
 
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8 col-md-10 col-sm-12">
-                            <div class="card shadow-lg">
-                                <div class="card-header bg-primary text-white">
-                                    <h3 class="card-title mb-0">Informasi Program Studi</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-striped">
-                                            <tr>
-                                                <th width="40%">Nama Prodi</th>
-                                                <td>{{ $prodi->nama_prodi }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Kode Prodi</th>
-                                                <td>{{ $prodi->kode_prodi ?? '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Alias Prodi</th>
-                                                <td>{{ $prodi->alias_prodi ?? '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Nama Kaprodi</th>
-                                                <td>{{ $prodi->nama_kaprodi }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>NIP Kaprodi</th>
-                                                <td>{{ $prodi->nip_kaprodi ?? '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Deskripsi</th>
-                                                <td>{{ $prodi->prodi_description ?? '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Status</th>
-                                                <td>
-                                                    @if($prodi->prodi_status)
-                                                        <span class="badge badge-success">Aktif</span>
-                                                    @else
-                                                        <span class="badge badge-danger">Non-Aktif</span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Dibuat pada</th>
-                                                <td>{{ $prodi->created_at->format('d-m-Y H:i') }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Diperbarui pada</th>
-                                                <td>{{ $prodi->updated_at->format('d-m-Y H:i') }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="card-footer text-right">
-                                    <a href="{{ route('admin.prodi.index') }}" class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left"></i> Kembali
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+@section('content')
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Program Studi</h1>
+            <p class="mt-1 text-sm text-zinc-500">Informasi lengkap mengenai program studi.</p>
         </div>
-
-        @include('include.footerSistem')
+        <nav class="flex text-sm font-medium text-zinc-500 items-center">
+            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <a href="{{ route('admin.prodi.index') }}" class="hover:text-zinc-900 transition-colors">Prodi</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <span class="text-zinc-900">Detail</span>
+        </nav>
     </div>
 
-    @include('services.LogoutModal')
+    <!-- Detail Card -->
+    <div class="max-w-3xl bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div class="border-b border-zinc-100 bg-zinc-50/50 px-6 py-4 flex items-center justify-between">
+            <h3 class="font-semibold text-zinc-900">Informasi Prodi</h3>
+            <span
+                class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold
+                {{ $prodi->prodi_status
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                    : 'bg-zinc-100 text-zinc-700 border-zinc-200' }}">
+                {{ $prodi->prodi_status ? 'Aktif' : 'Nonaktif' }}
+            </span>
+        </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.nav-sidebar').Treeview('init');
-        });
-    </script>
-</body>
-</html>
+        <div class="p-6">
+            <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                    <dt class="text-sm font-medium text-zinc-500">Nama Program Studi</dt>
+                    <dd class="mt-1 text-base font-semibold text-zinc-900">{{ $prodi->nama_prodi }}</dd>
+                </div>
+
+                <div>
+                    <dt class="text-sm font-medium text-zinc-500">Kode Prodi</dt>
+                    <dd class="mt-1 text-sm text-zinc-900 font-mono">{{ $prodi->kode_prodi ?? '-' }}</dd>
+                </div>
+
+                <div>
+                    <dt class="text-sm font-medium text-zinc-500">Alias</dt>
+                    <dd class="mt-1 text-sm text-zinc-900">{{ $prodi->alias_prodi ?? '-' }}</dd>
+                </div>
+
+                <div class="border-t border-zinc-100 pt-4 sm:col-span-2">
+                    <h4 class="text-sm font-medium text-zinc-900 mb-3">Informasi Kaprodi</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <dt class="text-xs text-zinc-500">Nama Kaprodi</dt>
+                            <dd class="mt-1 text-sm font-medium text-zinc-900">{{ $prodi->nama_kaprodi }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs text-zinc-500">NIP Kaprodi</dt>
+                            <dd class="mt-1 text-sm font-medium text-zinc-900">{{ $prodi->nip_kaprodi ?? '-' }}</dd>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sm:col-span-2 border-t border-zinc-100 pt-4">
+                    <dt class="text-sm font-medium text-zinc-500">Deskripsi</dt>
+                    <dd class="mt-1 text-sm text-zinc-700 leading-relaxed">{{ $prodi->prodi_description ?? '-' }}</dd>
+                </div>
+
+                <div class="sm:col-span-2 border-t border-zinc-100 pt-4 flex gap-4 text-xs text-zinc-400">
+                    <div>
+                        <span class="block font-medium">Dibuat</span>
+                        {{ $prodi->created_at ? $prodi->created_at->format('d M Y, H:i') : '-' }}
+                    </div>
+                    <div>
+                        <span class="block font-medium">Diperbarui</span>
+                        {{ $prodi->updated_at ? $prodi->updated_at->format('d M Y, H:i') : '-' }}
+                    </div>
+                </div>
+            </dl>
+
+            <div class="mt-8 flex justify-end gap-3 pt-6 border-t border-zinc-100">
+                <a href="{{ route('admin.prodi.index') }}"
+                    class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
+                    Kembali
+                </a>
+                <a href="{{ route('admin.prodi.edit', $prodi->id) }}"
+                    class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 transition-colors">
+                    <i class="fas fa-pencil-alt mr-2"></i> Edit
+                </a>
+            </div>
+        </div>
+    </div>
+@endsection

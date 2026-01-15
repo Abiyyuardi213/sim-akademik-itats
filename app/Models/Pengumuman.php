@@ -10,6 +10,7 @@ class Pengumuman extends Model
     protected $table = 'pengumuman';
     protected $keyType = 'string';
     public $incrementing = false;
+    public $timestamps = false;
     protected $fillable = [
         'judul',
         'isi',

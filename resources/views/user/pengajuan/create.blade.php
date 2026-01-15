@@ -1,428 +1,390 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.user')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Ruangan - {{ $kelas->nama_kelas }}</title>
+@section('content')
+    <div class="container mx-auto px-4 md:px-6 py-8">
+        <a href="{{ url()->previous() }}"
+            class="inline-flex items-center text-sm text-zinc-500 hover:text-zinc-900 mb-6 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> Kembali
+        </a>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Scripts & Styles -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-    </style>
-</head>
-
-<body class="bg-gray-50 antialiased min-h-screen flex flex-col">
-    <!-- Navbar -->
-    @include('include.navbarUser')
-
-    <!-- Page Header -->
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
-        <div class="container mx-auto px-4 py-8">
-            <div class="flex items-center gap-4">
-                <a href="{{ url()->previous() }}"
-                    class="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors backdrop-blur-sm">
-                    <i class="fas fa-arrow-left text-lg"></i>
-                </a>
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-bold">{{ $kelas->nama_kelas }}</h1>
-                    <div class="flex items-center gap-4 mt-2 text-blue-100 text-sm md:text-base">
-                        <span class="flex items-center gap-1.5">
-                            <i class="fas fa-building"></i> {{ $kelas->gedung->nama_gedung ?? '-' }}
-                        </span>
-                        <span class="hidden md:inline w-1 h-1 bg-blue-300 rounded-full"></span>
-                        <span class="flex items-center gap-1.5">
-                            <i class="fas fa-users"></i> {{ $kelas->kapasitas_mahasiswa }} orang
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="flex-grow container mx-auto px-4 py-8 max-w-7xl">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column: Date Selection -->
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
-                            <i class="fas fa-calendar-alt text-lg"></i>
-                        </div>
-                        <h2 class="text-xl font-bold text-gray-900">Pilih Tanggal</h2>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3 max-h-[600px] overflow-y-auto pr-1 custom-scrollbar"
-                        id="dateNavigation">
-                        <!-- Dates will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column: Time Slots -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <div id="timeSlots" class="min-h-[400px]">
-                        <div class="flex flex-col items-center justify-center py-24 text-gray-400">
-                            <i class="fas fa-calendar-day text-6xl mb-4 text-gray-200"></i>
-                            <p class="text-lg font-medium text-gray-500">Pilih tanggal terlebih dahulu</p>
-                            <p class="text-sm text-gray-400 mt-1">Jadwal yang tersedia akan muncul di sini</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Booking Modal -->
-    <div id="bookingModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
-        <!-- Backdrop -->
-        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
-
-        <!-- Modal Content -->
-        <div
-            class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col transform transition-all scale-100">
-            <!-- Modal Header -->
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white shrink-0">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-                            <i class="fas fa-bookmark text-lg"></i>
-                        </div>
-                        <h3 class="text-lg font-bold">Konfirmasi Booking</h3>
-                    </div>
-                    <button onclick="closeModal()"
-                        class="text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="p-6 overflow-y-auto custom-scrollbar">
-                <form action="{{ route('users.pengajuan.store') }}" method="POST" class="space-y-6">
-                    @csrf
-                    <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
-                    <input type="hidden" name="tanggal_peminjaman" id="selectedDate" required>
-                    <input type="hidden" name="tanggal_berakhir_peminjaman" id="selectedEndDate" required>
-                    <input type="hidden" name="waktu_peminjaman" id="selectedStartTime" required>
-                    <input type="hidden" name="waktu_berakhir_peminjaman" id="selectedEndTime" required>
-
-                    <!-- Selected Time Info -->
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start gap-4">
+            <!-- Room Info Card -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden sticky top-8">
+                    <!-- Image Header -->
+                    <div class="aspect-video w-full bg-zinc-100 relative overflow-hidden">
+                        @if ($kelas->gambar)
+                            <img src="{{ asset('uploads/kelas/' . $kelas->gambar) }}" alt="{{ $kelas->nama_kelas }}"
+                                class="w-full h-full object-cover">
+                        @else
+                            <div class="absolute inset-0 flex items-center justify-center text-zinc-300">
+                                <i class="fas fa-image text-4xl"></i>
+                            </div>
+                        @endif
                         <div
-                            class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0 mt-0.5">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-blue-600 uppercase tracking-wide mb-1">Jadwal Pilihan</p>
-                            <p class="font-bold text-gray-900 text-lg leading-tight" id="selectedTimeDisplay"></p>
-                            <p class="text-sm text-gray-600 mt-1" id="selectedDateDisplay"></p>
+                            class="absolute top-4 right-4 bg-zinc-900/90 backdrop-blur text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-sm">
+                            {{ $kelas->kapasitas_mahasiswa }} Kursi
                         </div>
                     </div>
 
-                    <!-- Prodi -->
-                    <div class="space-y-2">
-                        <label for="prodi_id" class="block text-sm font-semibold text-gray-700">Program Studi</label>
-                        <div class="relative">
-                            <select name="prodi_id" id="prodi_id"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all appearance-none cursor-pointer"
-                                required>
-                                <option value="">Pilih Program Studi</option>
-                                @foreach ($prodis as $prodi)
-                                    <option value="{{ $prodi->id }}">{{ $prodi->nama_prodi }}</option>
-                                @endforeach
-                            </select>
-                            <div
-                                class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                                <i class="fas fa-chevron-down text-xs"></i>
+                    <div class="p-6">
+                        <h1 class="text-2xl font-bold text-zinc-900 mb-2">{{ $kelas->nama_kelas }}</h1>
+                        <div class="flex items-center gap-2 text-zinc-500 text-sm mb-6">
+                            <i class="fas fa-building text-zinc-400"></i>
+                            <span>{{ $kelas->gedung->nama_gedung ?? 'Gedung tidak diketahui' }}</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-lg bg-zinc-50 border border-zinc-100">
+                                <h3 class="text-sm font-semibold text-zinc-900 mb-2">Fasilitas</h3>
+                                <p class="text-sm text-zinc-600 leading-relaxed">
+                                    {{ $kelas->keterangan ?: 'Tidak ada keterangan fasilitas.' }}</p>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Keperluan -->
-                    <div class="space-y-2">
-                        <label for="keperluan_peminjaman" class="block text-sm font-semibold text-gray-700">Keperluan
-                            Peminjaman</label>
-                        <textarea name="keperluan_peminjaman" id="keperluan_peminjaman" rows="3"
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all resize-none placeholder-gray-400"
-                            placeholder="Deskripsikan keperluan peminjaman secara detail..." required></textarea>
+            <!-- Booking Form & Calendar -->
+            <div class="lg:col-span-2">
+                <div class="rounded-xl border border-zinc-200 bg-white shadow-sm p-6">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-bold text-zinc-900">Jadwal Peminjaman</h2>
+                        <p class="text-sm text-zinc-500">Pilih tanggal dan waktu untuk mengajukan peminjaman.</p>
                     </div>
 
-                    <!-- Submit Button -->
-                    <button type="submit"
-                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 mt-4">
-                        <i class="fas fa-paper-plane"></i>
-                        <span>Kirim Permohonan Booking</span>
-                    </button>
-                </form>
+                    <!-- Date Navigation -->
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-zinc-900" id="currentMonthDisplay">Januari 2024</h3>
+                            <div class="flex gap-2">
+                                <button id="prevDaysBtn"
+                                    class="p-1.5 rounded-md hover:bg-zinc-100 text-zinc-500 transition-colors">
+                                    <i class="fas fa-chevron-left text-xs"></i>
+                                </button>
+                                <button id="nextDaysBtn"
+                                    class="p-1.5 rounded-md hover:bg-zinc-100 text-zinc-500 transition-colors">
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x" id="dateNavigation">
+                            <!-- Dates populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Time Slots -->
+                    <div id="timeSlotsContainer" class="hidden animate-in fade-in slide-in-from-top-4 duration-300">
+                        <div class="flex items-center justify-between mb-4 border-t border-zinc-100 pt-6">
+                            <div>
+                                <h3 class="text-sm font-medium text-zinc-900">Waktu Tersedia</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5" id="selectedDateDisplayForSlots">-</p>
+                            </div>
+                        </div>
+
+                        <div id="timeSlotsGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <!-- Time slots populated by JS -->
+                        </div>
+                    </div>
+
+                    <div id="selectDatePrompt" class="border-2 border-dashed border-zinc-100 rounded-xl p-12 text-center">
+                        <div
+                            class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-zinc-50 text-zinc-300 mb-3">
+                            <i class="far fa-calendar text-xl"></i>
+                        </div>
+                        <p class="text-sm text-zinc-500 font-medium">Pilih tanggal untuk melihat ketersediaan waktu</p>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    @include('include.footerUser')
-    @include('services.LogoutModalUser')
+    <!-- Modal Confirmation -->
+    <div id="bookingModal" class="relative z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm transition-opacity"></div>
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div
+                    class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-zinc-200">
+                    <div class="flex items-center justify-between border-b border-zinc-100 px-4 py-3 sm:px-6">
+                        <h3 class="text-base font-semibold leading-6 text-zinc-900" id="modal-title">Konfirmasi Peminjaman
+                        </h3>
+                        <button type="button" onclick="closeModal()"
+                            class="text-zinc-400 hover:text-zinc-500 focus:outline-none">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <form action="{{ route('users.pengajuan.store') }}" method="POST" class="p-4 sm:p-6">
+                        @csrf
+                        <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                        <input type="hidden" name="tanggal_peminjaman" id="selectedDate" required>
+                        <input type="hidden" name="tanggal_berakhir_peminjaman" id="selectedEndDate" required>
+                        <input type="hidden" name="waktu_peminjaman" id="selectedStartTime" required>
+                        <input type="hidden" name="waktu_berakhir_peminjaman" id="selectedEndTime" required>
+
+                        <div class="mb-6 bg-zinc-50 rounded-lg p-4 border border-zinc-100 flex items-start gap-4">
+                            <div
+                                class="h-10 w-10 flex-shrink-0 bg-white rounded-lg border border-zinc-200 flex items-center justify-center text-zinc-700 shadow-sm">
+                                <i class="far fa-clock"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-semibold mb-1">Jadwal Dipilih
+                                </p>
+                                <p class="text-zinc-900 font-semibold text-lg leading-none mb-1" id="modalTimeDisplay">00:00
+                                    - 00:00</p>
+                                <p class="text-zinc-500 text-sm" id="modalDateDisplay">Senin, 1 Jan 2024</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="space-y-2">
+                                <label for="prodi_id" class="text-sm font-medium leading-none text-zinc-900">Program Studi
+                                    <span class="text-red-500">*</span></label>
+                                <div class="relative">
+                                    <select name="prodi_id" id="prodi_id" required
+                                        class="flex h-10 w-full appearance-none items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                        <option value="">Pilih Program Studi</option>
+                                        @foreach ($prodis as $prodi)
+                                            <option value="{{ $prodi->id }}">{{ $prodi->nama_prodi }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div
+                                        class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-zinc-500">
+                                        <i class="fas fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="keperluan_peminjaman"
+                                    class="text-sm font-medium leading-none text-zinc-900">Keperluan <span
+                                        class="text-red-500">*</span></label>
+                                <textarea name="keperluan_peminjaman" id="keperluan_peminjaman" required rows="3"
+                                    placeholder="Contoh: Kuliah Tamu, Rapat Himpunan"
+                                    class="flex min-h-[80px] w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                            <button type="button" onclick="closeModal()"
+                                class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 sm:mt-0 sm:w-auto">Batal</button>
+                            <button type="submit"
+                                class="inline-flex w-full justify-center rounded-md bg-zinc-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800 sm:w-auto">Ajukan
+                                Peminjaman</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Data from Server
-        const bookedDates = @json($bookings->map(fn($b) => $b->tanggal_peminjaman));
-        const bookedTimes = @json(
-            $bookings->groupBy('tanggal_peminjaman')->map(
-                    fn($bookings) => $bookings->map(fn($b) => ['start' => $b->waktu_peminjaman, 'end' => $b->waktu_berakhir_peminjaman])));
+        document.addEventListener('DOMContentLoaded', () => {
+            // Data from Server
+            const bookedbookings = @json($bookings);
+            // bookedbookings structure: [{tanggal_peminjaman, waktu_peminjaman, waktu_berakhir, ...}, ...]
 
-        // State
-        let selectedDate = null;
-        let selectedTimeSlot = null;
-        let startDate = null;
-        let endDate = null;
+            // State
+            let today = new Date();
+            let currentStartDate = new Date(today); // For pagination
+            let selectedDateStr = null;
 
-        // Utilities
-        function formatDate(date) {
-            return date.toISOString().split('T')[0];
-        }
+            const dateNav = document.getElementById('dateNavigation');
+            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+            const selectDatePrompt = document.getElementById('selectDatePrompt');
+            const timeSlotsGrid = document.getElementById('timeSlotsGrid');
+            const selectedDateDisplayForSlots = document.getElementById('selectedDateDisplayForSlots');
+            const currentMonthDisplay = document.getElementById('currentMonthDisplay');
 
-        function formatDisplayDate(date) {
-            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
-                'Oktober', 'November', 'Desember'
-            ];
-            return `${days[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-        }
+            // Render Dates
+            function renderDates(startDate) {
+                dateNav.innerHTML = '';
 
-        // Logic
-        function generateDates() {
-            const dates = [];
-            const today = new Date();
-            for (let i = 0; i < 14; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() + i);
-                dates.push(date);
-            }
-            return dates;
-        }
+                // Show month of start date
+                const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus',
+                    'September', 'Oktober', 'November', 'Desember'
+                ];
+                currentMonthDisplay.textContent = `${monthNames[startDate.getMonth()]} ${startDate.getFullYear()}`;
 
-        function generateTimeSlots() {
-            const slots = [];
-            // Configuration: Start 07:00, End 17:00
-            // Durations: 1 to 4 hours? Or fixed blocks? 
-            // Previous code seemed to generate ALL combinations of Start -> Start + Duration
-            // Let's optimize to show meaningful slots.
-            // Simplified: Hour blocks from 7 to 17.
+                for (let i = 0; i < 14; i++) {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + i);
 
-            const startHour = 7;
-            const endHour = 17;
+                    const dateStr = date.toISOString().split('T')[0];
+                    const dayName = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'][date.getDay()];
+                    const isToday = (date.toDateString() === today.toDateString());
+                    const isSelected = (selectedDateStr === dateStr);
 
-            // Generate standard slots: 1 hour, 2 hours, 3 hours, 4 hours
-            for (let hour = startHour; hour < endHour; hour++) {
-                // Max duration is up to endHour
-                const maxDuration = Math.min(4, endHour - hour);
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `flex-shrink-0 w-[4.5rem] h-[5.5rem] flex flex-col items-center justify-center rounded-xl border transition-all duration-200 snap-start ${isSelected ? 'bg-zinc-900 text-white border-zinc-900 shadow-md transform scale-105' : 'bg-white text-zinc-600 border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'}`;
+                    btn.onclick = () => selectDate(dateStr);
 
-                for (let duration = 1; duration <= maxDuration; duration++) {
-                    const start = `${hour.toString().padStart(2, '0')}:00`;
-                    const end = `${(hour + duration).toString().padStart(2, '0')}:00`;
-                    slots.push({
-                        start,
-                        end,
-                        duration
-                    });
-                }
-            }
-            return slots;
-        }
-
-        function isTimeSlotAvailable(dateStr, start, end) {
-            if (!bookedTimes[dateStr]) return true; // No bookings for this date
-
-            const startVal = parseInt(start.replace(':', ''));
-            const endVal = parseInt(end.replace(':', ''));
-
-            return !bookedTimes[dateStr].some(booking => {
-                const bookingStart = parseInt(booking.start.replace(':', ''));
-                const bookingEnd = parseInt(booking.end.replace(':', ''));
-
-                // Overlap check
-                return (startVal < bookingEnd && endVal > bookingStart);
-            });
-        }
-
-        function renderDateNavigation() {
-            const dates = generateDates();
-            const container = document.getElementById('dateNavigation');
-
-            const html = dates.map((date, index) => {
-                const dateStr = formatDate(date);
-                const isToday = index === 0;
-
-                // Using a simpler single selection for simplicity first, or maintain range?
-                // Maintaining range logic from before but fixing display.
-                const isStart = startDate === dateStr;
-                const isEnd = endDate === dateStr;
-                const inRange = startDate && endDate && dateStr > startDate && dateStr < endDate;
-                const isSelected = isStart || isEnd;
-
-                // Booking Check: Is the whole date fully booked? 
-                // Hard to say without checking all slots, assume available unless marked otherwise from backend.
-                // Assuming availability based on existing logic.
-                const isAvailable = true; // Assuming open unless specific logic says otherwise
-
-                let classes = "bg-white text-gray-700 border-gray-200 hover:border-blue-500 hover:shadow-md";
-
-                if (isSelected) {
-                    classes = "bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-200";
-                } else if (inRange) {
-                    classes = "bg-blue-50 text-blue-700 border-blue-200";
-                }
-
-                const dayName = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'][date.getDay()];
-                const monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov',
-                    'Des'
-                ][date.getMonth()];
-
-                return `
-                    <button 
-                        onclick="handleDateClick('${dateStr}')" 
-                        class="relative p-3 rounded-xl border transition-all duration-200 flex flex-col items-center justify-center group w-full ${classes}"
-                    >
-                        ${isToday ? '<span class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">Hari Ini</span>' : ''}
-                        <span class="text-xs font-medium mb-1 opacity-80">${dayName}</span>
-                        <span class="text-xl font-bold">${date.getDate()}</span>
-                        <span class="text-xs opacity-70">${monthName}</span>
-                    </button>
+                    btn.innerHTML = `
+                    <span class="text-xs font-medium ${isSelected ? 'text-zinc-300' : 'text-zinc-400'} mb-1">${dayName}</span>
+                    <span class="text-xl font-bold mb-1">${date.getDate()}</span>
+                    ${isToday ? `<span class="text-[10px] bg-emerald-500 text-white px-1.5 rounded-full mt-1">Hari ini</span>` : ''}
                 `;
-            }).join('');
 
-            container.innerHTML = html;
-        }
-
-        function renderTimeSlots() {
-            const container = document.getElementById('timeSlots');
-
-            if (!startDate) {
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center py-24 text-gray-400">
-                        <i class="fas fa-calendar-day text-6xl mb-4 text-gray-200"></i>
-                        <p class="text-lg font-medium text-gray-500">Pilih tanggal terlebih dahulu</p>
-                    </div>`;
-                return;
+                    dateNav.appendChild(btn);
+                }
             }
 
-            const slots = generateTimeSlots();
+            function selectDate(dateStr) {
+                selectedDateStr = dateStr;
+                renderDates(currentStartDate); // Re-render to highlight
 
-            const htmlHeader = `
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
-                        <i class="fas fa-clock text-lg"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-900">Pilih Waktu</h3>
-                        <p class="text-xs text-gray-500">Durasi booking tersedia</p>
-                    </div>
-                </div>`;
+                selectDatePrompt.classList.add('hidden');
+                timeSlotsContainer.classList.remove('hidden');
 
-            const htmlSlots = slots.map(slot => {
-                const isAvailable = isTimeSlotAvailable(startDate, slot.start, slot.end);
+                // Format nice date display
+                const d = new Date(dateStr);
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+                selectedDateDisplayForSlots.textContent =
+                    `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 
-                if (!isAvailable) {
-                    return `
-                        <div class="p-3 rounded-xl border border-red-100 bg-red-50 flex flex-col items-center justify-center gap-1 opacity-60 cursor-not-allowed">
-                            <span class="font-bold text-sm text-red-800">${slot.start} - ${slot.end}</span>
-                            <span class="text-[10px] font-bold bg-white text-red-500 px-2 py-0.5 rounded-full border border-red-100">Terisi</span>
-                        </div>
+                renderTimeSlots(dateStr);
+            }
+
+            // Slot Generation
+            function generateTimeSlots() {
+                const slots = [];
+                const startHour = 7;
+                const endHour = 17;
+
+                for (let hour = startHour; hour < endHour; hour++) {
+                    // Generate 1 to 4 hour blocks starting at this hour
+                    const maxDuration = Math.min(4, endHour -
+                    hour); // Limit max duration to 4 hours or until end of day
+                    // Only generating 1, 2, 3, 4 hour slots
+                    for (let duration = 1; duration <= maxDuration; duration++) {
+                        const hStart = hour;
+                        const hEnd = hour + duration;
+                        const startStr = `${hStart.toString().padStart(2, '0')}:00`;
+                        const endStr = `${hEnd.toString().padStart(2, '0')}:00`;
+
+                        slots.push({
+                            start: startStr,
+                            end: endStr,
+                            duration: duration
+                        });
+                    }
+                }
+                return slots;
+            }
+
+            function isSlotAvailable(dateStr, slotStart, slotEnd) {
+                const slotStartVal = parseInt(slotStart.replace(':', ''));
+                const slotEndVal = parseInt(slotEnd.replace(':', ''));
+
+                // Filter bookings for this specific date
+                const dayBookings = bookedbookings.filter(b => b.tanggal_peminjaman === dateStr);
+
+                for (let b of dayBookings) {
+                    // Assumes booking times are H:i:s or H:i form. parsing reliably:
+                    // b.waktu_peminjaman might be "08:00:00"
+                    const bStart = parseInt(b.waktu_peminjaman.substring(0, 5).replace(':', ''));
+                    const bEnd = parseInt(b.waktu_berakhir_peminjaman.substring(0, 5).replace(':', ''));
+
+                    // Overlap logic: (StartA < EndB) and (EndA > StartB)
+                    if (slotStartVal < bEnd && slotEndVal > bStart) {
+                        return false; // Overlaps
+                    }
+                }
+                return true;
+            }
+
+            function renderTimeSlots(dateStr) {
+                const slots = generateTimeSlots();
+                timeSlotsGrid.innerHTML = '';
+
+                // Group by start time to make it cleaner? Or plain grid?
+                // User requested similar to previous but better UI.
+                // Let's filter to show reasonable options.
+
+                let hasSlots = false;
+
+                slots.forEach(slot => {
+                    const available = isSlotAvailable(dateStr, slot.start, slot.end);
+
+                    // Only show available slots or all? Previous showed all with red.
+                    // Shadcn style usually clean. Let's show all but dim unavailable.
+
+                    const btn = document.createElement('button');
+
+                    if (available) {
+                        btn.className =
+                            "group relative flex flex-col items-center justify-center p-3 rounded-lg border border-zinc-200 bg-white hover:border-zinc-900 hover:shadow-sm transition-all text-sm";
+                        btn.onclick = () => openBookingModal(dateStr, slot.start, slot.end);
+                        btn.innerHTML = `
+                         <span class="font-semibold text-zinc-900 group-hover:text-zinc-900">${slot.start} - ${slot.end}</span>
+                         <span class="text-[10px] text-zinc-500 mt-1 bg-zinc-100 px-2 py-0.5 rounded-full group-hover:bg-zinc-900 group-hover:text-white transition-colors">${slot.duration} Jam</span>
                     `;
-                }
+                    } else {
+                        btn.className =
+                            "flex flex-col items-center justify-center p-3 rounded-lg border border-zinc-100 bg-zinc-50 opacity-50 cursor-not-allowed text-sm";
+                        btn.innerHTML = `
+                        <span class="font-semibold text-zinc-400 bg-transparent relative decoration-slice text-xs">${slot.start} - ${slot.end}</span>
+                        <span class="text-[10px] text-zinc-400 mt-1">Terisi</span>
+                     `;
+                    }
 
-                return `
-                    <button 
-                        onclick="handleTimeClick('${slot.start}', '${slot.end}')"
-                        class="p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-500 hover:bg-blue-50 hover:shadow-sm transition-all duration-200 flex flex-col items-center justify-center gap-1 group"
-                    >
-                        <span class="font-bold text-sm text-gray-700 group-hover:text-blue-700">${slot.start} - ${slot.end}</span>
-                        <span class="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-0.5 rounded-full group-hover:bg-green-200">Tersedia</span>
-                        <span class="text-[10px] text-gray-400 group-hover:text-blue-400">${slot.duration} Jam</span>
-                    </button>
-                `;
-            }).join('');
+                    timeSlotsGrid.appendChild(btn);
+                    hasSlots = true;
+                });
 
-            container.innerHTML =
-                `${htmlHeader}<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${htmlSlots}</div>`;
-        }
-
-        // Handlers
-        function handleDateClick(dateStr) {
-            // Simple logic: If Start is null, set Start. If Start exists but End is null, set End. If both exist, Reset.
-            // Or simpler: Just single date selection for now as Time Slots logic complexity increases with ranges.
-            // Let's stick to Single Date Selection per user request context often implies single day booking sessions.
-            // IF Multi-day is needed, logic needs to be complex. Let's force Single date for stability unless specifically asked.
-            // Re-reading code: 'tanggal_peminjaman' and 'tanggal_berakhir_peminjaman' implies range support.
-
-            if (!startDate || (startDate && endDate)) {
-                startDate = dateStr;
-                endDate = null;
-            } else {
-                // If clicking earlier date, swap
-                if (dateStr < startDate) {
-                    endDate = startDate;
-                    startDate = dateStr;
-                } else {
-                    endDate = dateStr;
+                if (!hasSlots) {
+                    timeSlotsGrid.innerHTML =
+                        '<p class="col-span-full text-center text-zinc-500 text-sm py-8">Tidak ada jadwal tersedia.</p>';
                 }
             }
-            // For now, let's just do single date selection to ensure reliability of the "Show Time" interaction
-            // Range selection often confuses time slot generation (e.g. 10am on day 1 to 2pm on day 3?)
-            // Simplification: Click selects START date. Double click or separate logic for Range?
-            // User request was "fix it so it works". Simple = Works.
-            startDate = dateStr;
-            endDate = dateStr; // Force single day for now to guarantee logic works.
 
-            renderDateNavigation();
-            renderTimeSlots();
-        }
+            // Navigation
+            document.getElementById('prevDaysBtn').onclick = () => {
+                currentStartDate.setDate(currentStartDate.getDate() - 7);
+                // Don't go to past?
+                if (currentStartDate < today) {
+                    // Reset to today if went too far back, but allow navigation if viewed range includes today
+                    if (Math.abs(currentStartDate - today) < (24 * 60 * 60 * 1000 * 7)) {
+                        // okay
+                    } else {
+                        // actually simple:
+                        // just allow going back
+                    }
+                }
+                renderDates(currentStartDate);
+            };
+            document.getElementById('nextDaysBtn').onclick = () => {
+                currentStartDate.setDate(currentStartDate.getDate() + 7);
+                renderDates(currentStartDate);
+            };
 
-        function handleTimeClick(start, end) {
-            // Update hidden inputs
-            document.getElementById('selectedDate').value = startDate;
-            document.getElementById('selectedEndDate').value = endDate || startDate;
+            // Init
+            renderDates(currentStartDate);
+        });
+
+        function openBookingModal(dateStr, start, end) {
+            // Set Inputs
+            document.getElementById('selectedDate').value = dateStr;
+            document.getElementById('selectedEndDate').value = dateStr;
             document.getElementById('selectedStartTime').value = start;
             document.getElementById('selectedEndTime').value = end;
 
-            // Update Modal UI
-            document.getElementById('selectedTimeDisplay').textContent = `${start} - ${end}`;
+            // Set Display
+            const d = new Date(dateStr);
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            document.getElementById('modalDateDisplay').textContent = d.toLocaleDateString('id-ID', options);
+            document.getElementById('modalTimeDisplay').textContent = `${start} - ${end}`;
 
-            const dateObj = new Date(startDate);
-            document.getElementById('selectedDateDisplay').textContent = formatDisplayDate(dateObj);
-
-            // Show Modal
+            // Open
             const modal = document.getElementById('bookingModal');
             modal.classList.remove('hidden');
         }
@@ -430,12 +392,5 @@
         function closeModal() {
             document.getElementById('bookingModal').classList.add('hidden');
         }
-
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            renderDateNavigation();
-        });
     </script>
-</body>
-
-</html>
+@endsection

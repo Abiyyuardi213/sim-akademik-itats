@@ -59,13 +59,19 @@
                                 <div
                                     class="group rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
                                     <div class="aspect-video relative overflow-hidden bg-zinc-100">
-                                        <!-- Placeholder or specific images based on logic -->
-                                        <div class="absolute inset-0 flex items-center justify-center text-zinc-300">
-                                            <i class="fas fa-image text-3xl"></i>
-                                        </div>
+                                        @if ($kelas->gambar)
+                                            <img src="{{ asset('uploads/kelas/' . $kelas->gambar) }}"
+                                                alt="{{ $kelas->nama_kelas }}"
+                                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                        @else
+                                            <div
+                                                class="absolute inset-0 flex items-center justify-center text-zinc-300">
+                                                <i class="fas fa-image text-3xl"></i>
+                                            </div>
+                                        @endif
                                         <div
                                             class="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-medium text-zinc-900 shadow-sm">
-                                            {{ $kelas->kapasitas }} Kursi
+                                            {{ $kelas->kapasitas_mahasiswa }} Kursi
                                         </div>
                                     </div>
                                     <div class="p-5">

@@ -16,11 +16,13 @@ class PengajuanPeminjamanController extends Controller
 {
     public function index()
     {
-        $kelas = Kelas::with('gedung')
-            ->orderBy('nama_kelas', 'asc')
-            ->get();
+        $gedungs = \App\Models\Gedung::with(['kelas' => function ($query) {
+            $query->where('kelas_status', true); // Optional: Only show active classes
+        }])->whereHas('kelas', function ($query) {
+            $query->where('kelas_status', true);
+        })->get();
 
-        return view('user.pengajuan.index', compact('kelas'));
+        return view('user.pengajuan.index', compact('gedungs'));
     }
 
     // public function create(Kelas $kelas)
@@ -113,7 +115,7 @@ class PengajuanPeminjamanController extends Controller
             ->whereDate('tanggal_berakhir_peminjaman', '>=', $startDate)
             ->where(function ($q) use ($startTime, $endTime) {
                 $q->whereTime('waktu_peminjaman', '<', $endTime)
-                  ->whereTime('waktu_berakhir_peminjaman', '>', $startTime);
+                    ->whereTime('waktu_berakhir_peminjaman', '>', $startTime);
             })
             ->exists();
 
@@ -260,6 +262,6 @@ class PengajuanPeminjamanController extends Controller
 
         return response($pdf->output(), 200)
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'inline; filename="surat_peminjaman_'.$pengajuan->id.'.pdf"');
+            ->header('Content-Disposition', 'inline; filename="surat_peminjaman_' . $pengajuan->id . '.pdf"');
     }
 }

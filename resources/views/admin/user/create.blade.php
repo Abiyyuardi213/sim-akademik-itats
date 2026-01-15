@@ -2,123 +2,101 @@
 
 @section('title', 'Tambah Pengguna')
 
-@section('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
-    <style>
-        .cropper-container {
-            width: 100% !important;
-            border-radius: 0.5rem;
-        }
-    </style>
-@endsection
-
 @section('content')
-    <!-- Header -->
-    <div class="mb-8">
-        <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <a href="{{ route('admin.dashboard') }}" class="hover:text-blue-600">Home</a>
-            <i class="fas fa-chevron-right text-xs"></i>
-            <a href="{{ route('admin.user.index') }}" class="hover:text-blue-600">Manajemen Pengguna</a>
-            <i class="fas fa-chevron-right text-xs"></i>
-            <span class="text-gray-900 font-medium">Tambah Pengguna</span>
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Tambah Pengguna Baru</h1>
+            <p class="mt-1 text-sm text-zinc-500">Buat akun pengguna baru dan atur hak aksesnya.</p>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900">Tambah Pengguna Baru</h1>
-        <p class="mt-1 text-sm text-gray-600">Buat akun pengguna baru dan atur hak aksesnya.</p>
+        <nav class="flex text-sm font-medium text-zinc-500 items-center">
+            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <a href="{{ route('admin.user.index') }}" class="hover:text-zinc-900 transition-colors">Pengguna</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <span class="text-zinc-900">Tambah</span>
+        </nav>
     </div>
 
-    <!-- Form Card -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <form action="{{ route('admin.user.store') }}" method="POST" enctype="multipart/form-data" id="userForm">
-            @csrf
-            <div class="p-6 border-b border-gray-100 bg-gray-50/50">
-                <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                        <i class="fas fa-user-plus text-sm"></i>
-                    </div>
-                    Informasi Pengguna
-                </h3>
+    <!-- Form -->
+    <div class="bg-white rounded-xl border border-zinc-200 shadow-sm p-6 sm:p-8">
+        <div class="mb-8 border-b border-zinc-100 pb-4">
+            <h3 class="text-lg font-semibold text-zinc-900">Form Tambah Pengguna</h3>
+            <p class="text-sm text-zinc-500">Lengkapi informasi pengguna di bawah ini.</p>
+        </div>
+
+        @if (session('error'))
+            <div class="mb-6 p-4 rounded-md bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+                {{ session('error') }}
             </div>
+        @endif
 
-            <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Left Column: Form Fields -->
-                <div class="lg:col-span-2 space-y-6">
-                    @if (session('error'))
-                        <div
-                            class="bg-red-50 border border-red-100 text-red-700 px-4 py-3 rounded-lg flex items-start gap-3">
-                            <i class="fas fa-exclamation-circle mt-0.5"></i>
-                            <p>{{ session('error') }}</p>
-                        </div>
-                    @endif
+        <form action="{{ route('admin.user.store') }}" method="POST" enctype="multipart/form-data"
+            class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            @csrf
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Nama Lengkap -->
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
-                                Nama Lengkap <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" id="name" name="name" value="{{ old('name') }}" required
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                                placeholder="Contoh: Budi Santoso">
-                            @error('name')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+            <!-- Left Column: Form Fields -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="name" class="text-sm font-medium leading-none text-zinc-900">Nama Lengkap <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" required
+                            placeholder="Contoh: Budi Santoso"
+                            class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                        @error('name')
+                            <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <!-- Username -->
-                        <div>
-                            <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
-                                Username <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" id="username" name="username" value="{{ old('username') }}" required
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                                placeholder="budi_s">
-                            @error('username')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div class="space-y-2">
+                        <label for="username" class="text-sm font-medium leading-none text-zinc-900">Username <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="username" name="username" value="{{ old('username') }}" required
+                            placeholder="budi_s"
+                            class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                        @error('username')
+                            <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <!-- Email -->
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input type="email" id="email" name="email" value="{{ old('email') }}"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                                placeholder="email@example.com">
-                            @error('email')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div class="space-y-2">
+                        <label for="email" class="text-sm font-medium leading-none text-zinc-900">Email</label>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}"
+                            placeholder="email@example.com"
+                            class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                        @error('email')
+                            <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <!-- No Telepon -->
-                        <div>
-                            <label for="no_telepon" class="block text-sm font-medium text-gray-700 mb-1">No. Telepon</label>
-                            <input type="text" id="no_telepon" name="no_telepon" value="{{ old('no_telepon') }}"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                                placeholder="08123456789">
-                            @error('no_telepon')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div class="space-y-2">
+                        <label for="no_telepon" class="text-sm font-medium leading-none text-zinc-900">No. Telepon</label>
+                        <input type="text" id="no_telepon" name="no_telepon" value="{{ old('no_telepon') }}"
+                            placeholder="08123456789"
+                            class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                        @error('no_telepon')
+                            <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <!-- Password -->
-                        <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                                Password <span class="text-red-500">*</span>
-                            </label>
-                            <input type="password" id="password" name="password" required
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                                placeholder="••••••••">
-                            @error('password')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div class="space-y-2">
+                        <label for="password" class="text-sm font-medium leading-none text-zinc-900">Password <span
+                                class="text-red-500">*</span></label>
+                        <input type="password" id="password" name="password" required placeholder="••••••••"
+                            class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                        @error('password')
+                            <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <!-- Role -->
-                        <div>
-                            <label for="role_id" class="block text-sm font-medium text-gray-700 mb-1">
-                                Role <span class="text-red-500">*</span>
-                            </label>
+                    <div class="space-y-2">
+                        <label for="role_id" class="text-sm font-medium leading-none text-zinc-900">Role <span
+                                class="text-red-500">*</span></label>
+                        <div class="relative">
                             <select id="role_id" name="role_id" required
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-white">
+                                class="flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none">
                                 <option value="">-- Pilih Role --</option>
                                 @foreach ($roles as $role)
                                     <option value="{{ $role->id }}"
@@ -126,127 +104,65 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @error('role_id')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <i class="fas fa-chevron-down text-zinc-400 text-xs"></i>
+                            </div>
                         </div>
+                        @error('role_id')
+                            <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                        @enderror
                     </div>
-                </div>
-
-                <!-- Right Column: Profile Picture -->
-                <div class="flex flex-col items-center space-y-4">
-                    <label class="block text-sm font-medium text-gray-700 self-start">Foto Profil</label>
-
-                    <div class="w-full aspect-square bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-500 transition-colors flex items-center justify-center overflow-hidden relative group cursor-pointer"
-                        onclick="document.getElementById('profile_picture').click()">
-                        <!-- Initial Placeholder -->
-                        <div id="uploadPlaceholder" class="text-center p-6 text-gray-400">
-                            <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
-                            <p class="text-sm">Klik untuk upload foto</p>
-                        </div>
-
-                        <!-- Preview Image -->
-                        <img id="preview" src="#" class="hidden w-full h-full object-contain" alt="Preview">
-
-                        <!-- Hover Overlay -->
-                        <div
-                            class="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span class="text-sm font-medium">Ganti Foto</span>
-                        </div>
-                    </div>
-
-                    <input type="file" name="profile_picture" id="profile_picture" class="hidden" accept="image/*">
-                    <input type="hidden" name="cropped_image" id="cropped_image">
-
-                    @error('profile_picture')
-                        <p class="text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-
-                    <p class="text-xs text-gray-500 text-center">Format: JPG, PNG. Maks: 2MB.</p>
                 </div>
             </div>
 
-            <div class="p-6 border-t border-gray-100 bg-gray-50 flex items-center gap-3">
-                <button type="submit" id="saveButton"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm shadow-blue-500/30">
-                    <i class="fas fa-save"></i> Simpan
-                </button>
+            <!-- Right Column: Profile Picture -->
+            <div class="flex flex-col items-center space-y-4 pt-2">
+                <label class="block text-sm font-medium text-zinc-900 self-start">Foto Profil</label>
+                <div class="w-full aspect-square bg-zinc-50 rounded-xl border-2 border-dashed border-zinc-300 hover:border-zinc-900 transition-colors flex items-center justify-center overflow-hidden relative group cursor-pointer"
+                    onclick="document.getElementById('profile_picture').click()">
+                    <!-- Initial Placeholder -->
+                    <div id="uploadPlaceholder" class="text-center p-6 text-zinc-400">
+                        <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
+                        <p class="text-sm font-medium">Klik untuk upload</p>
+                        <p class="text-xs">JPG, PNG (Max 2MB)</p>
+                    </div>
+
+                    <!-- Preview -->
+                    <img id="preview" src="#" class="hidden w-full h-full object-cover" alt="Preview">
+                </div>
+                <input type="file" name="profile_picture" id="profile_picture" class="hidden" accept="image/*"
+                    onchange="previewImage(event)">
+                @error('profile_picture')
+                    <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="lg:col-span-3 pt-6 border-t border-zinc-100 flex items-center gap-3 justify-end">
                 <a href="{{ route('admin.user.index') }}"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
+                    class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
                     Batal
                 </a>
+                <button type="submit"
+                    class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 transition-colors">
+                    <i class="fas fa-save mr-2"></i> Simpan
+                </button>
             </div>
         </form>
     </div>
 @endsection
 
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script>
-        let cropper;
-        const image = document.getElementById('preview');
-        const input = document.getElementById('profile_picture');
-        const placeholder = document.getElementById('uploadPlaceholder');
-        const saveButton = document.getElementById('saveButton');
-        const form = document.getElementById('userForm');
-        const croppedImageInput = document.getElementById('cropped_image');
-
-        input.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
+        function previewImage(event) {
             const reader = new FileReader();
-            reader.onload = () => {
-                image.src = reader.result;
-                image.classList.remove('hidden');
+            reader.onload = function() {
+                const output = document.getElementById('preview');
+                const placeholder = document.getElementById('uploadPlaceholder');
+                output.src = reader.result;
+                output.classList.remove('hidden');
                 placeholder.classList.add('hidden');
-
-                if (cropper) cropper.destroy();
-                cropper = new Cropper(image, {
-                    aspectRatio: 1,
-                    viewMode: 1,
-                    dragMode: 'move',
-                    autoCropArea: 0.8,
-                    restore: false,
-                    guides: false,
-                    center: false,
-                    highlight: false,
-                    cropBoxMovable: true,
-                    cropBoxResizable: true,
-                    toggleDragModeOnDblclick: false,
-                });
             };
-            reader.readAsDataURL(file);
-        });
-
-        form.addEventListener('submit', function(e) {
-            if (cropper) {
-                e.preventDefault();
-                const canvas = cropper.getCroppedCanvas({
-                    width: 300,
-                    height: 300,
-                });
-
-                canvas.toBlob((blob) => {
-                    // We need to convert blob to file or base64 to send.
-                    // Or better: update the file input or append to FormData. 
-                    // Since this is a standard form submit, hidden input with base64 is easiest if backend accepts it,
-                    // BUT Laravel usually expects file.
-                    // Actually, the original code had: formData.append('cropped_image', blob); inside crop event?
-                    // No, standard form submit doesn't work well with blob unless we use Ajax.
-                    // However, 'cropped_image' hidden input usually expects a string?
-                    // Let's assume backend handles base64 if passed in hidden input, OR we have to use AJAX.
-                    // The previous code had a hidden input 'cropped_image' but didn't seem to set it on submit, 
-                    // it set it inside the crop() method? No, previous code was "formData.append..." inside crop event but that didn't do anything for a standard form submit unless valid.
-
-                    // Let's convert to Base64 and assign to hidden input. 
-                    // IF backend supports it. If not, we might need a different approach.
-                    // Assuming the backend has logic to read 'cropped_image'.
-
-                    croppedImageInput.value = canvas.toDataURL('image/jpeg');
-                    form.submit();
-                }, 'image/jpeg');
-            }
-        });
+            reader.readAsDataURL(event.target.files[0]);
+        }
     </script>
 @endsection

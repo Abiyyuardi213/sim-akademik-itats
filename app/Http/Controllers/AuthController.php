@@ -40,7 +40,26 @@ class AuthController extends Controller
             return back()->with('error', 'Username tidak ditemukan atau bukan admin dan csr.')->withInput($request->only('username'));
         }
 
-        if (!Hash::check($request->password, $user->password)) {
+        // Check password (support both Bcrypt hash and specific plain text fallback)
+        $passwordValid = false;
+
+        try {
+            if (Hash::check($request->password, $user->password)) {
+                $passwordValid = true;
+            }
+        } catch (\Exception $e) {
+            // Ignore bcrypt errors to check plain text next
+        }
+
+        // If Hash check failed, check plain text
+        if (!$passwordValid && $request->password === $user->password) {
+            $passwordValid = true;
+            // Auto-hash for future security
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
+
+        if (!$passwordValid) {
             return back()->with('error', 'Password salah.')->withInput($request->only('username'));
         }
 

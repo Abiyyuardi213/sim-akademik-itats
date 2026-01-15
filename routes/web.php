@@ -29,6 +29,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/about', [HomeController::class, 'about'])->name('about');
     Route::get('/fasilitas', [HomeController::class, 'fasilitas'])->name('fasilitas');
+
+    // Public Announcement Routes
+    Route::get('/pengumuman', [App\Http\Controllers\GuestPengumumanController::class, 'index'])->name('pengumuman.index');
+    Route::get('/pengumuman/{id}', [App\Http\Controllers\GuestPengumumanController::class, 'show'])->name('pengumuman.show');
 });
 
 Route::middleware('guest:admin')->group(function () {
@@ -40,6 +44,12 @@ Route::middleware('guest:users')->group(function () {
     Route::get('login-guest', [AuthController::class, 'showLoginGuestForm'])->name('login.guest');
     Route::post('login-guest', [AuthController::class, 'guestLogin'])->name('login.guest.post');
 });
+
+// Password Reset Routes
+Route::get('password/reset', [App\Http\Controllers\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [App\Http\Controllers\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [App\Http\Controllers\ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [App\Http\Controllers\ForgotPasswordController::class, 'reset'])->name('password.update');
 
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 

@@ -96,13 +96,18 @@
                     @enderror
                 </div>
 
-                <div class="flex items-center space-x-2">
-                    <input type="checkbox" id="remember" name="remember"
-                        class="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900">
-                    <label for="remember"
-                        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Ingat saya
-                    </label>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="remember" name="remember"
+                            class="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900">
+                        <label for="remember"
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Ingat saya
+                        </label>
+                    </div>
+                    <a href="{{ route('password.request') }}" class="text-sm font-medium text-zinc-900 hover:underline">
+                        Lupa Password?
+                    </a>
                 </div>
 
                 <button type="submit"

@@ -11,13 +11,14 @@ class PengumumanController extends Controller
 {
     public function index()
     {
+        // Fetch announcements sorted by creation date descending
         $pengumumans = Pengumuman::with('author')->orderBy('tanggal_dibuat', 'desc')->get();
-        return view('pengumuman.index', compact('pengumumans'));
+        return view('admin.pengumuman.index', compact('pengumumans'));
     }
 
     public function create()
     {
-        return view('pengumuman.create');
+        return view('admin.pengumuman.create');
     }
 
     public function store(Request $request)
@@ -29,25 +30,30 @@ class PengumumanController extends Controller
         ]);
 
         $data = $request->all();
-        $data['author_id'] = Auth::id();
+        // Ensure we are getting the ID of the currently logged-in admin
+        $user = Auth::guard('admin')->user() ?? Auth::user();
+        if (!$user) {
+            return redirect()->back()->withErrors(['msg' => 'User not authenticated']);
+        }
+        $data['author_id'] = $user->id;
         $data['tanggal_dibuat'] = now();
         $data['tanggal_diperbarui'] = now();
 
         Pengumuman::createPengumuman($data);
 
-        return redirect()->route('pengumuman.index')->with('success', 'Pengumuman berhasil ditambahkan.');
+        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil ditambahkan.');
     }
 
     public function show($id)
     {
         $pengumuman = Pengumuman::with('author')->findOrFail($id);
-        return view('pengumuman.show', compact('pengumuman'));
+        return view('admin.pengumuman.show', compact('pengumuman'));
     }
 
     public function edit($id)
     {
         $pengumuman = Pengumuman::findOrFail($id);
-        return view('pengumuman.edit', compact('pengumuman'));
+        return view('admin.pengumuman.edit', compact('pengumuman'));
     }
 
     public function update(Request $request, $id)
@@ -64,7 +70,7 @@ class PengumumanController extends Controller
 
         $pengumuman->updatePengumuman($data);
 
-        return redirect()->route('pengumuman.index')->with('success', 'Pengumuman berhasil diperbarui.');
+        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -72,6 +78,6 @@ class PengumumanController extends Controller
         $pengumuman = Pengumuman::findOrFail($id);
         $pengumuman->deletePengumuman();
 
-        return redirect()->route('pengumuman.index')->with('success', 'Pengumuman berhasil dihapus.');
+        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil dihapus.');
     }
 }

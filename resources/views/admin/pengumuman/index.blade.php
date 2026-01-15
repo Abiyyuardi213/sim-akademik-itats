@@ -1,163 +1,121 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akademik WR 1 - Pengumuman</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        .card-header .d-flex.justify-content-end {
-            margin-left: auto;
-        }
-    </style>
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        @include('include.navbarSistem')
-        @include('include.sidebar')
+@extends('layouts.admin')
 
-        <div class="content-wrapper">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Manajemen Peminjaman Ruangan</h1>
-                        </div>
-                    </div>
-                </div>
+@section('title', 'Manajemen Pengumuman')
+
+@section('content')
+    <div class="space-y-6">
+        <!-- Page Header -->
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Manajemen Pengumuman</h1>
+                <p class="mt-2 text-sm text-zinc-500">Kelola pengumuman dan informasi penting untuk pengguna.</p>
             </div>
-
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">Daftar Peminjaman Ruangan</h3>
-                            <div class="d-flex justify-content-end gap-2">
-                                <!-- Tambah Data -->
-                                <a href="{{ route('peminjaman-ruangan.create') }}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-plus"></i> Tambah Data Peminjaman
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="peminjamanTable" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Tanggal</th>
-                                            <th>Ruangan</th>
-                                            <th>Peminjam</th>
-                                            <th>Keperluan</th>
-                                            <th>Waktu Peminjaman</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($peminjamans as $index => $peminjaman)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $peminjaman->tanggal_peminjaman }}</td>
-                                                <td>{{ $peminjaman->kelas->nama_kelas ?? '-' }}</td>
-                                                <td>{{ $peminjaman->prodi->nama_prodi ?? '-' }}</td>
-                                                <td>{{ $peminjaman->keperluan_peminjaman }}</td>
-                                                <td>{{ $peminjaman->waktu_peminjaman }} - {{ $peminjaman->waktu_berakhir_peminjaman }}</td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('peminjaman-ruangan.show', $peminjaman->id) }}" class="btn btn-info btn-sm">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="{{ route('peminjaman-ruangan.edit', $peminjaman->id) }}" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button class="btn btn-danger btn-sm delete-peminjaman-btn"
-                                                        data-toggle="modal"
-                                                        data-target="#deletePeminjamanModal"
-                                                        data-peminjaman-id="{{ $peminjaman->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div id="tablePagination"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                <a href="{{ route('admin.pengumuman.create') }}"
+                    class="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 sm:w-auto transition-colors">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tambah Pengumuman
+                </a>
+            </div>
         </div>
 
-        @include('include.footerSistem')
-    </div>
-
-    <!-- Modal Konfirmasi Hapus -->
-    <div class="modal fade" id="deletePeminjamanModal" tabindex="-1" aria-labelledby="deletePeminjamanModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deletePeminjamanModalLabel"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus data peminjaman ini?
-                </div>
-                <form id="deleteForm" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</button>
-                    </div>
-                </form>
+        <!-- Table Card -->
+        <div class="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-zinc-50 border-b border-zinc-200">
+                        <tr>
+                            <th class="h-12 px-4 font-medium text-zinc-500 w-16 text-center">No</th>
+                            <th class="h-12 px-4 font-medium text-zinc-500">Judul</th>
+                            <th class="h-12 px-4 font-medium text-zinc-500">Konten Preview</th>
+                            <th class="h-12 px-4 font-medium text-zinc-500">Status</th>
+                            <th class="h-12 px-4 font-medium text-zinc-500">Tanggal Dibuat</th>
+                            <th class="h-12 px-4 font-medium text-zinc-500 w-32 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-100">
+                        @forelse($pengumumans as $index => $item)
+                            <tr class="hover:bg-zinc-50/50 transition-colors group">
+                                <td class="p-4 text-center font-medium text-zinc-900">{{ $index + 1 }}</td>
+                                <td class="p-4">
+                                    <span class="font-semibold text-zinc-900 block">{{ $item->judul }}</span>
+                                    <span class="text-xs text-zinc-500">Oleh: {{ $item->author->name ?? 'Admin' }}</span>
+                                </td>
+                                <td class="p-4 text-zinc-600 max-w-xs truncate">
+                                    {{ Str::limit(strip_tags($item->isi), 50) }}
+                                </td>
+                                <td class="p-4">
+                                    @if ($item->status === 'published')
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                                            Published
+                                        </span>
+                                    @elseif($item->status === 'draft')
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-600 ring-1 ring-inset ring-zinc-500/10">
+                                            Draft
+                                        </span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                            Archived
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="p-4 text-zinc-500">
+                                    {{ \Carbon\Carbon::parse($item->tanggal_dibuat)->translatedFormat('d M Y H:i') }}
+                                </td>
+                                <td class="p-4 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{{ route('admin.pengumuman.show', $item->id) }}"
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-400 hover:border-zinc-300 hover:text-zinc-900 shadow-sm transition-all"
+                                            title="Lihat Detail">
+                                            <i class="fas fa-eye text-xs"></i>
+                                        </a>
+                                        <a href="{{ route('admin.pengumuman.edit', $item->id) }}"
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-400 hover:border-blue-300 hover:text-blue-600 shadow-sm transition-all"
+                                            title="Edit">
+                                            <i class="fas fa-edit text-xs"></i>
+                                        </a>
+                                        <button type="button" onclick="confirmDelete('{{ $item->id }}')"
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-400 hover:border-red-300 hover:text-red-600 shadow-sm transition-all"
+                                            title="Hapus">
+                                            <i class="fas fa-trash text-xs"></i>
+                                        </button>
+                                    </div>
+                                    <form id="delete-form-{{ $item->id }}"
+                                        action="{{ route('admin.pengumuman.destroy', $item->id) }}" method="POST"
+                                        class="hidden">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="p-12 text-center">
+                                    <div class="flex flex-col items-center justify-center text-zinc-500">
+                                        <div
+                                            class="h-12 w-12 rounded-full bg-zinc-100 flex items-center justify-center mb-3">
+                                            <i class="fas fa-bullhorn text-xl text-zinc-400"></i>
+                                        </div>
+                                        <h3 class="font-medium text-zinc-900">Belum ada pengumuman</h3>
+                                        <p class="text-sm mt-1">Silakan tambahkan pengumuman baru.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    @include('services.ToastModal')
-    @include('services.LogoutModal')
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script src="{{ asset('js/ToastScript.js') }}"></script>
     <script>
-        $(document).ready(function () {
-            $("#peminjamanTable").DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true
-            });
-        });
-
-        $(document).ready(function () {
-            $('.delete-peminjaman-btn').click(function () {
-                let peminjamanId = $(this).data('peminjaman-id');
-                let deleteUrl = "{{ url('peminjaman-ruangan') }}/" + peminjamanId;
-                $('#deleteForm').attr('action', deleteUrl);
-            });
-        });
-
-        $(document).ready(function() {
-            @if (session('success') || session('error'))
-                $('#toastNotification').toast({
-                    delay: 3000,
-                    autohide: true
-                }).toast('show');
-            @endif
-        });
+        function confirmDelete(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        }
     </script>
-</body>
-</html>
+@endsection

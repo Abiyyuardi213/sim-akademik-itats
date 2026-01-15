@@ -53,4 +53,15 @@ class Gedung extends Model
         $this->gedung_status = !$this->gedung_status;
         $this->save();
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi
+    |--------------------------------------------------------------------------
+    */
+
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'gedung_id');
+    }
 }

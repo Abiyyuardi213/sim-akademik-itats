@@ -6,7 +6,7 @@
             <a class="flex items-center gap-2 mr-4" href="{{ url('home') }}">
                 <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" class="h-8 w-auto">
                 <div class="hidden md:flex flex-col">
-                    <span class="text-lg font-bold tracking-tight text-zinc-900 leading-none">ITATS</span>
+                    <span class="text-lg font-bold tracking-tight text-zinc-900 leading-none">SISTEM</span>
                     <span class="text-[10px] uppercase tracking-wider font-medium text-zinc-500">Peminjaman
                         Ruangan</span>
                 </div>
@@ -26,7 +26,8 @@
                     href="{{ url('fasilitas') }}">
                     Fasilitas
                 </a>
-                <a class="transition-colors hover:text-zinc-900 text-zinc-600" href="#pengumuman">
+                <a class="transition-colors hover:text-zinc-900 {{ Request::is('pengumuman*') ? 'text-zinc-900 font-semibold' : 'text-zinc-600' }}"
+                    href="{{ url('pengumuman') }}">
                     Pengumuman
                 </a>
             </nav>
@@ -67,7 +68,7 @@
                 Fasilitas
             </a>
             <a class="block rounded-md px-3 py-2 text-sm font-medium hover:bg-zinc-100 text-zinc-600"
-                href="#pengumuman">
+                href="{{ url('pengumuman') }}">
                 Pengumuman
             </a>
             <div class="pt-4 mt-2 border-t border-zinc-100">

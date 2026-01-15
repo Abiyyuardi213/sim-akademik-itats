@@ -3,100 +3,86 @@
 @section('title', 'Tambah Peran')
 
 @section('content')
-    <!-- Header -->
-    <div class="mb-8">
-        <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <a href="{{ route('admin.dashboard') }}" class="hover:text-blue-600">Home</a>
-            <i class="fas fa-chevron-right text-xs"></i>
-            <a href="{{ route('admin.role.index') }}" class="hover:text-blue-600">Manajemen Peran</a>
-            <i class="fas fa-chevron-right text-xs"></i>
-            <span class="text-gray-900 font-medium">Tambah Peran</span>
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Tambah Peran Baru</h1>
+            <p class="mt-1 text-sm text-zinc-500">Buat peran baru untuk mendefinisikan hak akses pengguna.</p>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900">Tambah Peran Baru</h1>
-        <p class="mt-1 text-sm text-gray-600">Buat peran baru untuk mendefinisikan hak akses pengguna.</p>
+        <nav class="flex text-sm font-medium text-zinc-500 items-center">
+            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <a href="{{ route('admin.role.index') }}" class="hover:text-zinc-900 transition-colors">Peran</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <span class="text-zinc-900">Tambah</span>
+        </nav>
     </div>
 
-    <!-- Form Card -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-2xl">
-        <div class="p-6 border-b border-gray-100 bg-gray-50/50">
-            <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                    <i class="fas fa-plus text-sm"></i>
-                </div>
-                Form Tambah Peran
-            </h3>
+    <!-- Form -->
+    <div class="max-w-2xl bg-white rounded-xl border border-zinc-200 shadow-sm p-6 sm:p-8">
+        <div class="mb-6 border-b border-zinc-100 pb-4">
+            <h3 class="text-lg font-semibold text-zinc-900">Form Tambah Peran</h3>
+            <p class="text-sm text-zinc-500">Lengkapi data di bawah ini.</p>
         </div>
 
-        <div class="p-6">
-            @if (session('error'))
-                <div class="mb-6 bg-red-50 border border-red-100 text-red-700 px-4 py-3 rounded-lg flex items-start gap-3">
-                    <i class="fas fa-exclamation-circle mt-0.5"></i>
-                    <p>{{ session('error') }}</p>
-                </div>
-            @endif
+        @if (session('error'))
+            <div class="mb-6 p-4 rounded-md bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+                {{ session('error') }}
+            </div>
+        @endif
 
-            <form action="{{ route('admin.role.store') }}" method="POST" class="space-y-6">
-                @csrf
+        <form action="{{ route('admin.role.store') }}" method="POST" class="space-y-6">
+            @csrf
 
-                <!-- Nama Peran -->
-                <div>
-                    <label for="role_name" class="block text-sm font-medium text-gray-700 mb-1">
-                        Nama Peran <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                            <i class="fas fa-tag"></i>
-                        </div>
-                        <input type="text" id="role_name" name="role_name" value="{{ old('role_name') }}" required
-                            autocomplete="off"
-                            class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all @error('role_name') border-red-300 focus:ring-red-500/20 focus:border-red-500 @enderror"
-                            placeholder="Contoh: Administrator, Dosen, Mahasiswa">
-                    </div>
+            <div class="space-y-4">
+                <div class="space-y-2">
+                    <label for="role_name" class="text-sm font-medium leading-none text-zinc-900">Nama Peran <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" id="role_name" name="role_name" value="{{ old('role_name') }}" required
+                        placeholder="Contoh: Administrator"
+                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
                     @error('role_name')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Deskripsi -->
-                <div>
-                    <label for="role_description" class="block text-sm font-medium text-gray-700 mb-1">
-                        Deskripsi <span class="text-red-500">*</span>
-                    </label>
-                    <textarea id="role_description" name="role_description" required rows="3"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none @error('role_description') border-red-300 focus:ring-red-500/20 focus:border-red-500 @enderror"
-                        placeholder="Jelaskan tujuan dan cakupan akses untuk peran ini">{{ old('role_description') }}</textarea>
+                <div class="space-y-2">
+                    <label for="role_description" class="text-sm font-medium leading-none text-zinc-900">Deskripsi <span
+                            class="text-red-500">*</span></label>
+                    <textarea id="role_description" name="role_description" required rows="4"
+                        placeholder="Jelaskan tujuan dan cakupan akses untuk peran ini"
+                        class="flex min-h-[80px] w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">{{ old('role_description') }}</textarea>
                     @error('role_description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Status -->
-                <div>
-                    <label for="role_status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <div class="space-y-2">
+                    <label for="role_status" class="text-sm font-medium leading-none text-zinc-900">Status</label>
                     <div class="relative">
                         <select id="role_status" name="role_status" required
-                            class="w-full pl-4 pr-10 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none cursor-pointer">
+                            class="flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none">
                             <option value="1" {{ old('role_status') == '1' ? 'selected' : '' }}>Aktif</option>
                             <option value="0" {{ old('role_status') == '0' ? 'selected' : '' }}>Nonaktif</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                            <i class="fas fa-chevron-down text-xs"></i>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                            <i class="fas fa-chevron-down text-zinc-400 text-xs"></i>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Buttons -->
-                <div class="pt-4 flex items-center gap-3 border-t border-gray-100 mt-6">
-                    <button type="submit"
-                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm shadow-blue-500/30">
-                        <i class="fas fa-save"></i> Simpan
-                    </button>
-                    <a href="{{ route('admin.role.index') }}"
-                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
-                        Batal
-                    </a>
-                </div>
-            </form>
-        </div>
+            <div class="pt-6 border-t border-zinc-100 flex items-center gap-3 justify-end">
+                <a href="{{ route('admin.role.index') }}"
+                    class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
+                    Batal
+                </a>
+                <button type="submit"
+                    class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 transition-colors">
+                    <i class="fas fa-save mr-2"></i> Simpan
+                </button>
+            </div>
+        </form>
     </div>
 @endsection
