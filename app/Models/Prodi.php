@@ -66,4 +66,22 @@ class Prodi extends Model
         $this->prodi_status = !$this->prodi_status;
         $this->save();
     }
+
+    public function kaprodi()
+    {
+        return $this->hasOne(User::class, 'prodi_id')->whereHas('role', function ($query) {
+            $query->where('role_name', 'like', '%Kaprodi%')
+                ->orWhere('role_name', 'like', '%Kepala Program Studi%');
+        });
+    }
+
+    public function getKaprodiNameAttribute()
+    {
+        return $this->kaprodi ? $this->kaprodi->name : ($this->attributes['nama_kaprodi'] ?? '-');
+    }
+
+    public function getKaprodiNipAttribute()
+    {
+        return $this->kaprodi ? $this->kaprodi->nip : ($this->attributes['nip_kaprodi'] ?? '-');
+    }
 }

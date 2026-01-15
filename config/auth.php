@@ -21,12 +21,21 @@ return [
             'driver' => 'session',
             'provider' => 'users', // user biasa juga di tabel users
         ],
+
+        'kaprodi' => [
+            'driver' => 'session',
+            'provider' => 'kaprodis',
+        ],
     ],
 
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+        'kaprodis' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Kaprodi::class,
         ],
     ],
 

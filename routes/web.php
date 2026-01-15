@@ -58,6 +58,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:admin'])->group(functi
 
     Route::middleware('ensure.admin:admin')->group(function () {
         Route::resource('user', UserController::class);
+        Route::resource('kaprodi', \App\Http\Controllers\AdminKaprodiController::class);
         Route::post('role/{id}/toggle-status', [RoleController::class, 'toggleStatus'])->name('role.toggleStatus');
         Route::resource('role', RoleController::class);
         Route::post('prodi/{id}/toggle-status', [ProdiController::class, 'toggleStatus'])->name('prodi.toggleStatus');
@@ -109,6 +110,16 @@ Route::name('admin.')->middleware('ensure.admin:admin,CSR')->group(function () {
         ->name('pengajuan-ruangan.approve');
     Route::post('pengajuan-ruangan/{id}/reject', [PengajuanPeminjamanController::class, 'reject'])
         ->name('pengajuan-ruangan.reject');
+});
+
+// Kaprodi Auth routes removed as they now use the main admin login
+
+// Kaprodi Approval Routes
+Route::middleware(['auth:admin'])->prefix('kaprodi')->name('kaprodi.')->group(function () {
+    Route::get('/approval', [App\Http\Controllers\KaprodiController::class, 'indexApproval'])->name('approval.index');
+    Route::get('/approval/{id}', [App\Http\Controllers\KaprodiController::class, 'show'])->name('approval.show');
+    Route::post('/approval/{id}/approve', [App\Http\Controllers\KaprodiController::class, 'approve'])->name('approval.approve');
+    Route::post('/approval/{id}/reject', [App\Http\Controllers\KaprodiController::class, 'reject'])->name('approval.reject');
 });
 
 Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {

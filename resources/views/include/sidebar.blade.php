@@ -56,6 +56,12 @@
                 <span>Pengguna</span>
             </a>
 
+            <a href="{{ route('admin.kaprodi.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->routeIs('admin.kaprodi.*') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
+                <i class="fas fa-user-tie w-4 text-center"></i>
+                <span>Manajemen Kaprodi</span>
+            </a>
+
             <a href="{{ route('admin.prodi.index') }}"
                 class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->routeIs('admin.prodi.*') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
                 <i class="fas fa-university w-4 text-center"></i>

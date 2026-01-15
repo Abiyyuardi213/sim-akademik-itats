@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <style>
         @page {
-            margin: 0cm; /* hilangkan margin default dompdf */
+            margin: 0cm;
+            /* hilangkan margin default dompdf */
         }
+
         body {
             margin: 0;
             padding: 0;
@@ -13,12 +16,14 @@
             font-size: 16px;
             line-height: 1.5;
         }
+
         .kop {
             width: 100%;
             margin: 0;
             padding: 0;
             page-break-inside: avoid;
         }
+
         .kop img {
             display: block;
             width: 100%;
@@ -32,51 +37,68 @@
             margin-right: 2.5cm;
             page-break-inside: avoid;
         }
+
         .indent {
             text-indent: 30px;
             text-align: justify;
         }
+
         .table-info td {
             padding: 2px 8px;
             vertical-align: top;
         }
+
         .ttd {
             margin-left: 2.5cm;
             margin-right: 2.5cm;
             margin-top: 30px;
-            text-align: right; /* blok tetap di kanan */
+            text-align: right;
+            /* blok tetap di kanan */
             page-break-inside: avoid;
         }
+
         .ttd .inner {
             display: inline-block;
-            text-align: left; /* isi rata kiri */
+            text-align: left;
+            /* isi rata kiri */
         }
+
         .tembusan {
             margin-left: 2.5cm;
             margin-right: 2.5cm;
             margin-top: 20px;
             page-break-inside: avoid;
         }
+
         ol {
             padding-left: 20px;
             margin-top: 5px;
         }
-        .tab1, .tab2 {
+
+        .tab1,
+        .tab2 {
             display: block;
             margin: 0;
             line-height: 1.2;
         }
-        .tab1 { margin-left: 30px; }
-        .tab2 { margin-left: 60px; }
+
+        .tab1 {
+            margin-left: 30px;
+        }
+
+        .tab2 {
+            margin-left: 60px;
+        }
     </style>
 </head>
+
 <body>
     <div class="kop">
         @php
-        $path = public_path('image/header-itats.png');
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            $path = public_path('image/header-itats.png');
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $data = file_get_contents($path);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         @endphp
         <img src="{{ $base64 }}" alt="Header ITATS" style="width:100%; display:block; margin:0; padding:0;">
     </div>
@@ -104,11 +126,8 @@
                 <td style="width: 60px;">Nomor</td>
                 <td>
                     : <strong>
-                        {{ $pengajuan->nomor_surat
-                            ?? '___ / '
-                            . strtoupper($pengajuan->prodi->alias_prodi)
-                            . ' / ITATS / ' . $bulanSekarang
-                            . ' / ' . now()->year }}
+                        {{ $pengajuan->nomor_surat ??
+                            '___ / ' . strtoupper($pengajuan->prodi->alias_prodi) . ' / ITATS / ' . $bulanSekarang . ' / ' . now()->year }}
                     </strong>
                 </td>
             </tr>
@@ -184,10 +203,25 @@
                 Program Studi {{ $pengajuan->prodi->nama_prodi }}<br>
                 <b>Kepala,</b>
             </p>
-            <br><br><br>
+            <div style="margin: 10px 0;">
+                @php
+                    // Fallback if code is empty
+                    $code = $nip_kaprodi && $nip_kaprodi !== '-' ? $nip_kaprodi : '000000000';
+                    // Generate QR Code as Base64 image
+                    $qrCode = base64_encode(
+                        \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')
+                            ->size(100)
+                            ->margin(0)
+                            ->color(0, 0, 0)
+                            ->generate($code),
+                    );
+                @endphp
+                <img src="data:image/svg+xml;base64,{{ $qrCode }}" alt="QR Code"
+                    style="height: 80px; width: 80px;">
+            </div>
             <p>
-                <b><u>{{ $pengajuan->prodi->nama_kaprodi }}</u></b><br>
-                NIP. {{ $pengajuan->prodi->nip_kaprodi }}
+                <b><u>{{ $nama_kaprodi }}</u></b><br>
+                NIP. {{ $nip_kaprodi }}
             </p>
         </div>
     </div>
@@ -200,4 +234,5 @@
         </ol>
     </div>
 </body>
+
 </html>

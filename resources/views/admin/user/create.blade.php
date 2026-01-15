@@ -96,10 +96,11 @@
                                 class="text-red-500">*</span></label>
                         <div class="relative">
                             <select id="role_id" name="role_id" required
-                                class="flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none">
+                                class="flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none"
+                                onchange="toggleKaprodiFields()">
                                 <option value="">-- Pilih Role --</option>
                                 @foreach ($roles as $role)
-                                    <option value="{{ $role->id }}"
+                                    <option value="{{ $role->id }}" data-rolename="{{ strtolower($role->role_name) }}"
                                         {{ old('role_id') == $role->id ? 'selected' : '' }}>{{ $role->role_name }}
                                     </option>
                                 @endforeach
@@ -111,6 +112,50 @@
                         @error('role_id')
                             <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <!-- Kaprodi Fields (Hidden by default) -->
+                    <div id="kaprodiFields" class="col-span-1 md:col-span-2 hidden space-y-6 pt-4 border-t border-zinc-100">
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-sm font-semibold text-zinc-900">Informasi Akademik (Kaprodi)</h4>
+                            <span class="text-xs text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full">Khusus Kaprodi</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="prodi_id" class="text-sm font-medium leading-none text-zinc-900">Program Studi
+                                    <span class="text-red-500">*</span></label>
+                                <div class="relative">
+                                    <select id="prodi_id" name="prodi_id"
+                                        class="flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 appearance-none">
+                                        <option value="">-- Pilih Program Studi --</option>
+                                        @foreach ($prodis as $prodi)
+                                            <option value="{{ $prodi->id }}"
+                                                {{ old('prodi_id') == $prodi->id ? 'selected' : '' }}>
+                                                {{ $prodi->nama_prodi }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                        <i class="fas fa-chevron-down text-zinc-400 text-xs"></i>
+                                    </div>
+                                </div>
+                                @error('prodi_id')
+                                    <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="nip" class="text-sm font-medium leading-none text-zinc-900">NIP <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text" id="nip" name="nip" value="{{ old('nip') }}"
+                                    placeholder="Nomor Induk Pegawai"
+                                    class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                                @error('nip')
+                                    <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -164,5 +209,30 @@
             };
             reader.readAsDataURL(event.target.files[0]);
         }
+
+        function toggleKaprodiFields() {
+            const roleSelect = document.getElementById('role_id');
+            const kaprodiFields = document.getElementById('kaprodiFields');
+            const selectedOption = roleSelect.options[roleSelect.selectedIndex];
+            const roleName = selectedOption.getAttribute('data-rolename');
+
+            if (roleName && (roleName.includes('kaprodi') || roleName.includes('kepala program studi'))) {
+                kaprodiFields.classList.remove('hidden');
+                document.getElementById('prodi_id').setAttribute('required', 'required');
+                document.getElementById('nip').setAttribute('required', 'required');
+            } else {
+                kaprodiFields.classList.add('hidden');
+                document.getElementById('prodi_id').removeAttribute('required');
+                document.getElementById('nip').removeAttribute('required');
+                // Clear values when hidden
+                document.getElementById('prodi_id').value = "";
+                document.getElementById('nip').value = "";
+            }
+        }
+
+        // Run on load in case of validation error redirect
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleKaprodiFields();
+        });
     </script>
 @endsection

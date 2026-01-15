@@ -30,6 +30,11 @@
                     class="inline-flex items-center rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20">
                     Menunggu Konfirmasi
                 </span>
+            @elseif($pengajuan->status == 'pending_admin')
+                <span
+                    class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                    Menunggu Approval Admin
+                </span>
             @elseif($pengajuan->status == 'disetujui')
                 <span
                     class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
@@ -127,7 +132,7 @@
                 <i class="fas fa-arrow-left mr-2"></i> Kembali
             </a>
 
-            @if ($pengajuan->status == 'pending')
+            @if ($pengajuan->status == 'pending_admin')
                 <div class="flex gap-3 w-full sm:w-auto">
                     <form action="{{ route('admin.pengajuan-ruangan.reject', $pengajuan->id) }}" method="POST"
                         class="w-full sm:w-auto">

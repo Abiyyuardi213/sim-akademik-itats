@@ -36,8 +36,8 @@ class AuthController extends Controller
 
         $user = User::where('username', $request->username)->with('role')->first();
 
-        if (!$user || !in_array($user->role?->role_name, ['admin', 'CSR'])) {
-            return back()->with('error', 'Username tidak ditemukan atau bukan admin dan csr.')->withInput($request->only('username'));
+        if (!$user || !in_array($user->role?->role_name, ['admin', 'CSR', 'Kaprodi', 'Kepala Program Studi'])) {
+            return back()->with('error', 'Username tidak ditemukan atau bukan admin, CSR, atau Kaprodi.')->withInput($request->only('username'));
         }
 
         // Check password (support both Bcrypt hash and specific plain text fallback)
@@ -67,7 +67,13 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('admin.dashboard');
+        // Redirect based on role
+        $roleName = strtolower($user->role->role_name);
+        if ($roleName === 'kaprodi' || $roleName === 'kepala program studi') {
+            return redirect()->route('kaprodi.approval.index')->with('success', 'Login Berhasil sebagai Kaprodi.');
+        }
+
+        return redirect()->route('admin.dashboard')->with('success', 'Login Berhasil.');
     }
 
     public function guestLogin(Request $request)
@@ -95,7 +101,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('users.dashboard'));
+        return redirect()->intended(route('users.dashboard'))->with('success', 'Login Berhasil.');
     }
 
     public function logout(Request $request)

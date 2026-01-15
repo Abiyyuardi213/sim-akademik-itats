@@ -22,6 +22,8 @@ class RedirectIfAuthenticated
                     return redirect()->route('admin.dashboard');
                 } elseif ($guard === 'users') {
                     return redirect()->route('users.dashboard');
+                } elseif ($guard === 'kaprodi') {
+                    return redirect()->route('kaprodi.approval.index');
                 }
             }
         }

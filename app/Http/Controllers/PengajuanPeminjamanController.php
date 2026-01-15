@@ -139,7 +139,9 @@ class PengajuanPeminjamanController extends Controller
             'waktu_peminjaman' => $startTime,
             'waktu_berakhir_peminjaman' => $endTime,
             'keperluan_peminjaman' => $request->keperluan_peminjaman,
-            'status' => 'pending',
+            'status' => 'pending_kaprodi',
+            'catatan_admin' => null, // ensure clear
+            'catatan_kaprodi' => null,
         ]);
 
         return redirect()->route('users.pengajuan.index')->with('success', 'Pengajuan peminjaman berhasil diajukan.');
@@ -189,6 +191,9 @@ class PengajuanPeminjamanController extends Controller
     public function indexAdmin()
     {
         $pengajuans = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
+            // Admin only sees what passed Kaprodi or is already processed
+            ->where('status', '!=', 'pending_kaprodi')
+            ->orderByRaw("FIELD(status, 'pending_admin', 'disetujui', 'ditolak')")
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -209,6 +214,12 @@ class PengajuanPeminjamanController extends Controller
     public function approve($id)
     {
         $pengajuan = PengajuanPeminjamanRuangan::findOrFail($id);
+
+        // Hanya boleh approve jika status pending_admin (sudah disetujui kaprodi)
+        if ($pengajuan->status !== 'pending_admin') {
+            return back()->with('error', 'Hanya pengajuan yang sudah disetujui Kaprodi (pending admin) yang bisa disetujui Admin.');
+        }
+
         $pengajuan->status = 'disetujui';
         $pengajuan->catatan_admin = request('catatan_admin');
         $pengajuan->save();
@@ -252,8 +263,8 @@ class PengajuanPeminjamanController extends Controller
 
         Carbon::setLocale('id');
 
-        $nama_kaprodi = $pengajuan->prodi->nama_kaprodi;
-        $nip_kaprodi  = $pengajuan->prodi->nip_kaprodi;
+        $nama_kaprodi = $pengajuan->prodi->kaprodi_name;
+        $nip_kaprodi  = $pengajuan->prodi->kaprodi_nip;
 
         $pdf = Pdf::loadView('pdf.surat_peminjaman', compact('pengajuan', 'nama_kaprodi', 'nip_kaprodi'))
             ->setPaper('A4', 'portrait')

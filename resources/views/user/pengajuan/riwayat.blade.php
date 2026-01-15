@@ -42,11 +42,17 @@
                                     {{ \Carbon\Carbon::parse($p->waktu_berakhir_peminjaman)->format('H:i') }}
                                 </td>
                                 <td class="p-6">
-                                    @if ($p->status == 'pending')
+                                    @if ($p->status == 'pending' || $p->status == 'pending_kaprodi')
                                         <span
                                             class="inline-flex items-center rounded-full border border-yellow-200 bg-yellow-50 px-2.5 py-0.5 text-xs font-semibold text-yellow-700 gap-1.5">
                                             <span class="h-1.5 w-1.5 rounded-full bg-yellow-500"></span>
-                                            Pending
+                                            Menunggu Kaprodi
+                                        </span>
+                                    @elseif($p->status == 'pending_admin')
+                                        <span
+                                            class="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 gap-1.5">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                                            Menunggu Admin
                                         </span>
                                     @elseif($p->status == 'disetujui')
                                         <span
@@ -68,11 +74,15 @@
                                     @endif
                                 </td>
                                 <td class="p-6 text-right">
-                                    <a href="{{ route('users.pengajuan.cetakPdf', $p->id) }}" target="_blank"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2"
-                                        title="Cetak Surat Peminjaman">
-                                        <i class="fas fa-print text-xs"></i>
-                                    </a>
+                                    @if ($p->status == 'disetujui')
+                                        <a href="{{ route('users.pengajuan.cetakPdf', $p->id) }}" target="_blank"
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2"
+                                            title="Cetak Surat Peminjaman">
+                                            <i class="fas fa-print text-xs"></i>
+                                        </a>
+                                    @else
+                                        <span class="text-zinc-400 italic text-xs">Belum disetujui</span>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

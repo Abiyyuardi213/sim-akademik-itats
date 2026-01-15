@@ -65,6 +65,11 @@
                                             class="inline-flex items-center rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20">
                                             Menunggu
                                         </span>
+                                    @elseif($pengajuan->status == 'pending_admin')
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                                            Menunggu Admin
+                                        </span>
                                     @elseif($pengajuan->status == 'disetujui')
                                         <span
                                             class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
@@ -84,7 +89,7 @@
                                         <i class="fas fa-eye text-xs"></i>
                                     </a>
 
-                                    @if ($pengajuan->status == 'pending')
+                                    @if ($pengajuan->status == 'pending_admin')
                                         <form action="{{ route('admin.pengajuan-ruangan.approve', $pengajuan->id) }}"
                                             method="POST" class="inline-block">
                                             @csrf
@@ -145,10 +150,10 @@
             // Custom styling for inputs
             $('.dataTables_filter input').addClass(
                 'w-full md:w-64 rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 text-sm'
-                );
+            );
             $('.dataTables_length select').addClass(
                 'rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 text-sm'
-                );
+            );
         });
     </script>
 @endsection

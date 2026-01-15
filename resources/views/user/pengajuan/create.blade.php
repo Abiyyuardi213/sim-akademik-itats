@@ -251,29 +251,38 @@
 
             // Slot Generation
             function generateTimeSlots() {
-                const slots = [];
-                const startHour = 7;
-                const endHour = 17;
-
-                for (let hour = startHour; hour < endHour; hour++) {
-                    // Generate 1 to 4 hour blocks starting at this hour
-                    const maxDuration = Math.min(4, endHour -
-                    hour); // Limit max duration to 4 hours or until end of day
-                    // Only generating 1, 2, 3, 4 hour slots
-                    for (let duration = 1; duration <= maxDuration; duration++) {
-                        const hStart = hour;
-                        const hEnd = hour + duration;
-                        const startStr = `${hStart.toString().padStart(2, '0')}:00`;
-                        const endStr = `${hEnd.toString().padStart(2, '0')}:00`;
-
-                        slots.push({
-                            start: startStr,
-                            end: endStr,
-                            duration: duration
-                        });
+                // Pre-defined slots as requested
+                const definedSlots = [{
+                        start: "08:00",
+                        end: "16:00"
+                    },
+                    {
+                        start: "08:00",
+                        end: "17:00"
+                    },
+                    {
+                        start: "08:00",
+                        end: "12:00"
+                    },
+                    {
+                        start: "12:00",
+                        end: "17:00"
+                    },
+                    {
+                        start: "13:00",
+                        end: "17:00"
                     }
-                }
-                return slots;
+                ];
+
+                return definedSlots.map(slot => {
+                    const startH = parseInt(slot.start.split(':')[0]);
+                    const endH = parseInt(slot.end.split(':')[0]);
+                    return {
+                        start: slot.start,
+                        end: slot.end,
+                        duration: endH - startH
+                    };
+                });
             }
 
             function isSlotAvailable(dateStr, slotStart, slotEnd) {

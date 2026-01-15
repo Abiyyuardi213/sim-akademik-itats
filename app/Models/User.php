@@ -24,6 +24,8 @@ class User extends Authenticatable
         'password',
         'profile_picture',
         'role_id',
+        'prodi_id',
+        'nip',
     ];
 
     protected $hidden = [
@@ -58,6 +60,8 @@ class User extends Authenticatable
             'password'        => $data['password'],
             'profile_picture' => $data['profile_picture'] ?? null,
             'role_id'         => $data['role_id'],
+            'prodi_id'        => $data['prodi_id'] ?? null,
+            'nip'             => $data['nip'] ?? null,
         ]);
     }
 
@@ -70,6 +74,8 @@ class User extends Authenticatable
             'no_telepon'      => $data['no_telepon'] ?? $this->no_telepon,
             'profile_picture' => $data['profile_picture'] ?? $this->profile_picture,
             'role_id'         => $data['role_id'] ?? $this->role_id,
+            'prodi_id'        => $data['prodi_id'] ?? $this->prodi_id,
+            'nip'             => $data['nip'] ?? $this->nip,
         ]);
     }
 
@@ -81,6 +87,11 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class, 'prodi_id');
     }
 
     public function getAuthIdentifierName()

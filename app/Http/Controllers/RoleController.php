@@ -65,6 +65,8 @@ class RoleController extends Controller
             $role = Role::findOrFail($id);
             $role->toggleStatus();
 
+            session()->flash('success', 'Status role berhasil diperbarui.');
+
             return response()->json([
                 'success' => true,
                 'message' => 'Status role berhasil diperbarui.'

@@ -195,6 +195,7 @@
 
     <!-- Footer -->
     @include('include.footerUser')
+    @include('services.ToastModal')
     @include('services.LogoutModalUser')
 </body>
 
