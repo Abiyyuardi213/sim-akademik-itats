@@ -1,128 +1,114 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Login Guest | Akademik WR 1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icheck-bootstrap@3.0.1/icheck-bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Scripts & Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
-        .background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 100vw;
-            background: url('{{ asset('image/d1.jpg') }}') no-repeat center center fixed;
-            background-size: cover;
-            z-index: 0;
-        }
-
-        .background-overlay::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-        }
-
-        .login-box {
-            position: relative;
-            z-index: 1;
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
     </style>
 </head>
-<body class="hold-transition login-page">
 
-    {{-- Overlay background --}}
-    <div class="background-overlay"></div>
+<body class="h-screen w-full bg-cover bg-center overflow-hidden flex items-center justify-center relative"
+    style="background-image: url('{{ asset('image/d1.jpg') }}');">
 
-    <div class="login-box">
-        {{-- Card --}}
-        <div class="card">
-            <div class="card-body login-card-body">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-zinc-950/70 backdrop-blur-sm z-0"></div>
 
-                {{-- Logo di dalam card --}}
-                <div class="text-center mb-3">
-                    <a href="#">
-                        <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" style="height: 40px;">
-                    </a>
+    <!-- Login Card -->
+    <div class="relative z-10 w-full max-w-[400px] px-4">
+        <div class="bg-white rounded-xl shadow-2xl p-8 border border-zinc-200/80">
+            <!-- Header -->
+            <div class="flex flex-col items-center space-y-4 mb-8">
+                <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" class="h-10 w-auto opacity-90">
+                <div class="text-center space-y-1">
+                    <h2 class="text-xl font-semibold tracking-tight text-zinc-900">Login Guest</h2>
+                    <p class="text-sm text-zinc-500">Masuk untuk mengakses layanan sarpras</p>
+                </div>
+            </div>
+
+            <!-- Flash Error -->
+            @if (session('error'))
+                <div
+                    class="mb-6 p-3 rounded-md bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                        class="w-4 h-4 shrink-0">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div
+                    class="mb-6 p-3 rounded-md bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                        class="w-4 h-4 shrink-0">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <!-- Form -->
+            <form action="{{ route('login.guest.post') }}" method="POST" class="space-y-4">
+                @csrf
+
+                <div class="space-y-2">
+                    <label for="username"
+                        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Username</label>
+                    <input id="username" name="username" type="text" value="{{ old('username') }}" required
+                        autofocus
+                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Masukkan Username">
+                    @error('username')
+                        <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <h4 class="login-box-msg text-warning">Login Pengguna Sarpras</h4>
-                <p class="text-center text-muted mb-4">Masuk untuk melakukan peminjaman sarana dan prasarana</p>
+                <div class="space-y-2">
+                    <label for="password"
+                        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
+                    <input id="password" name="password" type="password" required
+                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Masukkan Password">
+                    @error('password')
+                        <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                {{-- Flash error --}}
-                @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
+                <button type="submit"
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 h-10 w-full mt-2">
+                    Masuk
+                </button>
+            </form>
 
-                {{-- Validation error --}}
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>{{ $errors->first() }}</strong>
-                    </div>
-                @endif
-
-                {{-- Form login --}}
-                <form action="{{ route('login.guest.post') }}" method="POST">
-                    @csrf
-
-                    {{-- Username --}}
-                    <div class="input-group mb-3">
-                        <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
-                               placeholder="Username" value="{{ old('username') }}" required autofocus>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
-                            </div>
-                        </div>
-                        @error('username')
-                            <div class="invalid-feedback d-block text-danger">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- Password --}}
-                    <div class="input-group mb-3">
-                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                               placeholder="Password" required>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                        @error('password')
-                            <div class="invalid-feedback d-block text-danger">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- Tombol login --}}
-                    <div class="row">
-                        <div class="col-8"></div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-warning btn-block text-dark">Masuk</button>
-                        </div>
-                    </div>
-                </form>
-
+            <div class="mt-8 text-center">
+                <p class="text-xs text-zinc-400">
+                    &copy; 2025 ITATS. All rights reserved.
+                </p>
             </div>
         </div>
     </div>
-
-    {{-- Script --}}
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 </body>
+
 </html>

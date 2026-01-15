@@ -1,150 +1,182 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Pengguna - Sistem Peminjaman Ruangan</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Profil Pengguna | Akademik WR 1</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Scripts & Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         body {
-            font-family: 'Source Sans Pro', sans-serif !important;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            padding: 80px 0;
-        }
-        .profile-sidebar {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-            border-radius: 20px;
-        }
-        .profile-picture {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.3);
-            margin-bottom: 20px;
-        }
-        .form-label {
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .form-control {
-            border-radius: 10px;
-            padding: 10px 14px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 12px 28px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #0056b3 0%, #004494 100%);
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0, 91, 187, 0.4);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
     </style>
 </head>
-<body>
+
+<body class="bg-white text-zinc-950 antialiased flex flex-col min-h-screen">
     @include('include.navbarUser')
 
-    <section class="hero-section text-center">
-        <div class="container">
-            <h1 class="fw-bold">Profil Pengguna</h1>
-            <p class="lead">Kelola informasi akun Anda dengan mudah</p>
+    <main class="flex-grow container mx-auto px-4 md:px-6 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold tracking-tight text-zinc-900 mb-2">Profil Saya</h1>
+            <p class="text-zinc-500">Kelola informasi akun dan preferensi Anda.</p>
         </div>
-    </section>
 
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center g-4">
-                <!-- Sidebar -->
-                <div class="col-lg-4">
-                    <div class="profile-sidebar">
-                        <img src="{{ $user->profile_picture ? asset('uploads/profile/'.$user->profile_picture) : asset('image/default.png') }}"
-                             alt="Foto Profil" class="profile-picture">
-                        <h4 class="fw-bold">{{ $user->name }}</h4>
-                        <p class="opacity-75 mb-2">{{ $user->role->nama_role ?? 'User' }}</p>
-                        <p class="mb-1"><i class="fas fa-envelope me-2"></i>{{ $user->email }}</p>
-                        <p><i class="fas fa-phone me-2"></i>{{ $user->no_telepon ?? 'Belum diisi' }}</p>
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar / Profile Card -->
+            <div class="lg:w-1/3">
+                <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
+                    <div class="p-6 text-center border-b border-zinc-100">
+                        <div class="relative w-32 h-32 mx-auto mb-4">
+                            <img src="{{ $user->profile_picture ? asset('uploads/profile/' . $user->profile_picture) : asset('image/default.png') }}"
+                                alt="Foto Profil"
+                                class="w-full h-full object-cover rounded-full border-2 border-zinc-100">
+                        </div>
+                        <h2 class="text-xl font-bold text-zinc-900">{{ $user->name }}</h2>
+                        <span
+                            class="inline-block mt-2 px-3 py-1 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full border border-zinc-200">
+                            {{ $user->role->nama_role ?? 'User' }}
+                        </span>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-50 text-zinc-500 border border-zinc-100">
+                                <i class="fas fa-envelope text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Email</p>
+                                <p class="text-sm font-medium text-zinc-900 mt-0.5">{{ $user->email }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-50 text-zinc-500 border border-zinc-100">
+                                <i class="fas fa-phone text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Telepon</p>
+                                <p class="text-sm font-medium text-zinc-900 mt-0.5">{{ $user->no_telepon ?? '-' }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Form -->
-                <div class="col-lg-8">
-                    <h3 class="fw-bold mb-3">Edit Profil</h3>
-                    <form action="{{ route('users.profile.update') }}" method="POST" enctype="multipart/form-data">
+            <!-- Edit Form -->
+            <div class="lg:w-2/3">
+                <div class="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-zinc-900">Edit Informasi</h3>
+                        <p class="text-sm text-zinc-500">Perbarui detail profil akun Anda di sini.</p>
+                    </div>
+
+                    @if (session('success'))
+                        <div class="mb-4 p-4 rounded-md bg-green-50 border border-green-200 text-sm text-green-700">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <form action="{{ route('users.profile.update') }}" method="POST" enctype="multipart/form-data"
+                        class="space-y-6">
                         @csrf
                         @method('PUT')
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nama Lengkap</label>
-                                <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                                       class="form-control @error('name') is-invalid @enderror">
-                                @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="grid gap-6 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <label for="name"
+                                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Nama
+                                    Lengkap</label>
+                                <input type="text" name="name" id="name"
+                                    value="{{ old('name', $user->name) }}"
+                                    class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                @error('name')
+                                    <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Username</label>
-                                <input type="text" name="username" value="{{ old('username', $user->username) }}"
-                                       class="form-control @error('username') is-invalid @enderror">
-                                @error('username') <div class="invalid-feedback">{{ $message }}</div> @enderror
+
+                            <div class="space-y-2">
+                                <label for="username"
+                                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Username</label>
+                                <input type="text" name="username" id="username"
+                                    value="{{ old('username', $user->username) }}"
+                                    class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                @error('username')
+                                    <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="email"
+                                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
+                                <input type="email" name="email" id="email"
+                                    value="{{ old('email', $user->email) }}"
+                                    class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                @error('email')
+                                    <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="no_telepon"
+                                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">No.
+                                    Telepon</label>
+                                <input type="text" name="no_telepon" id="no_telepon"
+                                    value="{{ old('no_telepon', $user->no_telepon) }}"
+                                    class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                @error('no_telepon')
+                                    <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                                       class="form-control @error('email') is-invalid @enderror">
-                                @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">No. Telepon</label>
-                                <input type="text" name="no_telepon" value="{{ old('no_telepon', $user->no_telepon) }}"
-                                       class="form-control @error('no_telepon') is-invalid @enderror">
-                                @error('no_telepon') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
+                        <div class="space-y-2 pt-2">
+                            <label for="password"
+                                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password
+                                Baru</label>
+                            <input type="password" name="password" id="password"
+                                class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                            <p class="text-[0.8rem] text-zinc-500">Kosongkan jika tidak ingin mengubah password.</p>
+                            @error('password')
+                                <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Password Baru</label>
-                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror">
-                            <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
-                            @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="space-y-2">
+                            <label for="profile_picture"
+                                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Foto
+                                Profil</label>
+                            <input type="file" name="profile_picture" id="profile_picture"
+                                class="flex w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-600 file:mr-4 file:py-0 file:px-0 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                            <p class="text-[0.8rem] text-zinc-500">JPG atau PNG. Maksimal 2MB.</p>
+                            @error('profile_picture')
+                                <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label">Foto Profil</label>
-                            <input type="file" name="profile_picture" class="form-control @error('profile_picture') is-invalid @enderror">
-                            <small class="text-muted">Format: JPG, PNG. Maksimal 2MB</small>
-                            @error('profile_picture') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="pt-4 flex justify-end">
+                            <button type="submit"
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 h-10 px-4 py-2">
+                                Simpan Perubahan
+                            </button>
                         </div>
-
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i> Simpan Perubahan
-                        </button>
                     </form>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
     @include('include.footerUser')
     @include('services.LogoutModalUser')
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

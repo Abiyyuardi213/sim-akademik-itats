@@ -1,107 +1,89 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Periode</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+@extends('layouts.admin')
 
-    <style>
-        th {
-            width: 35%;
-        }
-        .card-title i {
-            margin-right: 5px;
-        }
-    </style>
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        @include('include.navbarSistem')
-        @include('include.sidebar')
+@section('title', 'Detail Periode')
 
-        <!-- Content Wrapper -->
-        <div class="content-wrapper">
-            <!-- Header -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h1 class="m-0">Detail Periode</h1>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Main Content -->
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="card shadow-lg border-left-primary">
-                        <div class="card-header bg-primary text-white">
-                            <h3 class="card-title mb-0">
-                                <i class="fas fa-calendar-alt"></i> Informasi Periode Cuti
-                            </h3>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover">
-                                    <tbody>
-                                        <tr>
-                                            <th>Nama Periode</th>
-                                            <td>{{ $periode->nama_periode }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Awal Cuti</th>
-                                            <td>{{ \Carbon\Carbon::parse($periode->awal_cuti)->translatedFormat('d F Y') }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Akhir Cuti</th>
-                                            <td>{{ \Carbon\Carbon::parse($periode->akhir_cuti)->translatedFormat('d F Y') }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Bulan Pelaksanaan HER</th>
-                                            <td>{{ $periode->bulan_her }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Status Periode Cuti</th>
-                                            <td>
-                                                @if($periode->periode_status)
-                                                    <span class="badge badge-success">Aktif</span>
-                                                @else
-                                                    <span class="badge badge-secondary">Nonaktif</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="card-footer text-right">
-                            <a href="{{ route('admin.periode.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Kembali
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
+@section('content')
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Periode</h1>
+            <p class="mt-1 text-sm text-zinc-500">Informasi lengkap tentang periode cuti akademik.</p>
         </div>
-
-        @include('include.footerSistem')
+        <nav class="flex text-sm font-medium text-zinc-500 items-center">
+            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <a href="{{ route('admin.periode.index') }}" class="hover:text-zinc-900 transition-colors">Periode Cuti</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <span class="text-zinc-900">Detail</span>
+        </nav>
     </div>
 
-    @include('services.LogoutModal')
+    <div class="max-w-3xl bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-zinc-100 bg-zinc-50/50 flex justify-between items-center">
+            <h3 class="text-base font-semibold text-zinc-900 flex items-center gap-2">
+                <i class="fas fa-calendar-alt text-zinc-500"></i> Informasi Periode
+            </h3>
+            @if ($periode->periode_status)
+                <span
+                    class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                    STATUS AKTIF
+                </span>
+            @else
+                <span
+                    class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 ring-1 ring-inset ring-zinc-500/10">
+                    NONAKTIF
+                </span>
+            @endif
+        </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('[data-widget="treeview"]').Treeview?.('init');
-        });
-    </script>
-</body>
-</html>
+        <div class="p-6">
+            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+                <div class="sm:col-span-2">
+                    <dt class="text-sm font-medium text-zinc-500">ID Periode</dt>
+                    <dd
+                        class="mt-1 text-sm text-zinc-900 font-mono bg-zinc-50 p-2 rounded border border-zinc-100 inline-block">
+                        {{ $periode->id }}
+                    </dd>
+                </div>
+
+                <div class="sm:col-span-2 border-b border-zinc-100 pb-4">
+                    <dt class="text-sm font-medium text-zinc-500">Nama Periode</dt>
+                    <dd class="mt-1 text-lg font-semibold text-zinc-900">{{ $periode->nama_periode }}</dd>
+                </div>
+
+                <div>
+                    <dt class="text-sm font-medium text-zinc-500">Awal Cuti</dt>
+                    <dd class="mt-1 text-sm font-medium text-zinc-900">
+                        {{ \Carbon\Carbon::parse($periode->awal_cuti)->translatedFormat('F Y') }}
+                    </dd>
+                </div>
+
+                <div>
+                    <dt class="text-sm font-medium text-zinc-500">Akhir Cuti</dt>
+                    <dd class="mt-1 text-sm font-medium text-zinc-900">
+                        {{ \Carbon\Carbon::parse($periode->akhir_cuti)->translatedFormat('F Y') }}
+                    </dd>
+                </div>
+
+                <div class="sm:col-span-2 pt-2">
+                    <dt class="text-sm font-medium text-zinc-500">Bulan Pelaksanaan HER</dt>
+                    <dd class="mt-1 text-sm font-medium text-zinc-900 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-blue-500"></i>
+                        {{ \Carbon\Carbon::parse($periode->bulan_her)->translatedFormat('F Y') }}
+                    </dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="bg-zinc-50 px-6 py-4 flex justify-end gap-3 border-t border-zinc-100">
+            <a href="{{ route('admin.periode.index') }}"
+                class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali
+            </a>
+            <a href="{{ route('admin.periode.edit', $periode->id) }}"
+                class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
+                <i class="fas fa-pencil-alt mr-2"></i> Edit Data
+            </a>
+        </div>
+    </div>
+@endsection

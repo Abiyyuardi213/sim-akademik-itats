@@ -1,192 +1,176 @@
-<!-- Sidebar -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside
+    class="w-64 bg-white border-r border-zinc-200 hidden md:flex flex-col h-full shrink-0 transition-all duration-300 relative z-20">
     <!-- Logo -->
-    <a href="{{ route('admin.dashboard') }}" class="brand-link d-flex justify-content-center align-items-center">
-        <img src="{{ asset('image/itats-biru.png') }}"
-             alt="Logo ITATS"
-             class="brand-image d-none d-md-inline"
-             style="width: 170px; height: 90px; object-fit: contain;">
-        <img src="{{ asset('image/itats-biru.png') }}"
-             alt="Logo Mini ITATS"
-             class="brand-image d-inline d-md-none"
-             style="width: 160px; height: 80px; object-fit: contain;">
-    </a>
+    <div class="h-16 flex items-center gap-2 px-6 border-b border-zinc-200">
+        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
+            <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS"
+                class="h-8 w-auto object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
+            <span class="font-bold text-lg text-zinc-900 tracking-tight">Admin<span
+                    class="text-zinc-400">Panel</span></span>
+        </a>
+    </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <!-- User Info -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
-            <div class="image">
-                @php
-                    $currentUser = Auth::guard('admin')->check()
-                        ? Auth::guard('admin')->user()
-                        : Auth::guard('users')->user();
-                @endphp
+    <!-- User Info -->
+    <div class="p-4 border-b border-zinc-100 bg-zinc-50/50">
+        <div class="flex items-center gap-3">
+            @php
+                $currentUser = Auth::guard('admin')->check()
+                    ? Auth::guard('admin')->user()
+                    : Auth::guard('users')->user();
+            @endphp
+            <div class="relative">
                 <img src="{{ asset('uploads/profile/' . ($currentUser->profile_picture ?? 'default.png')) }}"
-                    class="img-circle elevation-2"
-                    alt="User Image"
-                    style="width: 45px; height: 45px; object-fit: cover; border: 2px solid white;">
+                    class="w-9 h-9 rounded-full object-cover border border-zinc-200 shadow-sm" alt="User Image">
             </div>
-            <div class="info">
-                <a href="#" class="d-block text-white font-weight-bold">
-                    {{ $currentUser->username }}
+            <div class="overflow-hidden">
+                <h6 class="text-sm font-semibold text-zinc-900 truncate">{{ $currentUser->username }}</h6>
+                <p class="text-xs text-zinc-500 font-medium truncate">
+                    {{ $currentUser->role->role_name ?? 'Administrator' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
+        <!-- Dashboard -->
+        <a href="{{ route('admin.dashboard') }}"
+            class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
+            <i class="fas fa-home w-4 text-center"></i>
+            <span>Dashboard</span>
+        </a>
+
+        @if ($currentUser->role->role_name !== 'CSR')
+            <div class="pt-6 pb-2 px-3">
+                <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Master Data</p>
+            </div>
+
+            <a href="{{ route('admin.role.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->routeIs('admin.role.*') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
+                <i class="fas fa-user-shield w-4 text-center"></i>
+                <span>Peran Pengguna</span>
+            </a>
+
+            <a href="{{ route('admin.user.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->routeIs('admin.user.*') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
+                <i class="fas fa-users-cog w-4 text-center"></i>
+                <span>Pengguna</span>
+            </a>
+
+            <a href="{{ route('admin.prodi.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->routeIs('admin.prodi.*') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
+                <i class="fas fa-university w-4 text-center"></i>
+                <span>Program Studi</span>
+            </a>
+        @endif
+
+        <!-- Menu Cuti -->
+        <div class="pt-6 pb-2 px-3">
+            <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Manajemen Cuti</p>
+        </div>
+
+        @php
+            $isCuti = request()->routeIs('admin.periode.*') || request()->routeIs('admin.mahasiswa-cuti.*');
+        @endphp
+        <div class="space-y-1" id="cuti-menu">
+            <button onclick="toggleMenu('cuti-submenu', 'cuti-arrow')"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ $isCuti ? 'text-zinc-900 bg-zinc-50' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-briefcase w-4 text-center"></i>
+                    <span>Cuti Mahasiswa</span>
+                </div>
+                <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-zinc-400 {{ $isCuti ? 'rotate-180' : '' }}"
+                    id="cuti-arrow"></i>
+            </button>
+            <div id="cuti-submenu" class="pl-4 space-y-1 mt-1 {{ $isCuti ? 'block' : 'hidden' }}">
+                <a href="{{ route('admin.mahasiswa-cuti.dashboard') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.mahasiswa-cuti.dashboard') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Dashboard Cuti</span>
                 </a>
-                <span class="badge badge-success">Online</span>
-                <span class="d-block" style="color: #f39c12; font-size: 14px; font-weight: 600;">
-                    {{ $currentUser->role->role_name ?? 'Unknown' }}
-                </span>
+                <a href="{{ route('admin.periode.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.periode.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Periode Cuti</span>
+                </a>
+                <a href="{{ route('admin.mahasiswa-cuti.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.mahasiswa-cuti.index') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>List Mahasiswa</span>
+                </a>
             </div>
         </div>
 
-        <!-- Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" data-accordion="false" role="menu">
-                <!-- Dashboard -->
-                <li class="nav-item">
-                    <a href="{{ route('admin.dashboard') }}"
-                       class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-home"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
+        <!-- Menu Fasilitas -->
+        <div class="pt-6 pb-2 px-3">
+            <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Fasilitas</p>
+        </div>
 
-                <!-- Role & User (jika bukan CSR) -->
-                @if($currentUser->role->role_name !== 'CSR')
-                <li class="nav-item">
-                    <a href="{{ route('admin.role.index') }}"
-                       class="nav-link {{ request()->routeIs('admin.role.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-user-shield"></i>
-                        <p>Peran Pengguna</p>
-                    </a>
-                </li>
+        @php
+            $isFasilitas =
+                request()->routeIs('admin.fasilitas.dashboard') ||
+                request()->routeIs('admin.gedung.*') ||
+                request()->routeIs('admin.kelas.*') ||
+                request()->routeIs('admin.peminjaman-ruangan.*') ||
+                request()->routeIs('admin.pengajuan-ruangan.*') ||
+                request()->routeIs('admin.fasilitas-support.*');
+        @endphp
+        <div class="space-y-1" id="fasilitas-menu">
+            <button onclick="toggleMenu('fasilitas-submenu', 'fasilitas-arrow')"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ $isFasilitas ? 'text-zinc-900 bg-zinc-50' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-building w-4 text-center"></i>
+                    <span>Sarana & Prasarana</span>
+                </div>
+                <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-zinc-400 {{ $isFasilitas ? 'rotate-180' : '' }}"
+                    id="fasilitas-arrow"></i>
+            </button>
+            <div id="fasilitas-submenu" class="pl-4 space-y-1 mt-1 {{ $isFasilitas ? 'block' : 'hidden' }}">
+                <a href="{{ route('admin.fasilitas.dashboard') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.fasilitas.dashboard') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Dashboard Fasilitas</span>
+                </a>
+                <a href="{{ route('admin.gedung.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.gedung.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Gedung</span>
+                </a>
+                <a href="{{ route('admin.kelas.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.kelas.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Ruang Kelas</span>
+                </a>
+                <a href="{{ route('admin.peminjaman-ruangan.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.peminjaman-ruangan.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Jadwal Peminjaman</span>
+                </a>
+                <a href="{{ route('admin.pengajuan-ruangan.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.pengajuan-ruangan.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Permohonan User</span>
+                </a>
+            </div>
+        </div>
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.user.index') }}"
-                       class="nav-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-users-cog"></i>
-                        <p>Pengguna</p>
-                    </a>
-                </li>
+        <!-- Lainnya -->
+        <div class="pt-6 pb-2 px-3">
+            <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Layanan</p>
+        </div>
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.prodi.index') }}"
-                       class="nav-link {{ request()->routeIs('admin.prodi.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-university"></i>
-                        <p>Program Studi</p>
-                    </a>
-                </li>
-                @endif
+        <a href="{{ route('admin.legalisir.index') }}"
+            class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->routeIs('admin.legalisir.*') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
+            <i class="fas fa-file-signature w-4 text-center"></i>
+            <span>Legalisir</span>
+        </a>
 
-                <!-- Menu Cuti -->
-                @php
-                    $isCuti = request()->routeIs('admin.periode.*') ||
-                              request()->routeIs('admin.mahasiswa-cuti.*');
-                @endphp
-                <li class="nav-item has-treeview {{ $isCuti ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ $isCuti ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-briefcase"></i>
-                        <p>
-                            Cuti
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview" style="{{ $isCuti ? 'display: block;' : '' }}">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.mahasiswa-cuti.dashboard') }}"
-                                class="nav-link {{ request()->routeIs('admin.mahasiswa-cuti.dashboard') ? 'active' : '' }}">
-                                <i class="fas fa-chart-bar nav-icon"></i>
-                                <p>Dashboard Rekap Cuti</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.periode.index') }}"
-                               class="nav-link {{ request()->routeIs('admin.periode.*') ? 'active' : '' }}">
-                                <i class="fas fa-calendar-alt nav-icon text-success"></i>
-                                <p>Periode Cuti</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.mahasiswa-cuti.index') }}"
-                            class="nav-link {{ request()->routeIs('admin.mahasiswa-cuti.index') ? 'active' : '' }}">
-                                <i class="fas fa-user-graduate nav-icon text-info"></i>
-                                <p>List Mahasiswa Cuti</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Menu Fasilitas -->
-                @php
-                    $isFasilitas = request()->routeIs('admin.fasilitas.dashboard') ||
-                                request()->routeIs('admin.gedung.*') ||
-                                request()->routeIs('admin.kelas.*') ||
-                                request()->routeIs('admin.peminjaman-ruangan.*') ||
-                                request()->routeIs('admin.pengajuan-ruangan.*') ||
-                                request()->routeIs('admin.fasilitas-support.*');
-                @endphp
-                <li class="nav-item has-treeview {{ $isFasilitas ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ $isFasilitas ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-briefcase"></i>
-                        <p>
-                            Fasilitas
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview" style="{{ $isFasilitas ? 'display: block;' : '' }}">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.fasilitas.dashboard') }}"
-                            class="nav-link {{ request()->routeIs('admin.fasilitas.dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chart-bar"></i>
-                                <p>Dashboard Fasilitas</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.gedung.index') }}"
-                            class="nav-link {{ request()->routeIs('admin.gedung.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-building text-success"></i>
-                                <p>Gedung</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.kelas.index') }}"
-                            class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chalkboard text-info"></i>
-                                <p>Ruang Kelas</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.fasilitas-support.index') }}"
-                            class="nav-link {{ request()->routeIs('admin.fasilitas-support.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-life-ring text-success"></i>
-                                <p>Support</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.peminjaman-ruangan.index') }}"
-                            class="nav-link {{ request()->routeIs('admin.peminjaman-ruangan.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-calendar-check text-warning"></i>
-                                <p>Peminjaman Kelas</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.pengajuan-ruangan.index') }}"
-                            class="nav-link {{ request()->routeIs('admin.pengajuan-ruangan.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-paper-plane text-purple"></i>
-                                <p>Permohonan</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Legalisir -->
-                <li class="nav-item">
-                    <a href="{{ route('admin.legalisir.index') }}"
-                       class="nav-link {{ request()->routeIs('admin.legalisir.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-file-signature"></i>
-                        <p>Legalisir</p>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+        <div class="h-10"></div> <!-- Spacer -->
+    </nav>
 </aside>
+
+<script>
+    function toggleMenu(submenuId, arrowId) {
+        const submenu = document.getElementById(submenuId);
+        const arrow = document.getElementById(arrowId);
+
+        if (submenu.classList.contains('hidden')) {
+            submenu.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+        } else {
+            submenu.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+        }
+    }
+</script>

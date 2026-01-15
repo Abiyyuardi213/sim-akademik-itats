@@ -1,105 +1,119 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konfirmasi Upload Data Legalisir</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
-    @include('include.navbarSistem')
-    @include('include.sidebar')
+@extends('layouts.admin')
 
-    <div class="content-wrapper">
-        <div class="content-header">
-            <div class="container-fluid">
-                <h1 class="m-0">Konfirmasi Upload Data Legalisir</h1>
-                <p>Periksa kembali data di bawah ini sebelum menyimpan ke sistem.</p>
+@section('title', 'Konfirmasi Upload Data')
+
+@section('content')
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Konfirmasi Upload Data</h1>
+            <p class="mt-1 text-sm text-zinc-500">Tinjau data CSV sebelum disimpan ke database.</p>
+        </div>
+        <nav class="flex text-sm font-medium text-zinc-500 items-center">
+            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <a href="{{ route('admin.legalisir.index') }}" class="hover:text-zinc-900 transition-colors">Legalisir</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <span class="text-zinc-900">Import Confirm</span>
+        </nav>
+    </div>
+
+    <form action="{{ route('admin.legalisir.import.confirm') }}" method="POST">
+        @csrf
+        <input type="hidden" name="data" value="{{ base64_encode(serialize($data)) }}">
+
+        <!-- Table Card -->
+        <div class="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-zinc-200 bg-zinc-50/50 flex justify-between items-center">
+                <h3 class="text-base font-semibold text-zinc-900">Preview Data to Import</h3>
+                <span
+                    class="inline-flex items-center rounded-md bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-600 ring-1 ring-inset ring-zinc-500/10">
+                    {{ count($data) }} Baris Data
+                </span>
+            </div>
+
+            <div class="p-0">
+                <div class="overflow-x-auto">
+                    <table id="dataUploadTable" class="w-full text-left text-sm">
+                        <thead
+                            class="bg-zinc-50 text-zinc-500 uppercase tracking-wider font-medium border-b border-zinc-200">
+                            <tr>
+                                <th class="px-6 py-3 w-16 text-center">No</th>
+                                <th class="px-6 py-3">Tanggal</th>
+                                <th class="px-6 py-3">Legal Number</th>
+                                <th class="px-6 py-3">Identity</th>
+                                <th class="px-6 py-3 text-center">Detail</th>
+                                <th class="px-6 py-3 text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-100 bg-white">
+                            @foreach ($data as $index => $row)
+                                <tr class="hover:bg-zinc-50/50 transition-colors">
+                                    <td class="px-6 py-4 text-center font-medium text-zinc-900">{{ $loop->iteration }}</td>
+                                    <td class="px-6 py-4 text-zinc-700 whitespace-nowrap">{{ $row['tanggal'] }}</td>
+                                    <td class="px-6 py-4 font-mono text-xs text-zinc-600">{{ $row['no_legalisir'] }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-zinc-900">{{ $row['nama'] }}</span>
+                                            <span class="text-xs text-zinc-500">{{ $row['npm'] }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center text-xs text-zinc-500">
+                                        Ijazah: {{ $row['jumlah_ijazah'] }} | Trans: {{ $row['jumlah_transkip'] }} | Lain:
+                                        {{ $row['jumlah_lain'] }}
+                                    </td>
+                                    <td class="px-6 py-4 text-center font-bold text-zinc-900">
+                                        {{ $row['jumlah_total'] }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <section class="content">
-            <div class="container-fluid">
-                <form action="{{ route('admin.legalisir.import.confirm') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="data" value="{{ base64_encode(serialize($data)) }}">
+        <div class="flex items-center justify-end gap-3">
+            <a href="{{ route('admin.legalisir.index') }}"
+                class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
+                Batal
+            </a>
+            <button type="submit"
+                class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 transition-colors">
+                <i class="fas fa-save mr-2"></i> Konfirmasi & Simpan
+            </button>
+        </div>
+    </form>
+@endsection
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Data Legalisir</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="dataUploadTable" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Tanggal</th>
-                                            <th>No Legalisir</th>
-                                            <th>Nama</th>
-                                            <th>NPM</th>
-                                            <th>Ijazah</th>
-                                            <th>Transkip</th>
-                                            <th>Lain-lain</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $index => $row)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $row['tanggal'] }}</td>
-                                                <td>{{ $row['no_legalisir'] }}</td>
-                                                <td>{{ $row['nama'] }}</td>
-                                                <td>{{ $row['npm'] }}</td>
-                                                <td>{{ $row['jumlah_ijazah'] }}</td>
-                                                <td>{{ $row['jumlah_transkip'] }}</td>
-                                                <td>{{ $row['jumlah_lain'] }}</td>
-                                                <td>{{ $row['jumlah_total'] }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="card-footer text-right">
-                            <a href="{{ route('admin.legalisir.index') }}" class="btn btn-secondary">Batal</a>
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan ke Database</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </section>
-    </div>
-
-    @include('include.footerSistem')
-</div>
-
-@include('services.ToastModal')
-@include('services.LogoutModal')
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-<script>
-    $(function () {
-        $('#dataUploadTable').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true
+@section('scripts')
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(function() {
+            // Tailwind-styled DataTables
+            $('#dataUploadTable').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "language": {
+                    "search": "",
+                    "searchPlaceholder": "Cari data...",
+                    "paginate": {
+                        "first": '<i class="fas fa-angle-double-left"></i>',
+                        "last": '<i class="fas fa-angle-double-right"></i>',
+                        "next": '<i class="fas fa-angle-right"></i>',
+                        "previous": '<i class="fas fa-angle-left"></i>'
+                    }
+                },
+                "dom": '<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"lf>rt<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"ip>'
+            });
+            $('.dataTables_filter input').addClass(
+                'w-full md:w-64 rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 text-sm'
+                );
         });
-    });
-</script>
-</body>
-</html>
+    </script>
+@endsection

@@ -1,212 +1,197 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akademik WR 1 - Peran</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        .toggle-status {
-            width: 50px;
-            height: 24px;
-            appearance: none;
-            background: #ddd;
-            border-radius: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
+@extends('layouts.admin')
 
-        .toggle-status:checked {
-            background: linear-gradient(90deg, #28a745, #2ecc71);
-        }
+@section('title', 'Manajemen Peran')
 
-        .toggle-status::before {
-            content: "❌";
-            position: absolute;
-            top: 3px;
-            left: 4px;
-            width: 18px;
-            height: 18px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            text-align: center;
-            font-size: 12px;
-            line-height: 18px;
-        }
+@section('content')
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Manajemen Peran</h1>
+            <p class="mt-1 text-sm text-gray-600">Kelola data peran (role) pengguna dan hak akses sistem.</p>
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <a href="{{ route('admin.role.create') }}"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm shadow-blue-500/30">
+                <i class="fas fa-plus"></i> Tambah Peran
+            </a>
+        </div>
+    </div>
 
-        .toggle-status:checked::before {
-            content: "✔️";
-            transform: translateX(26px);
-            color: #28a745;
-        }
-    </style>
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        @include('include.navbarSistem')
-        @include('include.sidebar')
+    <!-- Table Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr
+                        class="bg-gray-50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500 font-semibold">
+                        <th class="px-6 py-4 w-16 text-center">No</th>
+                        <th class="px-6 py-4 w-20">ID</th>
+                        <th class="px-6 py-4">Nama Peran</th>
+                        <th class="px-6 py-4">Deskripsi</th>
+                        <th class="px-6 py-4 text-center">Status</th>
+                        <th class="px-6 py-4 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+                    @forelse($roles as $index => $role)
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="px-6 py-4 text-center text-gray-500">{{ $index + 1 }}</td>
+                            <td class="px-6 py-4 font-mono text-gray-500 text-xs">{{ $role->id }}</td>
+                            <td class="px-6 py-4 font-medium text-gray-900">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-2 h-2 rounded-full {{ $role->role_status ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                                    {{ $role->role_name }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-gray-500">{{ Str::limit($role->role_description, 60) }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer toggle-status"
+                                        data-role-id="{{ $role->id }}" {{ $role->role_status ? 'checked' : '' }}>
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center justify-center gap-2">
+                                    <a href="{{ route('admin.role.edit', $role->id) }}"
+                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                        title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button onclick="openDeleteModal('{{ $role->id }}')"
+                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                                <div class="flex flex-col items-center justify-center">
+                                    <i class="fas fa-user-shield text-4xl text-gray-300 mb-3"></i>
+                                    <p>Belum ada data peran.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-        <div class="content-wrapper">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Manajemen Peran</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Counters -->
+        <div
+            class="px-6 py-4 border-t border-gray-100 text-sm text-gray-500 flex justify-between items-center bg-gray-50/50">
+            <span>Total Peran: <strong>{{ $roles->count() }}</strong></span>
+            {{-- If pagination enabled: {{ $roles->links() }} --}}
+        </div>
+    </div>
 
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">Daftar Peran</h3>
-                            <a href="{{ route('admin.role.create') }}" class="btn btn-primary btn-sm ml-auto">
-                                <i class="fas fa-plus"></i> Tambah Peran
-                            </a>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="roleTable" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>ID</th>
-                                            <th>Nama Peran</th>
-                                            <th>Deskripsi</th>
-                                            <th>Status Peran</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($roles as $index => $role)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $role->id }}</td>
-                                                <td>{{ $role->role_name }}</td>
-                                                <td>{{ $role->role_description }}</td>
-                                                <td class="text-center">
-                                                    <input type="checkbox" class="toggle-status"
-                                                        data-role-id="{{ $role->id }}"
-                                                        {{ $role->role_status ? 'checked' : '' }}>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('admin.role.edit', $role->id) }}" class="btn btn-info btn-sm">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </a>
-                                                    <button class="btn btn-danger btn-sm delete-role-btn"
-                                                        data-toggle="modal"
-                                                        data-target="#deleteRoleModal"
-                                                        data-role-id="{{ $role->id }}">
-                                                        <i class="fas fa-trash"></i> Hapus
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+    <!-- Custom Delete Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="closeDeleteModal()"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <!-- Modal Panel -->
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div
+                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <i class="fas fa-exclamation-triangle text-red-600"></i>
                             </div>
-                            <div id="tablePagination"></div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-semibold leading-6 text-gray-900" id="modal-title">Hapus Peran</h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">Apakah Anda yakin ingin menghapus peran ini? Pastikan
+                                        tidak ada pengguna yang sedang menggunakan peran ini. Tindakan ini tidak dapat
+                                        dibatalkan.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </div>
-
-        @include('include.footerSistem')
-    </div>
-
-    <!-- Modal Konfirmasi Hapus -->
-    <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteRoleModalLabel"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus peran ini? Tindakan ini tidak dapat dibatalkan.
-                </div>
-                <form id="deleteForm" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</button>
+                    <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <form id="deleteForm" method="POST" class="inline-block w-full sm:w-auto">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="inline-flex w-full justify-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto transition-colors">
+                                Ya, Hapus
+                            </button>
+                        </form>
+                        <button type="button" onclick="closeDeleteModal()"
+                            class="mt-3 inline-flex w-full justify-center rounded-lg bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors">
+                            Batal
+                        </button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
-    @include('services.ToastModal')
-    @include('services.LogoutModal')
+@endsection
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script src="{{ asset('js/ToastScript.js') }}"></script>
+@section('scripts')
     <script>
-        $(document).ready(function () {
-            $("#roleTable").DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true
-            });
-        });
+        function openDeleteModal(id) {
+            const modal = document.getElementById('deleteModal');
+            const form = document.getElementById('deleteForm');
+            // Based on previous file: url('role') + '/' + id
+            form.action = "{{ url('role') }}/" + id;
 
-        $(document).ready(function () {
-            $('.delete-role-btn').click(function () {
-                let roleId = $(this).data('role-id');
-                let deleteUrl = "{{ url('role') }}/" + roleId;
-                $('#deleteForm').attr('action', deleteUrl);
-            });
-        });
+            modal.classList.remove('hidden');
+        }
 
-        $(document).ready(function () {
-            $(".toggle-status").change(function () {
-                let roleId = $(this).data("role-id");
-                let status = $(this).prop("checked") ? 1 : 0;
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            modal.classList.add('hidden');
+        }
 
-                $.post("{{ url('role') }}/" + roleId + "/toggle-status", {
-                    _token: '{{ csrf_token() }}',
-                    role_status: status
-                }, function (res) {
-                    if (res.success) {
-                        $(".toast-body").text(res.message);
-                        $("#toastNotification").toast({ autohide: true, delay: 3000 }).toast("show");
-                    } else {
-                        alert("Gagal memperbarui status.");
-                    }
-                }).fail(function () {
-                    alert("Terjadi kesalahan dalam mengubah status.");
+        // Status Toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggles = document.querySelectorAll('.toggle-status');
+            toggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const roleId = this.dataset.roleId;
+                    const status = this.checked ? 1 : 0;
+
+                    fetch("{{ url('role') }}/" + roleId + "/toggle-status", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                role_status: status
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Success toast handled by layout if trigger session, but this is async.
+                                // We can manually show toast if we had access to the showToast function global.
+                                if (typeof showToast === 'function') {
+                                    showToast(data.message, 'success');
+                                }
+                            } else {
+                                alert('Gagal update status');
+                                this.checked = !this.checked; // Revert
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Terjadi kesalahan');
+                            this.checked = !this.checked; // Revert
+                        });
                 });
             });
         });
-
-        $(document).ready(function() {
-            @if (session('success') || session('error'))
-                $('#toastNotification').toast({
-                    delay: 3000,
-                    autohide: true
-                }).toast('show');
-            @endif
-        });
     </script>
-</body>
-</html>
+@endsection

@@ -1,243 +1,144 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akademik WR 1 - Client Dashboard</title>
+    <title>Dashboard | Akademik WR 1</title>
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Scripts & Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         body {
-            font-family: 'Source Sans Pro', sans-serif !important;
-            background-color: #f8f9fa;
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            padding: 80px 0;
-        }
-        .feature-card {
-            border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            height: 100%;
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-        .feature-icon {
-            font-size: 3rem;
-            color: #007bff;
-            margin-bottom: 1rem;
-        }
-        .stats-section {
-            background-color: white;
-            padding: 60px 0;
-        }
-        .stat-item {
-            text-align: center;
-            padding: 20px;
-        }
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #007bff;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            padding: 12px 30px;
-            font-weight: 600;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
     </style>
 </head>
-<body>
+
+<body class="bg-white text-zinc-950 antialiased min-h-screen flex flex-col">
     <!-- Navbar -->
     @include('include.navbarUser')
 
-    <!-- Hero Section -->
-    <section id="beranda" class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold mb-4">Sistem Peminjaman Ruangan</h1>
-                    <p class="lead mb-4">Kelola peminjaman ruangan dengan mudah dan efisien. Ajukan permohonan, pantau status, dan dapatkan persetujuan dengan cepat.</p>
-                    <div class="d-flex gap-3">
-                        <a href="#permohonan-peminjaman" class="btn btn-light btn-lg">
-                            <i class="fas fa-plus me-2"></i>Ajukan Peminjaman
-                        </a>
-                        <a href="{{ route('users.pengajuan.index') }}" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-search me-2"></i>Lihat Ruangan
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <img src="{{ asset('image/d1.jpg') }}" alt="Room Booking" class="img-fluid rounded shadow">
-                </div>
-            </div>
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 md:px-6 py-8">
+        <!-- Welcome Section -->
+        <div class="mb-8 space-y-2">
+            <h1 class="text-3xl font-bold tracking-tight text-zinc-900">Dashboard</h1>
+            <p class="text-zinc-500">Selamat datang kembali, {{ Auth::guard('users')->user()->username }}. Kelola
+                peminjaman Anda.</p>
         </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-12">
-                    <h2 class="fw-bold mb-3">Fitur Unggulan</h2>
-                    <p class="text-muted">Nikmati kemudahan dalam mengelola peminjaman ruangan</p>
+        <!-- Quick Stats -->
+        <div class="grid gap-4 md:grid-cols-3 mb-8">
+            <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+                <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <h3 class="tracking-tight text-sm font-medium text-zinc-500">Total Peminjaman</h3>
+                    <i class="fas fa-calendar-check text-zinc-400"></i>
                 </div>
+                <div class="text-2xl font-bold">12</div>
+                <p class="text-xs text-zinc-500 mt-1">
+                    Semua riwayat peminjaman
+                </p>
             </div>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card feature-card text-center p-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-door-open"></i>
-                        </div>
-                        <h5 class="fw-bold mb-3">Daftar Ruangan Lengkap</h5>
-                        <p class="text-muted">Lihat semua ruangan yang tersedia dengan detail fasilitas dan kapasitas</p>
-                    </div>
+            <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+                <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <h3 class="tracking-tight text-sm font-medium text-zinc-500">Menunggu Persetujuan</h3>
+                    <i class="fas fa-clock text-zinc-400"></i>
                 </div>
-                <div class="col-md-4">
-                    <div class="card feature-card text-center p-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <h5 class="fw-bold mb-3">Peminjaman Mudah</h5>
-                        <p class="text-muted">Ajukan permohonan peminjaman dengan form yang sederhana dan intuitif</p>
-                    </div>
+                <div class="text-2xl font-bold">2</div>
+                <p class="text-xs text-zinc-500 mt-1">
+                    Sedang diproses admin
+                </p>
+            </div>
+            <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+                <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <h3 class="tracking-tight text-sm font-medium text-zinc-500">Disetujui</h3>
+                    <i class="fas fa-check-circle text-zinc-400"></i>
                 </div>
-                <div class="col-md-4">
-                    <div class="card feature-card text-center p-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h5 class="fw-bold mb-3">Tracking Status</h5>
-                        <p class="text-muted">Pantau status permohonan Anda secara real-time</p>
-                    </div>
-                </div>
+                <div class="text-2xl font-bold">10</div>
+                <p class="text-xs text-zinc-500 mt-1">
+                    Peminjaman aktif & selesai
+                </p>
             </div>
         </div>
-    </section>
 
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="stat-item">
-                        <div class="stat-number">50+</div>
-                        <p class="text-muted mb-0">Ruangan Tersedia</p>
+        <!-- Quick Actions -->
+        <div>
+            <h2 class="text-lg font-semibold tracking-tight text-zinc-900 mb-4">Akses Cepat</h2>
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <a href="{{ route('users.pengajuan.index') }}"
+                    class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 hover:bg-zinc-50 hover:border-zinc-300 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-900 group-hover:bg-white group-hover:shadow-sm">
+                            <i class="fas fa-search text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-zinc-900">Cari Ruangan</h3>
+                            <p class="text-sm text-zinc-500">Lihat daftar fasilitas</p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-item">
-                        <div class="stat-number">1,200+</div>
-                        <p class="text-muted mb-0">Peminjaman Berhasil</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-item">
-                        <div class="stat-number">98%</div>
-                        <p class="text-muted mb-0">Tingkat Kepuasan</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-item">
-                        <div class="stat-number">24/7</div>
-                        <p class="text-muted mb-0">Layanan Online</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                </a>
 
-    <!-- Quick Actions Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row text-center mb-4">
-                <div class="col-12">
-                    <h3 class="fw-bold">Aksi Cepat</h3>
-                    <p class="text-muted">Akses fitur utama dengan satu klik</p>
-                </div>
-            </div>
-            <div class="row g-3 justify-content-center">
-                <div class="col-md-3 col-sm-6">
-                    <a href="#daftar-ruangan" class="btn btn-outline-primary w-100 py-3">
-                        <i class="fas fa-list fa-2x d-block mb-2"></i>
-                        <span>Daftar Ruangan</span>
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#permohonan-peminjaman" class="btn btn-primary w-100 py-3">
-                        <i class="fas fa-plus-circle fa-2x d-block mb-2"></i>
-                        <span>Ajukan Peminjaman</span>
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#status-permohonan" class="btn btn-outline-primary w-100 py-3">
-                        <i class="fas fa-clock fa-2x d-block mb-2"></i>
-                        <span>Cek Status</span>
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#pengumuman" class="btn btn-outline-primary w-100 py-3">
-                        <i class="fas fa-bullhorn fa-2x d-block mb-2"></i>
-                        <span>Pengumuman</span>
-                    </a>
-                </div>
+                <a href="#permohonan-peminjaman"
+                    class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 hover:bg-zinc-50 hover:border-zinc-300 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-900 group-hover:bg-white group-hover:shadow-sm">
+                            <i class="fas fa-plus text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-zinc-900">Buat Pengajuan</h3>
+                            <p class="text-sm text-zinc-500">Ajukan peminjaman baru</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{{ route('users.pengajuan.status') }}"
+                    class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 hover:bg-zinc-50 hover:border-zinc-300 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-900 group-hover:bg-white group-hover:shadow-sm">
+                            <i class="fas fa-history text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-zinc-900">Cek Status</h3>
+                            <p class="text-sm text-zinc-500">Pantau progres</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#pengumuman"
+                    class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 hover:bg-zinc-50 hover:border-zinc-300 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-900 group-hover:bg-white group-hover:shadow-sm">
+                            <i class="fas fa-bullhorn text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-zinc-900">Pengumuman</h3>
+                            <p class="text-sm text-zinc-500">Informasi terbaru</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
     @include('include.footerUser')
-    <!-- Logout Modal -->
     @include('services.LogoutModalUser')
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Active nav link highlighting
-        window.addEventListener('scroll', function() {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
 </body>
+
 </html>

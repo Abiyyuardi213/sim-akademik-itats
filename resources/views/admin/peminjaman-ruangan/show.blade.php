@@ -1,103 +1,116 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Peminjaman Ruangan</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Source Sans Pro', sans-serif !important;
-        }
-        .card {
-            border-radius: 10px;
-        }
-        .table th {
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        @include('include.navbarSistem')
-        @include('include.sidebar')
+@extends('layouts.admin')
 
-        <div class="content-wrapper">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Detail Informasi Peminjaman Ruangan</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
+@section('title', 'Detail Peminjaman')
 
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8 col-md-10 col-sm-12">
-                            <div class="card shadow-lg">
-                                <div class="card-header bg-primary text-white">
-                                    <h3 class="card-title mb-0">Informasi Peminjaman Ruangan</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-striped">
-                                            <tr>
-                                                <th width="40%">Tanggal Peminjaman</th>
-                                                <td>{{ $peminjaman->tanggal_peminjaman }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th width="40%">Tanggal Berakhir Peminjaman</th>
-                                                <td>{{ $peminjaman->tanggal_berakhir_peminjaman }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Penanggung Jawab Peminjaman</th>
-                                                <td>{{ $peminjaman->prodi ? $peminjaman->prodi->nama_prodi : '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Ruangan</th>
-                                                <td>{{ $peminjaman->kelas ? $peminjaman->kelas->nama_kelas : '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Keperluan Peminjaman</th>
-                                                <td>{{ $peminjaman->keperluan_peminjaman }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Waktu Peminjaman</th>
-                                                <td>{{ $peminjaman->waktu_peminjaman }} - {{ $peminjaman->waktu_berakhir_peminjaman }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="card-footer text-right">
-                                    <a href="{{ route('admin.peminjaman-ruangan.index') }}" class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left"></i> Kembali
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+@section('content')
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Peminjaman Ruangan</h1>
+            <p class="mt-1 text-sm text-zinc-500">Informasi lengkap tentang jadwal peminjaman.</p>
         </div>
-
-        @include('include.footerSistem')
+        <nav class="flex text-sm font-medium text-zinc-500 items-center">
+            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <a href="{{ route('admin.peminjaman-ruangan.index') }}"
+                class="hover:text-zinc-900 transition-colors">Peminjaman</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <span class="text-zinc-900">Detail</span>
+        </nav>
     </div>
 
-    @include('services.LogoutModal')
+    <div class="max-w-4xl bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-zinc-100 bg-zinc-50/50 flex justify-between items-center">
+            <h3 class="text-base font-semibold text-zinc-900 flex items-center gap-2">
+                <i class="fas fa-calendar-week text-zinc-500"></i> Informasi Peminjaman
+            </h3>
+            @php
+                $today = \Carbon\Carbon::today();
+                $start = \Carbon\Carbon::parse($peminjaman->tanggal_peminjaman);
+                $end = \Carbon\Carbon::parse($peminjaman->tanggal_berakhir_peminjaman);
+            @endphp
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.nav-sidebar').Treeview('init');
-        });
-    </script>
-</body>
-</html>
+            @if ($today->lt($start))
+                <span
+                    class="inline-flex items-center rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20">
+                    AKAN DATANG
+                </span>
+            @elseif ($today->gt($end))
+                <span
+                    class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 ring-1 ring-inset ring-zinc-500/10">
+                    SELESAI
+                </span>
+            @else
+                <span
+                    class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                    SEDANG BERLANGSUNG
+                </span>
+            @endif
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <!-- Waktu -->
+                <div class="space-y-6">
+                    <h4 class="text-sm font-medium text-zinc-900 border-b border-zinc-100 pb-2">Jadwal Penggunaan</h4>
+
+                    <div>
+                        <dt class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Tanggal</dt>
+                        <dd class="mt-1 text-base font-medium text-zinc-900">
+                            {{ \Carbon\Carbon::parse($peminjaman->tanggal_peminjaman)->translatedFormat('d F Y') }}
+                            <span class="text-zinc-400 mx-2">-</span>
+                            {{ \Carbon\Carbon::parse($peminjaman->tanggal_berakhir_peminjaman)->translatedFormat('d F Y') }}
+                        </dd>
+                    </div>
+
+                    <div>
+                        <dt class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Jam</dt>
+                        <dd class="mt-1 text-base font-mono text-zinc-700">
+                            {{ $peminjaman->waktu_peminjaman }} WIB - {{ $peminjaman->waktu_berakhir_peminjaman }} WIB
+                        </dd>
+                    </div>
+                </div>
+
+                <!-- Detail -->
+                <div class="space-y-6">
+                    <h4 class="text-sm font-medium text-zinc-900 border-b border-zinc-100 pb-2">Peminjam & Ruangan</h4>
+
+                    <div>
+                        <dt class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Penanggung Jawab / Prodi</dt>
+                        <dd class="mt-1 text-sm font-medium text-zinc-900">
+                            {{ $peminjaman->prodi ? $peminjaman->prodi->nama_prodi : '-' }}
+                        </dd>
+                    </div>
+
+                    <div>
+                        <dt class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Ruangan</dt>
+                        <dd class="mt-1 text-base font-bold text-zinc-900 flex items-center gap-2">
+                            <i class="fas fa-door-open text-zinc-400 text-sm"></i>
+                            {{ $peminjaman->kelas ? $peminjaman->kelas->nama_kelas : '-' }}
+                        </dd>
+                    </div>
+                </div>
+
+                <!-- Keperluan Full Width -->
+                <div class="md:col-span-2 border-t border-zinc-100 pt-4">
+                    <dt class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Keperluan</dt>
+                    <dd
+                        class="mt-2 text-sm text-zinc-700 bg-zinc-50 p-4 rounded-md border border-zinc-100 border-l-4 border-l-zinc-300 italic">
+                        "{{ $peminjaman->keperluan_peminjaman }}"
+                    </dd>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-zinc-50 px-6 py-4 flex justify-end gap-3 border-t border-zinc-100">
+            <a href="{{ route('admin.peminjaman-ruangan.index') }}"
+                class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali
+            </a>
+            <a href="{{ route('admin.peminjaman-ruangan.edit', $peminjaman->id) }}"
+                class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
+                <i class="fas fa-pencil-alt mr-2"></i> Edit Data
+            </a>
+        </div>
+    </div>
+@endsection

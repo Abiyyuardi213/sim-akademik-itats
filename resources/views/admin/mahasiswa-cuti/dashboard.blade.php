@@ -1,100 +1,59 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akademik WR 1 - Dashboard Cuti</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Source Sans Pro', sans-serif !important;
-        }
-        .fc-daygrid-day-number {
-            color: white !important;
-        }
-        .fc-daygrid-day {
-            border: none !important;
-        }
-    </style>
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
-    @include('include.navbarSistem')
-    @include('include.sidebar')
+@extends('layouts.admin')
 
-    <div class="content-wrapper">
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Dashboard</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard Cuti</li>
-                        </ol>
-                    </div>
+@section('title', 'Dashboard Cuti')
+
+@section('content')
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Dashboard Cuti</h1>
+            <p class="mt-1 text-sm text-zinc-500">Ringkasan data periode dan mahasiswa cuti akademik.</p>
+        </div>
+        <nav class="flex text-sm font-medium text-zinc-500">
+            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <span class="text-zinc-900">Dashboard Cuti</span>
+        </nav>
+    </div>
+
+    <!-- Statistics Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Total Periode Cuti -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-zinc-500">Total Periode Cuti</p>
+                    <h4 class="text-3xl font-bold text-zinc-900 mt-2">{{ $totalPeriode ?? 0 }}</h4>
                 </div>
+                <div class="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                    <i class="fas fa-calendar-alt text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-zinc-50">
+                <a href="{{ route('admin.periode.index') }}"
+                    class="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 group">
+                    Lebih Detail <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                </a>
             </div>
         </div>
 
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-info">
-                            <div class="inner">
-                                <h3>{{ $totalPeriode ?? 0 }}</h3>
-                                <p>Total Periode Cuti</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-user-tag"></i>
-                            </div>
-                            <a href="{{ route('admin.periode.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3>{{ $totalMahasiswaCuti ?? 0 }}</h3>
-                                <p>Total Mahasiswa Cuti</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-user-friends"></i>
-                            </div>
-                            <a href="{{ route('admin.mahasiswa-cuti.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
+        <!-- Total Mahasiswa Cuti -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-zinc-500">Total Mahasiswa Cuti</p>
+                    <h4 class="text-3xl font-bold text-zinc-900 mt-2">{{ $totalMahasiswaCuti ?? 0 }}</h4>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                    <i class="fas fa-user-clock text-xl"></i>
                 </div>
             </div>
-        </section>
+            <div class="mt-4 pt-4 border-t border-zinc-50">
+                <a href="{{ route('admin.mahasiswa-cuti.index') }}"
+                    class="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 group">
+                    Lebih Detail <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                </a>
+            </div>
+        </div>
     </div>
-
-    @include('include.footerSistem')
-</div>
-
-@include('services.ToastModal')
-@include('services.LogoutModal')
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-<script src="{{ asset('resources/js/ToastScript.js') }}"></script>
-
-<script>
-    $(document).ready(function () {
-        $('[data-widget="treeview"]').each(function () {
-            AdminLTE.Treeview._jQueryInterface.call($(this));
-        });
-    });
-</script>
-</body>
-</html>
+@endsection

@@ -1,84 +1,88 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubah Periode</title>
-    <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        @include('include.navbarSistem')
-        @include('include.sidebar')
+@extends('layouts.admin')
 
-        <div class="content-wrapper">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Ubah Periode</h1>
-                        </div>
+@section('title', 'Ubah Periode')
+
+@section('content')
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Ubah Data Periode</h1>
+            <p class="mt-1 text-sm text-zinc-500">Perbarui informasi periode cuti yang sudah ada.</p>
+        </div>
+        <nav class="flex text-sm font-medium text-zinc-500 items-center">
+            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <a href="{{ route('admin.periode.index') }}" class="hover:text-zinc-900 transition-colors">Periode Cuti</a>
+            <span class="mx-2 text-zinc-300">/</span>
+            <span class="text-zinc-900">Ubah</span>
+        </nav>
+    </div>
+
+    <!-- Form -->
+    <div class="max-w-2xl bg-white rounded-xl border border-zinc-200 shadow-sm p-6 sm:p-8">
+        <div class="mb-6 border-b border-zinc-100 pb-4">
+            <h3 class="text-lg font-semibold text-zinc-900">Form Ubah Periode</h3>
+            <p class="text-sm text-zinc-500">Edit detail periode di bawah ini.</p>
+        </div>
+
+        <form action="{{ route('admin.periode.update', $periode->id) }}" method="POST" class="space-y-5">
+            @csrf
+            @method('PUT')
+
+            <div class="space-y-2">
+                <label for="nama_periode" class="text-sm font-medium leading-none text-zinc-900">Nama Periode</label>
+                <input type="text" id="nama_periode" name="nama_periode"
+                    value="{{ old('nama_periode', $periode->nama_periode) }}" required
+                    class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="space-y-2">
+                    <label for="awal_cuti" class="text-sm font-medium leading-none text-zinc-900">Awal Cuti</label>
+                    <input type="month" id="awal_cuti" name="awal_cuti"
+                        value="{{ old('awal_cuti', $periode->awal_cuti) }}" required
+                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="akhir_cuti" class="text-sm font-medium leading-none text-zinc-900">Akhir Cuti</label>
+                    <input type="month" id="akhir_cuti" name="akhir_cuti"
+                        value="{{ old('akhir_cuti', $periode->akhir_cuti) }}" required
+                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label for="bulan_her" class="text-sm font-medium leading-none text-zinc-900">Bulan Wajib HER</label>
+                <input type="month" id="bulan_her" name="bulan_her" value="{{ old('bulan_her', $periode->bulan_her) }}"
+                    required
+                    class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+            </div>
+
+            <div class="space-y-2">
+                <label for="periode_status" class="text-sm font-medium leading-none text-zinc-900">Status Periode</label>
+                <div class="relative">
+                    <select id="periode_status" name="periode_status"
+                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 appearance-none">
+                        <option value="1" {{ $periode->periode_status == 1 ? 'selected' : '' }}>Aktif</option>
+                        <option value="0" {{ $periode->periode_status == 0 ? 'selected' : '' }}>Nonaktif</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-zinc-500">
+                        <i class="fas fa-chevron-down text-xs"></i>
                     </div>
                 </div>
             </div>
 
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="card card-warning">
-                        <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-edit"></i> Form Ubah Data Periode</h3>
-                        </div>
-                        <div class="card-body">
-                            <form action="{{ route('admin.periode.update', $periode->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="form-group">
-                                    <label for="nama_periode">Nama Periode</label>
-                                    <input type="text" class="form-control" name="nama_periode" value="{{ old('nama_periode', $periode->nama_periode) }}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="awal_cuti">Awal Cuti</label>
-                                    <input type="month" class="form-control" name="awal_cuti" value="{{ old('awal_cuti', $periode->awal_cuti) }}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="akhir_cuti">Akhir Cuti</label>
-                                    <input type="month" class="form-control" name="akhir_cuti" value="{{ old('akhir_cuti', $periode->akhir_cuti) }}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="bulan_her">Bulan Wajib HER</label>
-                                    <input type="month" class="form-control" name="bulan_her" value="{{ old('bulan_her', $periode->bulan_her) }}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="periode_status">Status Periode</label>
-                                    <select class="form-control" name="periode_status">
-                                        <option value="1" {{ $periode->periode_status == 1 ? 'selected' : '' }}>Aktif</option>
-                                        <option value="0" {{ $periode->periode_status == 0 ? 'selected' : '' }}>Nonaktif</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                                <a href="{{ route('admin.periode.index') }}" class="btn btn-secondary">Batal</a>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        @include('include.footerSistem')
+            <div class="pt-6 border-t border-zinc-100 flex items-center gap-3 justify-end">
+                <a href="{{ route('admin.periode.index') }}"
+                    class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
+                    Batal
+                </a>
+                <button type="submit"
+                    class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 transition-colors">
+                    <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                </button>
+            </div>
+        </form>
     </div>
-
-    @include('services.LogoutModal')
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('[data-widget="treeview"]').Treeview('init');
-        });
-    </script>
-</body>
-</html>
+@endsection

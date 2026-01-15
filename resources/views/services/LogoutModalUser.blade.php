@@ -1,22 +1,66 @@
-<div class="modal fade" id="logoutModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Konfirmasi Logout</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Apakah Anda yakin ingin keluar dari sistem?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+<div id="logoutModal" class="hidden fixed inset-0 z-[100] overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+    aria-modal="true">
+    <!-- Background backdrop -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true"
+        id="logoutModalBackdrop"></div>
 
-                <!-- Form Logout -->
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div
+            class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div
+                        class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                    </div>
+                    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                        <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Konfirmasi Logout
+                        </h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">Apakah Anda yakin ingin keluar dari sistem? Anda harus
+                                login kembali untuk mengakses fitur.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-danger">Ya, Logout</button>
+                    <button type="submit"
+                        class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Ya,
+                        Logout</button>
                 </form>
+                <button type="button"
+                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    id="cancelLogout">Batal</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('logoutModal');
+        const triggers = document.querySelectorAll('[data-bs-target="#logoutModal"]');
+        const cancelBtn = document.getElementById('cancelLogout');
+        const backdrop = document.getElementById('logoutModalBackdrop');
+
+        function toggleModal() {
+            modal.classList.toggle('hidden');
+        }
+
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleModal();
+            });
+        });
+
+        if (cancelBtn) cancelBtn.addEventListener('click', toggleModal);
+        if (backdrop) backdrop.addEventListener('click', toggleModal);
+    });
+</script>

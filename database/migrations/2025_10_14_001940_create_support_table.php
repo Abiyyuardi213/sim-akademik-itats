@@ -6,20 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('support', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('gedung_id');
+            $table->foreign('gedung_id')->references('id')->on('gedung')->onDelete('cascade');
+            $table->string('nama_ruangan');
+            $table->unsignedTinyInteger('kapasitas')->nullable();
+            $table->text('keterangan')->nullable();
+            $table->boolean('ruangan_status');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('support');
