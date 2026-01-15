@@ -50,7 +50,7 @@ class KelasController extends Controller
 
         Kelas::createKelas($data);
 
-        return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil ditambahkan');
+        return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil ditambahkan')->with('new_entry_created', true);
     }
 
     public function edit($id)

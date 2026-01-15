@@ -223,7 +223,7 @@
     <script>
         $(document).ready(function() {
             // Tailwind-styled DataTables
-            $('#kelasTable').DataTable({
+            var table = $('#kelasTable').DataTable({
                 "paging": true,
                 "lengthChange": true,
                 "searching": true,
@@ -245,6 +245,10 @@
                 },
                 "dom": '<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"lf>rt<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"ip>'
             });
+
+            @if (session('new_entry_created'))
+                table.page('last').draw(false);
+            @endif
 
             // Custom styling for inputs
             $('.dataTables_filter input').addClass(
