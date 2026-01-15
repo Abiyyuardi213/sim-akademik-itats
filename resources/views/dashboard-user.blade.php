@@ -146,131 +146,49 @@
             </div>
 
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <!-- Mock Card 1 -->
-                <div
-                    class="group relative bg-white rounded-xl border border-zinc-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
-                    <div class="aspect-video w-full bg-zinc-100 relative overflow-hidden">
-                        <img src="{{ asset('uploads/kelas/689d663ab4a95.jpg') }}"
-                            onerror="this.src='https://placehold.co/600x400?text=Ruangan'" alt="Ruang A"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div
-                            class="absolute top-3 right-3 bg-emerald-500/90 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide backdrop-blur-sm">
-                            Tersedia
+                @foreach ($rekomendasi_ruangan as $kelas)
+                    <div
+                        class="group relative bg-white rounded-xl border border-zinc-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
+                        <div class="aspect-video w-full bg-zinc-100 relative overflow-hidden">
+                            <img src="{{ $kelas->gambar ? asset('uploads/kelas/' . $kelas->gambar) : 'https://placehold.co/600x400?text=Ruangan' }}"
+                                onerror="this.src='https://placehold.co/600x400?text=Ruangan'"
+                                alt="{{ $kelas->nama_kelas }}"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div
+                                class="absolute top-3 right-3 bg-emerald-500/90 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide backdrop-blur-sm">
+                                Tersedia
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <div>
+                                    <h3 class="font-bold text-zinc-900 line-clamp-1">{{ $kelas->nama_kelas }}</h3>
+                                    <p class="text-xs text-zinc-500">{{ $kelas->gedung->nama_gedung ?? 'Gedung' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 text-xs text-zinc-600 mb-4 mt-3">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-users text-zinc-400"></i>
+                                    <span>{{ $kelas->kapasitas_mahasiswa }} Kursi</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-wind text-zinc-400"></i>
+                                    <span>AC</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-wifi text-zinc-400"></i>
+                                    <span>WiFi</span>
+                                </div>
+                            </div>
+
+                            <a href="{{ route('users.pengajuan.create', $kelas->id) }}"
+                                class="flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2">
+                                Ajukan Peminjaman
+                            </a>
                         </div>
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-start justify-between mb-2">
-                            <div>
-                                <h3 class="font-bold text-zinc-900 line-clamp-1">Gedung B - 303</h3>
-                                <p class="text-xs text-zinc-500">Gedung B, Lantai 3</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-4 text-xs text-zinc-600 mb-4 mt-3">
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-users text-zinc-400"></i>
-                                <span>40 Kursi</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-wind text-zinc-400"></i>
-                                <span>AC</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-wifi text-zinc-400"></i>
-                                <span>WiFi</span>
-                            </div>
-                        </div>
-
-                        <a href="{{ route('users.pengajuan.create', ['kelas' => 'B-303']) }}"
-                            class="flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2">
-                            Ajukan Peminjaman
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Mock Card 2 -->
-                <div
-                    class="group relative bg-white rounded-xl border border-zinc-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
-                    <div class="aspect-video w-full bg-zinc-100 relative overflow-hidden">
-                        <img src="{{ asset('uploads/kelas/689d664599fa1.jpg') }}"
-                            onerror="this.src='https://placehold.co/600x400?text=Ruangan'" alt="Ruang B"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div
-                            class="absolute top-3 right-3 bg-emerald-500/90 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide backdrop-blur-sm">
-                            Tersedia
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex items-start justify-between mb-2">
-                            <div>
-                                <h3 class="font-bold text-zinc-900 line-clamp-1">Gedung F - 304</h3>
-                                <p class="text-xs text-zinc-500">Gedung F, Lantai 3</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-4 text-xs text-zinc-600 mb-4 mt-3">
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-users text-zinc-400"></i>
-                                <span>35 Kursi</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-tv text-zinc-400"></i>
-                                <span>Proyektor</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-wind text-zinc-400"></i>
-                                <span>AC</span>
-                            </div>
-                        </div>
-
-                        <a href="{{ route('users.pengajuan.create', ['kelas' => 'F-304']) }}"
-                            class="flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2">
-                            Ajukan Peminjaman
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Mock Card 3 -->
-                <div
-                    class="group relative bg-white rounded-xl border border-zinc-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
-                    <div class="aspect-video w-full bg-zinc-100 relative overflow-hidden">
-                        <img src="{{ asset('uploads/kelas/689d665d053ea.jpg') }}"
-                            onerror="this.src='https://placehold.co/600x400?text=Ruangan'" alt="Ruang C"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div
-                            class="absolute top-3 right-3 bg-amber-500/90 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide backdrop-blur-sm">
-                            Terbatas
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex items-start justify-between mb-2">
-                            <div>
-                                <h3 class="font-bold text-zinc-900 line-clamp-1">Gedung A - 201</h3>
-                                <p class="text-xs text-zinc-500">Gedung A, Lantai 2</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-4 text-xs text-zinc-600 mb-4 mt-3">
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-users text-zinc-400"></i>
-                                <span>50 Kursi</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-volume-up text-zinc-400"></i>
-                                <span>Sound</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <i class="fas fa-wifi text-zinc-400"></i>
-                                <span>WiFi</span>
-                            </div>
-                        </div>
-
-                        <a href="{{ route('users.pengajuan.create', ['kelas' => 'A-201']) }}"
-                            class="flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2">
-                            Ajukan Peminjaman
-                        </a>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </main>

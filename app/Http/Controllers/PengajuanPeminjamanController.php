@@ -17,10 +17,12 @@ class PengajuanPeminjamanController extends Controller
     public function index()
     {
         $gedungs = \App\Models\Gedung::with(['kelas' => function ($query) {
-            $query->where('kelas_status', true); // Optional: Only show active classes
-        }])->whereHas('kelas', function ($query) {
-            $query->where('kelas_status', true);
-        })->get();
+            $query->where('kelas_status', 1); // Only show active classes
+        }])
+            ->where('gedung_status', 1) // Only show active buildings
+            ->whereHas('kelas', function ($query) {
+                $query->where('kelas_status', 1);
+            })->get();
 
         return view('user.pengajuan.index', compact('gedungs'));
     }

@@ -2,6 +2,76 @@
 
 @section('title', 'Manajemen Kelas')
 
+@section('styles')
+    <style>
+        /* Custom DataTables Pagination Styling */
+        .dataTables_wrapper .dataTables_paginate {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            display: inline-flex;
+            min-width: 2rem;
+            height: 2rem;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            border: 1px solid #e4e4e7;
+            /* zinc-200 */
+            background-color: white;
+            color: #52525b;
+            /* zinc-600 */
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            user-select: none;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled) {
+            background-color: #f4f4f5;
+            /* zinc-100 */
+            color: #18181b;
+            /* zinc-900 */
+            border-color: #d4d4d8;
+            /* zinc-300 */
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #18181b;
+            /* zinc-900 */
+            color: white;
+            border-color: #18181b;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #fafafa;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            font-size: 0.875rem;
+            color: #71717a;
+            /* zinc-500 */
+            padding-top: 0.5rem;
+        }
+
+        /* Remove default DataTables sorting icon spacing interference */
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_desc:after {
+            display: none;
+        }
+    </style>
+@endsection
+
 @section('content')
     <!-- Page Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
@@ -179,10 +249,10 @@
             // Custom styling for inputs
             $('.dataTables_filter input').addClass(
                 'w-full md:w-64 rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 text-sm'
-                );
+            );
             $('.dataTables_length select').addClass(
                 'rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 text-sm'
-                );
+            );
 
             // Delete Modal
             $('.delete-kelas-btn').click(function() {
@@ -193,10 +263,12 @@
             });
 
             // Status Toggle
-            $(".toggle-status").change(function() {
+            // Status Toggle (Event Delegation for DataTables)
+            $(document).on("change", ".toggle-status", function() {
                 let kelasId = $(this).data("kelas-id");
                 let status = $(this).prop("checked") ? 1 : 0;
                 const $label = $(this).siblings('span');
+                const $checkbox = $(this); // Store reference for inside callback
 
                 // Using standard API path pattern
                 $.post("{{ url('admin/kelas') }}/" + kelasId + "/toggle-status", {
@@ -205,18 +277,31 @@
                 }, function(res) {
                     if (res.success) {
                         $label.text(status ? 'Siap' : 'Maint.');
-                    } else {
-                        alert("Gagal memperbarui status.");
-                    }
-                }).fail(function() {
-                    $.post("{{ url('kelas') }}/" + kelasId + "/toggle-status", {
-                        _token: '{{ csrf_token() }}',
-                        kelas_status: status
-                    }, function(res) {
-                        if (res.success) {
-                            $label.text(status ? 'Siap' : 'Maint.');
+                        $label.toggleClass('text-green-600', status).toggleClass('text-zinc-600', !
+                            status);
+
+                        // Trigger Toast notification
+                        if (typeof showToast === 'function') {
+                            showToast('Status kelas berhasil diperbarui.', 'success');
                         }
-                    });
+                    } else {
+                        // Revert checkbox if failed
+                        $checkbox.prop('checked', !status);
+                        if (typeof showToast === 'function') {
+                            showToast('Gagal: ' + res.message, 'error');
+                        } else {
+                            alert('Gagal: ' + res.message);
+                        }
+                    }
+                }).fail(function(xhr) {
+                    // Revert checkbox if error
+                    console.error(xhr);
+                    $checkbox.prop('checked', !status);
+                    if (typeof showToast === 'function') {
+                        showToast('Terjadi kesalahan sistem.', 'error');
+                    } else {
+                        alert('Terjadi kesalahan sistem.');
+                    }
                 });
             });
         });

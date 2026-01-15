@@ -98,7 +98,10 @@ class KelasController extends Controller
         try {
             $kelas = Kelas::findOrFail($id);
 
-            $kelas->kelas_status = $request->input('kelas_status', !$kelas->kelas_status);
+            // Cast to boolean explicitly since AJAX sends 0 or 1 as integer/string
+            $status = filter_var($request->input('kelas_status'), FILTER_VALIDATE_BOOLEAN);
+
+            $kelas->kelas_status = $status;
             $kelas->save();
 
             return response()->json([
