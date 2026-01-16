@@ -39,6 +39,10 @@
                                 class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 rounded-md transition-colors">
                                 <i class="fas fa-door-open w-4 text-center"></i> Daftar Ruangan
                             </a>
+                            <a href="{{ route('users.pengajuan.support') }}"
+                                class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 rounded-md transition-colors">
+                                <i class="fas fa-chalkboard-teacher w-4 text-center"></i> Daftar Ruangan Support
+                            </a>
                             <a href="{{ route('users.pengajuan.riwayat') }}"
                                 class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 rounded-md transition-colors">
                                 <i class="fas fa-file-alt w-4 text-center"></i> Riwayat Pengajuan

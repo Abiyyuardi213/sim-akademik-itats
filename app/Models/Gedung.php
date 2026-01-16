@@ -64,4 +64,9 @@ class Gedung extends Model
     {
         return $this->hasMany(Kelas::class, 'gedung_id');
     }
+
+    public function support()
+    {
+        return $this->hasMany(Support::class, 'gedung_id');
+    }
 }

@@ -1,9 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Manajemen Legalisir')
+@section('title', 'Manajemen Support')
 
-@section('content')
-    <!-- Page Header -->
+@section('styles')
     <style>
         /* Custom DataTables Pagination Styling */
         .dataTables_wrapper .dataTables_paginate {
@@ -88,99 +87,104 @@
             padding: 3rem !important;
         }
     </style>
+@endsection
+
+@section('content')
+    <!-- Page Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Manajemen Legalisir</h1>
-            <p class="mt-1 text-sm text-zinc-500">Kelola data legalisir ijazah dan transkrip mahasiswa.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Manajemen Ruang Support</h1>
+            <p class="mt-1 text-sm text-zinc-500">Kelola data ruangan pertemuan khusus dan seminar.</p>
         </div>
-        <nav class="flex text-sm font-medium text-zinc-500 items-center">
-            <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
-            <span class="mx-2 text-zinc-300">/</span>
-            <span class="text-zinc-900">Legalisir</span>
-        </nav>
-    </div>
-
-    <!-- Actions Toolbar -->
-    <div class="mb-6 flex flex-col sm:flex-row sm:justify-between gap-4">
-        <div class="flex gap-2">
-            <!-- Import Form -->
-            <form action="{{ route('admin.legalisir.import') }}" method="POST" enctype="multipart/form-data"
-                id="importCsvForm" class="hidden">
-                @csrf
-                <input type="file" name="csv_file" id="csv_file" accept=".csv"
-                    onchange="document.getElementById('importCsvForm').submit();">
-            </form>
-            <button type="button" onclick="document.getElementById('csv_file').click();"
-                class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
-                <i class="fas fa-upload mr-2 text-zinc-400"></i> Import CSV
-            </button>
-
-            <a href="{{ url('admin/legalisir/export') }}"
-                class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
-                <i class="fas fa-download mr-2 text-zinc-400"></i> Export CSV
+        <div class="flex flex-col sm:flex-row gap-3">
+            <nav class="flex text-sm font-medium text-zinc-500 items-center">
+                <a href="{{ url('admin/dashboard') }}" class="hover:text-zinc-900 transition-colors">Home</a>
+                <span class="mx-2 text-zinc-300">/</span>
+                <span class="text-zinc-900">Support</span>
+            </nav>
+            <a href="{{ route('admin.support.create') }}"
+                class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 transition-colors">
+                <i class="fas fa-plus mr-2"></i> Tambah Ruangan
             </a>
         </div>
-
-        <a href="{{ route('admin.legalisir.create') }}"
-            class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus:ring-zinc-950 transition-colors">
-            <i class="fas fa-plus mr-2"></i> Tambah Data
-        </a>
     </div>
 
-    <!-- Table Card -->
-    <div class="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden">
-        <div class="p-0">
+    <!-- Filters & Table -->
+    <div class="space-y-4">
+        <!-- Filter Card -->
+        <div class="bg-white rounded-xl border border-zinc-200 shadow-sm p-4">
+            <form method="GET" action="{{ route('admin.support.index') }}"
+                class="flex flex-col sm:flex-row items-center gap-3">
+                <label for="filter_gedung" class="text-sm font-medium text-zinc-700 whitespace-nowrap">Filter
+                    Gedung:</label>
+                <div class="relative w-full sm:w-64">
+                    <select name="gedung_id" id="filter_gedung"
+                        class="flex h-9 w-full rounded-md border border-zinc-200 bg-white px-3 py-1 text-sm shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 appearance-none">
+                        <option value="">-- Semua Gedung --</option>
+                        @foreach ($gedungs as $gedung)
+                            <option value="{{ $gedung->id }}" {{ request('gedung_id') == $gedung->id ? 'selected' : '' }}>
+                                {{ $gedung->nama_gedung }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-zinc-500">
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+                <button type="submit"
+                    class="inline-flex h-9 items-center justify-center rounded-md bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 shadow-sm hover:bg-zinc-200/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 transition-colors w-full sm:w-auto">
+                    Terapkan
+                </button>
+            </form>
+        </div>
+
+        <!-- Table Card -->
+        <div class="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table id="legalisirTable" class="w-full text-left text-sm">
+                <table id="supportTable" class="w-full text-left text-sm">
                     <thead class="bg-zinc-50 text-zinc-500 uppercase tracking-wider font-medium border-b border-zinc-200">
                         <tr>
                             <th class="px-6 py-3 w-16 text-center">No</th>
-                            <th class="px-6 py-3">Mahasiswa</th>
-                            <th class="px-6 py-3">Detail Legalisir</th>
-                            <th class="px-6 py-3">Jumlah Dokumen</th>
+                            <th class="px-6 py-3">Nama Ruangan</th>
+                            <th class="px-6 py-3">Gedung</th>
+                            <th class="px-6 py-3">Kapasitas</th>
+                            <th class="px-6 py-3 text-center">Status</th>
                             <th class="px-6 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-100 bg-white">
-                        @foreach ($legalisirs as $index => $legalisir)
+                        @foreach ($supports as $index => $support)
                             <tr class="hover:bg-zinc-50/50 transition-colors">
                                 <td class="px-6 py-4 text-center font-medium text-zinc-900">{{ $index + 1 }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-zinc-900">{{ $legalisir->nama }}</span>
-                                        <span class="text-xs text-zinc-500">{{ $legalisir->npm }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex flex-col">
-                                        <span class="text-zinc-900">{{ $legalisir->no_legalisir }}</span>
-                                        <span class="text-xs text-zinc-500">
-                                            {{ \Carbon\Carbon::parse($legalisir->tanggal)->translatedFormat('d F Y') }}
-                                        </span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
+                                <td class="px-6 py-4 font-medium text-zinc-900">{{ $support->nama_ruangan }}</td>
+                                <td class="px-6 py-4 text-zinc-600">{{ $support->gedung->nama_gedung ?? '-' }}</td>
+                                <td class="px-6 py-4 text-zinc-600">{{ $support->kapasitas }} Orang</td>
+                                <td class="px-6 py-4 text-center">
+                                    <label class="inline-flex relative items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer toggle-status"
+                                            data-support-id="{{ $support->id }}"
+                                            {{ $support->ruangan_status ? 'checked' : '' }}>
+                                        <div
+                                            class="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600">
+                                        </div>
                                         <span
-                                            class="inline-flex items-center rounded-md bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-600 ring-1 ring-inset ring-zinc-500/10">
-                                            Total: {{ $legalisir->jumlah_total }}
-                                        </span>
-                                    </div>
+                                            class="ml-3 text-xs font-medium text-zinc-600 peer-checked:text-green-600 w-20 text-left">{{ $support->ruangan_status ? 'Siap' : 'Maint.' }}</span>
+                                    </label>
                                 </td>
                                 <td class="px-6 py-4 text-right space-x-2">
-                                    <a href="{{ route('admin.legalisir.show', $legalisir->id) }}"
+                                    <a href="{{ route('admin.support.show', $support->id) }}"
                                         class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 hover:text-blue-600 focus:outline-none focus:ring-1 focus:ring-zinc-950 shadow-sm transition-colors"
                                         title="Detail">
                                         <i class="fas fa-eye text-xs"></i>
                                     </a>
-                                    <a href="{{ route('admin.legalisir.edit', $legalisir->id) }}"
+                                    <a href="{{ route('admin.support.edit', $support->id) }}"
                                         class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950 shadow-sm transition-colors"
                                         title="Edit">
                                         <i class="fas fa-pencil-alt text-xs"></i>
                                     </a>
                                     <button
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-1 focus:ring-red-500 shadow-sm transition-colors delete-legalisir-btn"
-                                        data-legalisir-id="{{ $legalisir->id }}" title="Hapus">
+                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-1 focus:ring-red-500 shadow-sm transition-colors delete-support-btn"
+                                        data-support-id="{{ $support->id }}" title="Hapus">
                                         <i class="fas fa-trash text-xs"></i>
                                     </button>
                                 </td>
@@ -193,7 +197,7 @@
     </div>
 
     <!-- Modal Konfirmasi Hapus -->
-    <div class="fixed inset-0 z-50 hidden" id="deleteLegalisirModal" aria-labelledby="modal-title" role="dialog"
+    <div class="fixed inset-0 z-50 hidden" id="deleteSupportModal" aria-labelledby="modal-title" role="dialog"
         aria-modal="true">
         <div class="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm transition-opacity"></div>
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -210,8 +214,9 @@
                                 <h3 class="text-base font-semibold leading-6 text-zinc-900" id="modal-title">Konfirmasi
                                     Hapus</h3>
                                 <div class="mt-2">
-                                    <p class="text-sm text-zinc-500">Apakah Anda yakin ingin menghapus data legalisir ini?
-                                        Tindakan ini tidak dapat dibatalkan.</p>
+                                    <p class="text-sm text-zinc-500">Apakah Anda yakin ingin menghapus ruangan support ini?
+                                        Tindakan
+                                        ini tidak dapat dibatalkan.</p>
                                 </div>
                             </div>
                         </div>
@@ -236,7 +241,7 @@
     <script>
         $(document).ready(function() {
             // Tailwind-styled DataTables
-            $('#legalisirTable').DataTable({
+            var table = $('#supportTable').DataTable({
                 "paging": true,
                 "lengthChange": true,
                 "searching": true,
@@ -246,13 +251,13 @@
                 "responsive": true,
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Cari data...",
+                    "searchPlaceholder": "Cari ruangan...",
                     "lengthMenu": "Tampilkan _MENU_ data",
                     "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                     "infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
                     "infoFiltered": "(disaring dari _MAX_ total data)",
                     "zeroRecords": "<div class='flex flex-col items-center justify-center text-zinc-500'><i class='fas fa-search-minus text-4xl mb-2 text-zinc-300'></i><p>Tidak ada data yang cocok.</p></div>",
-                    "emptyTable": "<div class='flex flex-col items-center justify-center text-zinc-500'><i class='fas fa-stamp text-4xl mb-3 text-zinc-300'></i><p class='font-medium'>Belum ada data legalisir.</p></div>",
+                    "emptyTable": "<div class='flex flex-col items-center justify-center text-zinc-500'><i class='fas fa-door-closed text-4xl mb-3 text-zinc-300'></i><p class='font-medium'>Belum ada data ruangan support.</p></div>",
                     "paginate": {
                         "first": '<i class="fas fa-angle-double-left"></i>',
                         "last": '<i class="fas fa-angle-double-right"></i>',
@@ -263,6 +268,10 @@
                 "dom": '<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"lf>rt<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"ip>'
             });
 
+            @if (session('new_entry_created'))
+                table.page('last').draw(false);
+            @endif
+
             // Custom styling for inputs
             $('.dataTables_filter input').addClass(
                 'w-full md:w-64 rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 text-sm'
@@ -272,16 +281,42 @@
             );
 
             // Delete Modal
-            $('.delete-legalisir-btn').click(function() {
-                let legalisirId = $(this).data('legalisir-id');
-                let deleteUrl = "{{ url('admin/legalisir') }}/" + legalisirId;
+            $('.delete-support-btn').click(function() {
+                let supportId = $(this).data('support-id');
+                let deleteUrl = "{{ url('admin/support') }}/" + supportId;
                 $('#deleteForm').attr('action', deleteUrl);
-                $('#deleteLegalisirModal').removeClass('hidden');
+                $('#deleteSupportModal').removeClass('hidden');
+            });
+
+            // Status Toggle (Event Delegation for DataTables)
+            $(document).on("change", ".toggle-status", function() {
+                let supportId = $(this).data("support-id");
+                let status = $(this).prop("checked") ? 1 : 0;
+                const $label = $(this).siblings('span');
+                const $checkbox = $(this);
+
+                $.post("{{ url('admin/support') }}/" + supportId + "/toggle-status", {
+                    _token: '{{ csrf_token() }}',
+                    ruangan_status: status
+                }, function(res) {
+                    if (res.success) {
+                        $label.text(status ? 'Siap' : 'Maint.');
+                        $label.toggleClass('text-green-600', status).toggleClass('text-zinc-600', !
+                            status);
+                    } else {
+                        $checkbox.prop('checked', !status);
+                        alert('Gagal: ' + res.message);
+                    }
+                }).fail(function(xhr) {
+                    console.error(xhr);
+                    $checkbox.prop('checked', !status);
+                    alert('Terjadi kesalahan sistem.');
+                });
             });
         });
 
         function closeDeleteModal() {
-            document.getElementById('deleteLegalisirModal').classList.add('hidden');
+            document.getElementById('deleteSupportModal').classList.add('hidden');
         }
     </script>
 @endsection

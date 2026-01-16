@@ -15,6 +15,7 @@ use App\Http\Controllers\LegalisirController;
 use App\Http\Controllers\GedungController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\SupportController;
 use App\Http\Controllers\PeminjamanRuanganController;
 use App\Http\Controllers\PengajuanPeminjamanController;
 use App\Http\Controllers\PengumumanController;
@@ -86,6 +87,9 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:admin'])->group(functi
         Route::post('kelas/{id}/toggle-status', [KelasController::class, 'toggleStatus'])->name('kelas.toggleStatus');
         Route::resource('kelas', KelasController::class);
 
+        Route::post('support/{id}/toggle-status', [SupportController::class, 'toggleStatus'])->name('support.toggleStatus');
+        Route::resource('support', SupportController::class);
+
         Route::post('fasilitas-support/{id}/toggle-status', [FasilitasSupportController::class, 'toggleStatus'])->name('fasilitas-support.toggleStatus');
         Route::resource('fasilitas-support', FasilitasSupportController::class);
 
@@ -129,6 +133,9 @@ Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
     Route::put('profile', [UserController::class, 'updateProfileUser'])->name('profile.update');
 
     Route::prefix('pengajuan')->name('pengajuan.')->group(function () {
+        Route::get('/support', [App\Http\Controllers\PengajuanSupportController::class, 'index'])->name('support');
+        Route::get('/support/create/{support}', [App\Http\Controllers\PengajuanSupportController::class, 'create'])->name('create_support');
+
         Route::get('/', [PengajuanPeminjamanController::class, 'index'])->name('index');
         // ubah: create menerima parameter kelas
         Route::get('/create/{kelas}', [PengajuanPeminjamanController::class, 'create'])->name('create');

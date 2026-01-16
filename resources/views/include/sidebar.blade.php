@@ -113,6 +113,7 @@
                 request()->routeIs('admin.fasilitas.dashboard') ||
                 request()->routeIs('admin.gedung.*') ||
                 request()->routeIs('admin.kelas.*') ||
+                request()->routeIs('admin.support.*') ||
                 request()->routeIs('admin.peminjaman-ruangan.*') ||
                 request()->routeIs('admin.pengajuan-ruangan.*') ||
                 request()->routeIs('admin.fasilitas-support.*');
@@ -139,6 +140,10 @@
                 <a href="{{ route('admin.kelas.index') }}"
                     class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.kelas.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
                     <span>Ruang Kelas</span>
+                </a>
+                <a href="{{ route('admin.support.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.support.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Ruang Support</span>
                 </a>
                 <a href="{{ route('admin.peminjaman-ruangan.index') }}"
                     class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.peminjaman-ruangan.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
