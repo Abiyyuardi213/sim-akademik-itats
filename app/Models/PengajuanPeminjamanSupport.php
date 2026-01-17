@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class PengajuanPeminjamanSupport extends Model
@@ -12,6 +13,7 @@ class PengajuanPeminjamanSupport extends Model
     public $incrementing = false;
 
     protected $fillable = [
+        'id',
         'user_id',
         'support_id',
         'prodi_id',
@@ -22,29 +24,35 @@ class PengajuanPeminjamanSupport extends Model
         'keperluan_peminjaman',
         'status',
         'catatan_admin',
+        'catatan_kaprodi',
+    ];
+
+    protected $casts = [
+        'tanggal_peminjaman' => 'date',
+        'tanggal_berakhir_peminjaman' => 'date',
     ];
 
     protected static function booted()
     {
-        static::creating(function ($pengajuan) {
-            if (!$pengajuan->id) {
-                $pengajuan->id = (string) Str::uuid();
+        static::creating(function ($model) {
+            if (!$model->id) {
+                $model->id = (string) Str::uuid();
             }
         });
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function support()
+    public function support(): BelongsTo
     {
-        return $this->belongsTo(FasilitasSupport::class);
+        return $this->belongsTo(Support::class, 'support_id');
     }
 
-    public function prodi()
+    public function prodi(): BelongsTo
     {
-        return $this->belongsTo(Prodi::class);
+        return $this->belongsTo(Prodi::class, 'prodi_id');
     }
 }

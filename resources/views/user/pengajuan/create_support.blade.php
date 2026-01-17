@@ -116,10 +116,9 @@
                         </button>
                     </div>
 
-                    <form action="{{ route('users.pengajuan.store') }}" method="POST" class="p-4 sm:p-6">
+                    <form action="{{ route('users.pengajuan.store_support') }}" method="POST" class="p-4 sm:p-6">
                         @csrf
-                        <!-- IMPORTANT: Assuming we reuse 'kelas_id' for support ID or backend handles it. -->
-                        <input type="hidden" name="kelas_id" value="{{ $support->id }}">
+                        <input type="hidden" name="support_id" value="{{ $support->id }}">
                         <input type="hidden" name="tanggal_peminjaman" id="selectedDate" required>
                         <input type="hidden" name="tanggal_berakhir_peminjaman" id="selectedEndDate" required>
                         <input type="hidden" name="waktu_peminjaman" id="selectedStartTime" required>

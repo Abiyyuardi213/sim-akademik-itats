@@ -75,7 +75,7 @@
                     <div>
                         <dt class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Ruangan Yang Diajukan</dt>
                         <dd class="mt-1 text-base font-bold text-zinc-900">
-                            {{ $pengajuan->kelas->nama_kelas ?? '-' }}
+                            {{ $pengajuan->room_name ?? ($pengajuan->kelas->nama_kelas ?? '-') }}
                         </dd>
                     </div>
                 </div>

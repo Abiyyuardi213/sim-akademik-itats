@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use App\Models\PengajuanPeminjamanRuangan;
+use App\Models\PengajuanPeminjamanSupport;
+use App\Models\PengajuanPeminjamanLaboratorium;
 use App\Models\Prodi;
 use App\Notifications\StatusPengajuanNotification;
 use Illuminate\Http\Request;
@@ -144,61 +146,238 @@ class PengajuanPeminjamanController extends Controller
             'catatan_kaprodi' => null,
         ]);
 
+        Auth::user()->notify(new \App\Notifications\PengajuanBerhasilDikirimNotification('Ruangan'));
+
         return redirect()->route('users.pengajuan.index')->with('success', 'Pengajuan peminjaman berhasil diajukan.');
     }
 
     public function show($id)
     {
-        $pengajuan = PengajuanPeminjamanRuangan::with(['kelas.gedung', 'prodi'])
-            ->findOrFail($id);
+        $pengajuan = null;
+        $type = 'ruangan';
 
-        if ($pengajuan->user_id != Auth::user()->id) {
-            abort(404); // Security: Don't reveal existence of other's records, but for now 404 is fine.
+        // Try Ruangan
+        $pengajuan = PengajuanPeminjamanRuangan::with(['kelas.gedung', 'prodi'])
+            ->where('id', $id)
+            ->first();
+
+        if (!$pengajuan) {
+            // Try Support
+            $pengajuan = PengajuanPeminjamanSupport::with(['support.gedung', 'prodi'])
+                ->where('id', $id)
+                ->first();
+            if ($pengajuan) {
+                $type = 'support';
+                // normalize relationship for view
+                $pengajuan->setRelation('kelas', $pengajuan->support);
+                // We fake 'kelas' relation so view can use $pengajuan->kelas->nama_kelas (if mapped) 
+                // OR we update view. Updating view is cleaner but complex. 
+                // Let's modify the view to be smart or normalize here.
+                // The view expects: $pengajuan->kelas->nama_kelas, $pengajuan->kelas->gedung->nama_gedung, $pengajuan->kelas->kapasitas_mahasiswa
+
+                // Let's map support attributes to match what view expects or update view?
+                // Updating view is safer. But let's verify if we can pass a generic structure.
+            }
         }
 
-        return view('user.pengajuan.show', compact('pengajuan'));
+        if (!$pengajuan) {
+            // Try Lab
+            $pengajuan = PengajuanPeminjamanLaboratorium::with(['laboratorium.gedung', 'prodi'])
+                ->where('id', $id)
+                ->first();
+            if ($pengajuan) {
+                $type = 'laboratorium';
+            }
+        }
+
+        if (!$pengajuan) {
+            abort(404);
+        }
+
+        if ($pengajuan->user_id != Auth::user()->id) {
+            abort(404);
+        }
+
+        return view('user.pengajuan.show', compact('pengajuan', 'type'));
     }
 
     public function riwayat()
     {
-        $riwayats = PengajuanPeminjamanRuangan::with(['kelas', 'prodi'])
+        $ruangan = PengajuanPeminjamanRuangan::with(['kelas', 'prodi'])
             ->where('user_id', Auth::user()->id)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'ruangan';
+                $item->room_name = $item->kelas->nama_kelas ?? '-';
+                $item->entity = $item->kelas;
+                return $item;
+            });
+
+        $support = PengajuanPeminjamanSupport::with(['support', 'prodi'])
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'support';
+                $item->room_name = $item->support->nama_ruangan ?? '-';
+                $item->entity = $item->support;
+                return $item;
+            });
+
+        $lab = PengajuanPeminjamanLaboratorium::with(['laboratorium', 'prodi'])
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'laboratorium';
+                $item->room_name = $item->laboratorium->nama_laboratorium ?? '-';
+                $item->entity = $item->laboratorium;
+                return $item;
+            });
+
+        // Merge and Sort
+        $riwayats = $ruangan->concat($support)->concat($lab)->sortByDesc('created_at');
+
+        // Manual Pagination
+        $perPage = 10;
+        $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1;
+        $currentItems = $riwayats->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $riwayats = new \Illuminate\Pagination\LengthAwarePaginator($currentItems, count($riwayats), $perPage, $currentPage, [
+            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+        ]);
 
         return view('user.pengajuan.riwayat', compact('riwayats'));
     }
 
     public function rekap()
     {
-        $rekap = PengajuanPeminjamanRuangan::where('user_id', Auth::id())
+        // Must aggregate counts from all tables
+        $ruangan = PengajuanPeminjamanRuangan::where('user_id', Auth::id())
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
-            ->pluck('total', 'status');
+            ->pluck('total', 'status')->toArray();
+
+        $support = PengajuanPeminjamanSupport::where('user_id', Auth::id())
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')->toArray();
+
+        $lab = PengajuanPeminjamanLaboratorium::where('user_id', Auth::id())
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')->toArray();
+
+        // Merge counts
+        $rekap = [];
+        $allStatuses = array_unique(array_merge(array_keys($ruangan), array_keys($support), array_keys($lab)));
+        foreach ($allStatuses as $status) {
+            $rekap[$status] = ($ruangan[$status] ?? 0) + ($support[$status] ?? 0) + ($lab[$status] ?? 0);
+        }
 
         return view('user.pengajuan.rekap', compact('rekap'));
     }
 
     public function status()
     {
-        $statuses = PengajuanPeminjamanRuangan::with('kelas')
+        $ruangan = PengajuanPeminjamanRuangan::with('kelas')
             ->where('user_id', Auth::user()->id)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'ruangan';
+                $item->room_name = $item->kelas->nama_kelas ?? 'Ruangan';
+                $item->entity = $item->kelas;
+                return $item;
+            });
 
-        // dd($statuses);
+        $support = PengajuanPeminjamanSupport::with('support')
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'support';
+                $item->room_name = $item->support->nama_ruangan ?? 'Support';
+                $item->entity = $item->support;
+                return $item;
+            });
+
+        $lab = PengajuanPeminjamanLaboratorium::with('laboratorium')
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'laboratorium';
+                $item->room_name = $item->laboratorium->nama_laboratorium ?? 'Lab';
+                $item->entity = $item->laboratorium;
+                return $item;
+            });
+
+        // Merge and sort
+        $statuses = $ruangan->concat($support)->concat($lab)->sortByDesc('created_at');
 
         return view('user.pengajuan.status', compact('statuses'));
     }
 
     public function indexAdmin()
     {
-        $pengajuans = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
-            // Admin only sees what passed Kaprodi or is already processed
+        // 1. Fetch from PengajuanPeminjamanRuangan
+        $ruangan = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
             ->where('status', '!=', 'pending_kaprodi')
-            ->orderByRaw("FIELD(status, 'pending_admin', 'disetujui', 'ditolak')")
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'ruangan';
+                $item->room_name = $item->kelas->nama_kelas ?? '-';
+                return $item;
+            });
+
+        // 2. Fetch from PengajuanPeminjamanSupport
+        $support = \App\Models\PengajuanPeminjamanSupport::with(['support', 'prodi', 'user'])
+            ->where('status', '!=', 'pending_kaprodi')
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'support';
+                $item->room_name = $item->support->nama_ruangan ?? '-';
+                $item->setRelation('kelas', $item->support); // For view compatibility
+                return $item;
+            });
+
+        // 3. Fetch from PengajuanPeminjamanLaboratorium
+        $lab = \App\Models\PengajuanPeminjamanLaboratorium::with(['laboratorium', 'prodi', 'user'])
+            ->where('status', '!=', 'pending_kaprodi')
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'laboratorium';
+                $item->room_name = $item->laboratorium->nama_laboratorium ?? '-';
+                $item->setRelation('kelas', $item->laboratorium); // For view compatibility
+                return $item;
+            });
+
+        // 4. Merge all collections
+        $pengajuans = $ruangan->concat($support)->concat($lab);
+
+        // 5. Custom sort: pending_admin first, then newly creating
+        // Define status priority
+        $statusPriority = [
+            'pending_admin' => 1,
+            'disetujui' => 2,
+            'ditolak' => 3,
+            'batal' => 4,
+            'selesai' => 5,
+        ];
+
+        $pengajuans = $pengajuans->sort(function ($a, $b) use ($statusPriority) {
+            // Primary sort: Status priority
+            $priorityA = $statusPriority[$a->status] ?? 99;
+            $priorityB = $statusPriority[$b->status] ?? 99;
+
+            if ($priorityA === $priorityB) {
+                // Secondary sort: Created At desc
+                return $b->created_at <=> $a->created_at;
+            }
+
+            return $priorityA <=> $priorityB;
+        });
 
         return view('admin.pengajuan-ruangan.index', compact('pengajuans'));
     }
@@ -214,9 +393,36 @@ class PengajuanPeminjamanController extends Controller
     //         ->with('success', 'Pengajuan berhasil disetujui');
     // }
 
+    private function findPengajuan($id)
+    {
+        $pengajuan = PengajuanPeminjamanRuangan::find($id);
+        if ($pengajuan) {
+            $pengajuan->type = 'ruangan';
+            return $pengajuan;
+        }
+
+        $pengajuan = \App\Models\PengajuanPeminjamanSupport::find($id);
+        if ($pengajuan) {
+            $pengajuan->type = 'support';
+            return $pengajuan;
+        }
+
+        $pengajuan = \App\Models\PengajuanPeminjamanLaboratorium::find($id);
+        if ($pengajuan) {
+            $pengajuan->type = 'laboratorium';
+            return $pengajuan;
+        }
+
+        return null;
+    }
+
     public function approve($id)
     {
-        $pengajuan = PengajuanPeminjamanRuangan::findOrFail($id);
+        $pengajuan = $this->findPengajuan($id);
+
+        if (!$pengajuan) {
+            abort(404);
+        }
 
         // Hanya boleh approve jika status pending_admin (sudah disetujui kaprodi)
         if ($pengajuan->status !== 'pending_admin') {
@@ -225,10 +431,16 @@ class PengajuanPeminjamanController extends Controller
 
         $pengajuan->status = 'disetujui';
         $pengajuan->catatan_admin = request('catatan_admin');
+
+        // Ensure type attribute is unset before saving
+        unset($pengajuan->type);
+
         $pengajuan->save();
 
         // Kirim notifikasi ke user terkait
-        $pengajuan->user->notify(new StatusPengajuanNotification($pengajuan->status));
+        if ($pengajuan->user) {
+            $pengajuan->user->notify(new StatusPengajuanNotification($pengajuan->status));
+        }
 
         return redirect()->route('admin.pengajuan-ruangan.index')
             ->with('success', 'Pengajuan berhasil disetujui');
@@ -236,12 +448,23 @@ class PengajuanPeminjamanController extends Controller
 
     public function reject($id)
     {
-        $pengajuan = PengajuanPeminjamanRuangan::findOrFail($id);
+        $pengajuan = $this->findPengajuan($id);
+
+        if (!$pengajuan) {
+            abort(404);
+        }
+
         $pengajuan->status = 'ditolak'; // pastikan konsisten dengan badge di Blade kamu
         $pengajuan->catatan_admin = request('catatan_admin');
+
+        // Ensure type attribute is unset before saving
+        unset($pengajuan->type);
+
         $pengajuan->save();
 
-        $pengajuan->user->notify(new StatusPengajuanNotification($pengajuan->status));
+        if ($pengajuan->user) {
+            $pengajuan->user->notify(new StatusPengajuanNotification($pengajuan->status));
+        }
 
         return redirect()->route('admin.pengajuan-ruangan.index')
             ->with('success', 'Pengajuan berhasil ditolak');
@@ -249,8 +472,24 @@ class PengajuanPeminjamanController extends Controller
 
     public function showAdmin($id)
     {
-        $pengajuan = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
-            ->findOrFail($id);
+        $pengajuan = $this->findPengajuan($id);
+
+        if (!$pengajuan) {
+            abort(404);
+        }
+
+        // Load relationships based on type
+        if ($pengajuan->type === 'ruangan') {
+            $pengajuan->load(['kelas', 'prodi', 'user']);
+        } elseif ($pengajuan->type === 'support') {
+            $pengajuan->load(['support', 'prodi', 'user']);
+            $pengajuan->room_name = $pengajuan->support->nama_ruangan;
+            $pengajuan->setRelation('kelas', $pengajuan->support);
+        } elseif ($pengajuan->type === 'laboratorium') {
+            $pengajuan->load(['laboratorium', 'prodi', 'user']);
+            $pengajuan->room_name = $pengajuan->laboratorium->nama_laboratorium;
+            $pengajuan->setRelation('kelas', $pengajuan->laboratorium);
+        }
 
         return view('admin.pengajuan-ruangan.show', compact('pengajuan'));
     }

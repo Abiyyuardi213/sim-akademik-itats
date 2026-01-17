@@ -13,10 +13,86 @@
     <!-- Right Side -->
     <div class="flex items-center gap-4">
         <!-- Notification -->
-        <button class="relative p-2 text-zinc-400 hover:text-zinc-900 transition-colors">
-            <i class="fas fa-bell text-lg"></i>
-            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
+        <div class="relative group">
+            @php
+                $notifUser = Auth::guard('admin')->user() ?? Auth::guard('users')->user();
+                $unreadCount = $notifUser ? $notifUser->unreadNotifications->count() : 0;
+            @endphp
+            <button class="relative p-2 text-zinc-400 hover:text-zinc-900 transition-colors focus:outline-none">
+                <i class="fas fa-bell text-lg"></i>
+                @if ($unreadCount > 0)
+                    <span class="absolute top-1.5 right-2 flex h-2.5 w-2.5">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span
+                            class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border border-white"></span>
+                    </span>
+                @endif
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div class="absolute right-0 top-full pt-2 w-80 hidden group-hover:block z-50">
+                <div class="bg-white rounded-lg shadow-lg border border-zinc-200 overflow-hidden">
+                    <div class="px-4 py-3 border-b border-zinc-100 bg-zinc-50/50 flex justify-between items-center">
+                        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Notifikasi
+                            ({{ $unreadCount }})</p>
+                        @if ($unreadCount > 0)
+                            <form action="{{ route('notifications.readAll') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="text-xs text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                                    Tandai dibaca
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+
+                    <div class="max-h-[350px] overflow-y-auto">
+                        @if ($notifUser)
+                            @forelse($notifUser->unreadNotifications as $notification)
+                                <a href="{{ route('notifications.go', $notification->id) }}"
+                                    class="block px-4 py-3 hover:bg-zinc-50 transition-colors border-b border-zinc-50 last:border-0 relative">
+                                    <div class="flex gap-3">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div
+                                                class="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                                <i class="fas fa-info text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-zinc-900 mb-0.5">
+                                                {{ $notification->data['title'] ?? 'Pemberitahuan' }}
+                                            </p>
+                                            <p class="text-xs text-zinc-600 leading-relaxed line-clamp-2">
+                                                {{ $notification->data['message'] ?? '' }}
+                                            </p>
+                                            <p class="text-[10px] text-zinc-400 mt-1.5">
+                                                {{ $notification->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="absolute top-4 right-4 h-2 w-2 rounded-full bg-blue-500"></div>
+                                </a>
+                            @empty
+                                <div class="px-4 py-8 text-center">
+                                    <div
+                                        class="h-10 w-10 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-3 text-zinc-400">
+                                        <i class="far fa-bell-slash"></i>
+                                    </div>
+                                    <p class="text-sm text-zinc-500 font-medium">Tidak ada notifikasi baru</p>
+                                </div>
+                            @endforelse
+                        @endif
+                    </div>
+
+                    <div class="bg-zinc-50 p-2 text-center border-t border-zinc-100">
+                        <a href="{{ route('notifications.index') }}"
+                            class="text-xs text-zinc-500 hover:text-zinc-900 font-medium block w-full py-1">Lihat
+                            Semua Notifikasi</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="h-6 w-px bg-zinc-200 mx-1"></div>
 

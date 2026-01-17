@@ -97,6 +97,8 @@ class PengajuanLaboratoriumController extends Controller
             'catatan_kaprodi' => null,
         ]);
 
+        Auth::user()->notify(new \App\Notifications\PengajuanBerhasilDikirimNotification('Laboratorium'));
+
         return redirect()->route('users.pengajuan.laboratorium.index')->with('success', 'Pengajuan peminjaman laboratorium berhasil diajukan.');
     }
 }

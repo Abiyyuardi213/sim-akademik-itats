@@ -48,6 +48,36 @@
             </div>
         </a>
 
+        <!-- Total Support -->
+        <a href="{{ route('admin.support.index') }}"
+            class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 shadow-sm hover:border-zinc-300 hover:shadow-md transition-all">
+            <div class="flex items-center justify-between relative z-10">
+                <div>
+                    <p class="text-sm font-medium text-zinc-500">Total Support</p>
+                    <h4 class="text-2xl font-bold text-zinc-900 mt-2">{{ $totalSupport ?? 0 }}</h4>
+                </div>
+                <div
+                    class="h-10 w-10 rounded-full bg-pink-50 flex items-center justify-center text-pink-600 group-hover:bg-pink-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-chalkboard-teacher text-lg"></i>
+                </div>
+            </div>
+        </a>
+
+        <!-- Total Laboratorium -->
+        <a href="{{ route('admin.laboratorium.index') }}"
+            class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 shadow-sm hover:border-zinc-300 hover:shadow-md transition-all">
+            <div class="flex items-center justify-between relative z-10">
+                <div>
+                    <p class="text-sm font-medium text-zinc-500">Total Laboratorium</p>
+                    <h4 class="text-2xl font-bold text-zinc-900 mt-2">{{ $totalLaboratorium ?? 0 }}</h4>
+                </div>
+                <div
+                    class="h-10 w-10 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-flask text-lg"></i>
+                </div>
+            </div>
+        </a>
+
         <!-- Peminjaman Ruangan -->
         <a href="{{ route('admin.peminjaman-ruangan.index') }}"
             class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 shadow-sm hover:border-zinc-300 hover:shadow-md transition-all">

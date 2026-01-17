@@ -47,7 +47,8 @@
                                             class="text-xs text-zinc-500">{{ $pengajuan->prodi->nama_prodi ?? '-' }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 font-medium text-zinc-700">{{ $pengajuan->kelas->nama_kelas ?? '-' }}
+                                <td class="px-6 py-4 font-medium text-zinc-700">
+                                    {{ $pengajuan->room_name ?? ($pengajuan->kelas->nama_kelas ?? '-') }}
                                 </td>
                                 <td class="px-6 py-4 text-zinc-600">
                                     <div class="flex flex-col">

@@ -111,7 +111,7 @@ class PengajuanSupportController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kelas_id' => 'required|exists:kelas,id',
+            'support_id' => 'required|exists:support,id',
             'prodi_id' => 'required|exists:prodi,id',
             'tanggal_peminjaman' => 'required|date',
             'tanggal_berakhir_peminjaman' => 'nullable|date|after_or_equal:tanggal_peminjaman',
@@ -126,8 +126,8 @@ class PengajuanSupportController extends Controller
         $startTime = $request->waktu_peminjaman;
         $endTime   = $request->waktu_berakhir_peminjaman;
 
-        $exists = PengajuanPeminjamanRuangan::where('kelas_id', $request->kelas_id)
-            ->whereIn('status', ['pending', 'disetujui'])
+        $exists = \App\Models\PengajuanPeminjamanSupport::where('support_id', $request->support_id)
+            ->whereIn('status', ['pending', 'disetujui', 'pending_kaprodi', 'pending_admin'])
             ->whereDate('tanggal_peminjaman', '<=', $endDate)
             ->whereDate('tanggal_berakhir_peminjaman', '>=', $startDate)
             ->where(function ($q) use ($startTime, $endTime) {
@@ -142,10 +142,10 @@ class PengajuanSupportController extends Controller
                 ->withInput();
         }
 
-        PengajuanPeminjamanRuangan::create([
+        \App\Models\PengajuanPeminjamanSupport::create([
             'id' => Str::uuid(),
             'user_id' => Auth::user()->id,
-            'kelas_id' => $request->kelas_id,
+            'support_id' => $request->support_id,
             'prodi_id' => $request->prodi_id,
             'tanggal_peminjaman' => $startDate,
             'tanggal_berakhir_peminjaman' => $endDate,
@@ -153,11 +153,13 @@ class PengajuanSupportController extends Controller
             'waktu_berakhir_peminjaman' => $endTime,
             'keperluan_peminjaman' => $request->keperluan_peminjaman,
             'status' => 'pending_kaprodi',
-            'catatan_admin' => null, // ensure clear
+            'catatan_admin' => null,
             'catatan_kaprodi' => null,
         ]);
 
-        return redirect()->route('users.pengajuan.index')->with('success', 'Pengajuan peminjaman berhasil diajukan.');
+        Auth::user()->notify(new \App\Notifications\PengajuanBerhasilDikirimNotification('Ruangan Support'));
+
+        return redirect()->route('users.pengajuan.support')->with('success', 'Pengajuan peminjaman support berhasil diajukan.');
     }
 
     public function show($id)

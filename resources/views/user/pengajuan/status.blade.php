@@ -50,10 +50,21 @@
 
                     <div class="space-y-4 border-t border-zinc-100 pt-5 mt-auto">
                         <div class="flex items-center gap-3 text-sm">
-                            <div class="w-8 flex justify-center text-zinc-400"><i class="fas fa-door-open"></i></div>
+                            <div class="w-8 flex justify-center text-zinc-400">
+                                @if (($p->type ?? 'ruangan') == 'laboratorium')
+                                    <i class="fas fa-flask"></i>
+                                @elseif(($p->type ?? 'ruangan') == 'support')
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                @else
+                                    <i class="fas fa-door-open"></i>
+                                @endif
+                            </div>
                             <div>
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Ruangan</p>
-                                <p class="font-medium text-zinc-900">{{ $p->kelas->nama_kelas ?? 'Ruangan' }}</p>
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider font-semibold">
+                                    {{ ($p->type ?? 'ruangan') == 'laboratorium' ? 'Laboratorium' : (($p->type ?? 'ruangan') == 'support' ? 'Ruangan Support' : 'Ruangan') }}
+                                </p>
+                                <p class="font-medium text-zinc-900">
+                                    {{ $p->room_name ?? ($p->kelas->nama_kelas ?? 'Ruangan') }}</p>
                             </div>
                         </div>
 

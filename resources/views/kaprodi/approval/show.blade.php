@@ -65,13 +65,38 @@
                             <div>
                                 <p class="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1">Ruangan</p>
                                 <div class="flex items-center gap-3">
-                                    @if ($pengajuan->kelas->gambar)
+                                    @if (isset($pengajuan->kelas) && $pengajuan->kelas->gambar)
                                         <img src="{{ asset($pengajuan->kelas->gambar) }}"
                                             class="h-10 w-10 rounded-md object-cover bg-zinc-100" alt="Room">
+                                    @elseif(isset($pengajuan->support) && $pengajuan->support->gambar)
+                                        <img src="{{ asset($pengajuan->support->gambar) }}"
+                                            class="h-10 w-10 rounded-md object-cover bg-zinc-100" alt="Room">
+                                    @elseif(isset($pengajuan->laboratorium) && $pengajuan->laboratorium->gambar)
+                                        <img src="{{ asset($pengajuan->laboratorium->gambar) }}"
+                                            class="h-10 w-10 rounded-md object-cover bg-zinc-100" alt="Room">
+                                    @else
+                                        <div class="h-10 w-10 rounded-md bg-zinc-100 flex items-center justify-center">
+                                            @if ($pengajuan->type == 'laboratorium')
+                                                <i class="fas fa-flask text-zinc-400"></i>
+                                            @elseif($pengajuan->type == 'support')
+                                                <i class="fas fa-chalkboard-teacher text-zinc-400"></i>
+                                            @else
+                                                <i class="fas fa-door-open text-zinc-400"></i>
+                                            @endif
+                                        </div>
                                     @endif
                                     <div>
-                                        <p class="text-zinc-900 font-medium">{{ $pengajuan->kelas->nama_kelas }}</p>
-                                        <p class="text-xs text-zinc-500">{{ $pengajuan->kelas->gedung->nama_gedung ?? '-' }}
+                                        <p class="text-zinc-900 font-medium">
+                                            {{ $pengajuan->room_name ?? ($pengajuan->kelas->nama_kelas ?? '-') }}
+                                        </p>
+                                        <p class="text-xs text-zinc-500">
+                                            @if ($pengajuan->type == 'support')
+                                                {{ $pengajuan->support->gedung->nama_gedung ?? '-' }}
+                                            @elseif($pengajuan->type == 'laboratorium')
+                                                {{ $pengajuan->laboratorium->gedung->nama_gedung ?? '-' }}
+                                            @else
+                                                {{ $pengajuan->kelas->gedung->nama_gedung ?? '-' }}
+                                            @endif
                                         </p>
                                     </div>
                                 </div>
@@ -180,7 +205,8 @@
                                 <h3 class="text-sm font-semibold text-zinc-900">Menunggu Proses Admin</h3>
                             @endif
                             <p class="text-xs text-zinc-500 mt-1">Status saat ini:
-                                <strong>{{ ucfirst($pengajuan->status) }}</strong></p>
+                                <strong>{{ ucfirst($pengajuan->status) }}</strong>
+                            </p>
                         </div>
                     @endif
                 </div>

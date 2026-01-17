@@ -77,19 +77,36 @@
                     <div class="space-y-6">
                         <h3
                             class="text-lg font-semibold text-zinc-900 border-b border-zinc-100 pb-2 flex items-center gap-2">
-                            <i class="fas fa-door-open text-zinc-400"></i> Detail Ruangan
+                            @if ($type == 'laboratorium')
+                                <i class="fas fa-flask text-zinc-400"></i> Detail Laboratorium
+                            @elseif($type == 'support')
+                                <i class="fas fa-chalkboard-teacher text-zinc-400"></i> Detail Ruangan Support
+                            @else
+                                <i class="fas fa-door-open text-zinc-400"></i> Detail Ruangan
+                            @endif
                         </h3>
 
                         <div class="grid gap-4">
                             <div>
                                 <p class="text-sm text-zinc-500 mb-1">Nama Ruangan</p>
-                                <p class="font-medium text-zinc-900">{{ $pengajuan->kelas->nama_kelas ?? '-' }}</p>
+                                @if ($type == 'laboratorium')
+                                    <p class="font-medium text-zinc-900">
+                                        {{ $pengajuan->laboratorium->nama_laboratorium ?? '-' }}</p>
+                                @elseif($type == 'support')
+                                    <p class="font-medium text-zinc-900">{{ $pengajuan->support->nama_ruangan ?? '-' }}</p>
+                                @else
+                                    <p class="font-medium text-zinc-900">{{ $pengajuan->kelas->nama_kelas ?? '-' }}</p>
+                                @endif
                             </div>
                             <div>
                                 <p class="text-sm text-zinc-500 mb-1">Gedung</p>
                                 <?php
                                 $gedungName = '-';
-                                if ($pengajuan->kelas && $pengajuan->kelas->gedung) {
+                                if ($type == 'laboratorium' && $pengajuan->laboratorium && $pengajuan->laboratorium->gedung) {
+                                    $gedungName = $pengajuan->laboratorium->gedung->nama_gedung;
+                                } elseif ($type == 'support' && $pengajuan->support && $pengajuan->support->gedung) {
+                                    $gedungName = $pengajuan->support->gedung->nama_gedung;
+                                } elseif ($pengajuan->kelas && $pengajuan->kelas->gedung) {
                                     $gedungName = $pengajuan->kelas->gedung->nama_gedung;
                                 }
                                 ?>
@@ -101,8 +118,17 @@
                             </div>
                             <div>
                                 <p class="text-sm text-zinc-500 mb-1">Kapasitas</p>
-                                <p class="font-medium text-zinc-900">{{ $pengajuan->kelas->kapasitas_mahasiswa ?? '-' }}
-                                    Orang</p>
+                                <?php
+                                $kapasitas = '-';
+                                if ($type == 'laboratorium') {
+                                    $kapasitas = $pengajuan->laboratorium->kapasitas ?? '-';
+                                } elseif ($type == 'support') {
+                                    $kapasitas = $pengajuan->support->kapasitas ?? '-';
+                                } else {
+                                    $kapasitas = $pengajuan->kelas->kapasitas_mahasiswa ?? '-';
+                                }
+                                ?>
+                                <p class="font-medium text-zinc-900">{{ $kapasitas }} Orang</p>
                             </div>
                         </div>
                     </div>

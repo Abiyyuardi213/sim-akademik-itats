@@ -140,7 +140,8 @@
                             @endforelse
                         </div>
                         <div class="py-2 px-4 border-t border-zinc-100 bg-zinc-50 rounded-b-lg text-center">
-                            <a href="#" class="text-xs font-medium text-zinc-600 hover:text-zinc-900">Lihat
+                            <a href="{{ route('notifications.index') }}"
+                                class="text-xs font-medium text-zinc-600 hover:text-zinc-900">Lihat
                                 Semua</a>
                         </div>
                     </div>

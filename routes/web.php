@@ -138,6 +138,7 @@ Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
     Route::prefix('pengajuan')->name('pengajuan.')->group(function () {
         Route::get('/support', [App\Http\Controllers\PengajuanSupportController::class, 'index'])->name('support');
         Route::get('/support/create/{support}', [App\Http\Controllers\PengajuanSupportController::class, 'create'])->name('create_support');
+        Route::post('/support', [\App\Http\Controllers\PengajuanSupportController::class, 'store'])->name('store_support');
 
         Route::get('/laboratorium', [\App\Http\Controllers\PengajuanLaboratoriumController::class, 'index'])->name('laboratorium.index');
         Route::get('/laboratorium/create/{laboratorium}', [\App\Http\Controllers\PengajuanLaboratoriumController::class, 'create'])->name('laboratorium.create');
@@ -156,7 +157,8 @@ Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
     });
 });
 
-Route::middleware(['auth:users'])->group(function () {
+Route::middleware(['auth:users,admin'])->group(function () {
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/{id}/go', function ($id, Request $request) {
         $notification = $request->user()->notifications()->findOrFail($id);
         $notification->markAsRead();

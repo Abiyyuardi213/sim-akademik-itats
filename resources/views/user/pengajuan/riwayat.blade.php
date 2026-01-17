@@ -30,8 +30,14 @@
                                 <td class="p-6 text-zinc-700 font-medium">{{ $p->keperluan_peminjaman }}</td>
                                 <td class="p-6 text-zinc-700">
                                     <div class="flex items-center gap-2">
-                                        <i class="fas fa-door-open text-zinc-400"></i>
-                                        {{ $p->kelas->nama_kelas ?? '-' }}
+                                        @if (($p->type ?? 'ruangan') == 'laboratorium')
+                                            <i class="fas fa-flask text-zinc-400"></i>
+                                        @elseif(($p->type ?? 'ruangan') == 'support')
+                                            <i class="fas fa-chalkboard-teacher text-zinc-400"></i>
+                                        @else
+                                            <i class="fas fa-door-open text-zinc-400"></i>
+                                        @endif
+                                        {{ $p->room_name ?? ($p->kelas->nama_kelas ?? '-') }}
                                     </div>
                                 </td>
                                 <td class="p-6 text-zinc-500">
