@@ -116,7 +116,8 @@
                 request()->routeIs('admin.support.*') ||
                 request()->routeIs('admin.peminjaman-ruangan.*') ||
                 request()->routeIs('admin.pengajuan-ruangan.*') ||
-                request()->routeIs('admin.fasilitas-support.*');
+                request()->routeIs('admin.fasilitas-support.*') ||
+                request()->routeIs('admin.laboratorium.*');
         @endphp
         <div class="space-y-1" id="fasilitas-menu">
             <button onclick="toggleMenu('fasilitas-submenu', 'fasilitas-arrow')"
@@ -144,6 +145,10 @@
                 <a href="{{ route('admin.support.index') }}"
                     class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.support.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
                     <span>Ruang Support</span>
+                </a>
+                <a href="{{ route('admin.laboratorium.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.laboratorium.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Laboratorium</span>
                 </a>
                 <a href="{{ route('admin.peminjaman-ruangan.index') }}"
                     class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.peminjaman-ruangan.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">

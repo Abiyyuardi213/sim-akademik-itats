@@ -25,7 +25,7 @@
             <p class="text-sm text-zinc-500">Lengkapi informasi ruangan dan kapasitas.</p>
         </div>
 
-        <form action="{{ route('admin.support.store') }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.support.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -95,6 +95,20 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="space-y-2">
+                        <label for="gambar" class="text-sm font-medium leading-none text-zinc-900">Foto Ruangan
+                            (Opsional)</label>
+                        <input type="file" id="gambar" name="gambar" accept="image/*"
+                            class="flex w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-500 file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                        @error('gambar')
+                            <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                        @enderror
+                        <div class="mt-2">
+                            <img id="preview-img" src="#" alt="Preview"
+                                class="hidden max-h-48 rounded-lg border border-zinc-200 shadow-sm object-cover">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -109,11 +123,70 @@
                     class="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 focus:outline-none focus:ring-1 focus:ring-zinc-950 transition-colors">
                     Batal
                 </a>
-                <button type="submit"
+                <button type="button" id="submitBtn"
                     class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 transition-colors">
                     <i class="fas fa-save mr-2"></i> Simpan
                 </button>
             </div>
         </form>
     </div>
+@endsection
+
+@section('scripts')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script>
+        let cropper;
+        const gambarInput = document.getElementById('gambar');
+        const previewImg = document.getElementById('preview-img');
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+
+        gambarInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    previewImg.classList.remove('hidden');
+
+                    if (cropper) cropper.destroy();
+
+                    cropper = new Cropper(previewImg, {
+                        aspectRatio: 16 / 9,
+                        viewMode: 1,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                        autoCropArea: 0.8,
+                    });
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        submitBtn.addEventListener('click', function(e) {
+            if (cropper) {
+                e.preventDefault();
+                // Show loading state
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+                submitBtn.disabled = true;
+
+                cropper.getCroppedCanvas().toBlob((blob) => {
+                    const fileInput = new File([blob], gambarInput.files[0].name, {
+                        type: 'image/jpeg'
+                    }); // Force jpeg for consistency
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(fileInput);
+                    gambarInput.files = dataTransfer.files;
+
+                    form.submit();
+                }, 'image/jpeg', 0.8);
+            } else {
+                form.submit();
+            }
+        });
+    </script>
 @endsection

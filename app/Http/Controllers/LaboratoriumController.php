@@ -3,40 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gedung;
-use App\Models\Support;
+use App\Models\Laboratorium;
 use Illuminate\Http\Request;
 
-class SupportController extends Controller
+class LaboratoriumController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Support::with('gedung');
+        $query = Laboratorium::with('gedung');
 
         if ($request->filled('gedung_id')) {
             $query->where('gedung_id', $request->gedung_id);
         }
 
-        $supports = $query->orderBy('created_at', 'asc')->get();
+        $laboratoriums = $query->orderBy('created_at', 'asc')->get();
         $gedungs = Gedung::all();
 
-        return view('admin.support.index', compact('supports', 'gedungs'));
+        return view('admin.laboratorium.index', compact('laboratoriums', 'gedungs'));
     }
 
     public function create()
     {
         $gedungs = Gedung::all();
-        return view('admin.support.create', compact('gedungs'));
+        return view('admin.laboratorium.create', compact('gedungs'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'gedung_id' => 'required|exists:gedung,id',
-            'nama_ruangan' => 'required|string|max:255',
+            'nama_laboratorium' => 'required|string|max:255',
             'kapasitas' => 'required|integer',
             'keterangan' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
-            'ruangan_status' => 'required|boolean',
+            'status' => 'required|boolean',
         ]);
 
         $data = $request->all();
@@ -44,33 +44,35 @@ class SupportController extends Controller
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/fasilitas'), $filename);
+            $file->move(public_path('uploads/laboratorium'), $filename);
             $data['gambar'] = $filename;
         }
 
-        Support::createSupport($data);
+        Laboratorium::createLaboratorium($data);
 
-        return redirect()->route('admin.support.index')->with('success', 'Ruangan support berhasil ditambahkan')->with('new_entry_created', true);
+        return redirect()->route('admin.laboratorium.index')
+            ->with('success', 'Laboratorium berhasil ditambahkan')
+            ->with('new_entry_created', true);
     }
 
     public function edit($id)
     {
-        $support = Support::findOrFail($id);
+        $laboratorium = Laboratorium::findOrFail($id);
         $gedungs = Gedung::all();
-        return view('admin.support.edit', compact('support', 'gedungs'));
+        return view('admin.laboratorium.edit', compact('laboratorium', 'gedungs'));
     }
 
     public function update(Request $request, $id)
     {
-        $support = Support::findOrFail($id);
+        $laboratorium = Laboratorium::findOrFail($id);
 
         $request->validate([
             'gedung_id' => 'required|exists:gedung,id',
-            'nama_ruangan' => 'required|string|max:255',
+            'nama_laboratorium' => 'required|string|max:255',
             'kapasitas' => 'required|integer',
             'keterangan' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
-            'ruangan_status' => 'required|boolean',
+            'status' => 'required|boolean',
         ]);
 
         $data = $request->all();
@@ -78,43 +80,42 @@ class SupportController extends Controller
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/fasilitas'), $filename);
+            $file->move(public_path('uploads/laboratorium'), $filename);
             $data['gambar'] = $filename;
         }
 
-        $support->updateSupport($data);
+        $laboratorium->updateLaboratorium($data);
 
-        return redirect()->route('admin.support.index')->with('success', 'Data ruangan support berhasil diperbarui.');
+        return redirect()->route('admin.laboratorium.index')
+            ->with('success', 'Data laboratorium berhasil diperbarui.');
     }
 
     public function show($id)
     {
-        $support = Support::with('gedung')->findOrFail($id);
-        return view('admin.support.show', compact('support'));
+        $laboratorium = Laboratorium::with('gedung')->findOrFail($id);
+        return view('admin.laboratorium.show', compact('laboratorium'));
     }
 
     public function destroy($id)
     {
-        $support = Support::findOrFail($id);
-        $support->deleteSupport();
+        $laboratorium = Laboratorium::findOrFail($id);
+        $laboratorium->deleteLaboratorium();
 
-        return redirect()->route('admin.support.index')->with('success', 'Ruangan support berhasil dihapus');
+        return redirect()->route('admin.laboratorium.index')
+            ->with('success', 'Laboratorium berhasil dihapus');
     }
 
     public function toggleStatus(Request $request, $id)
     {
         try {
-            $support = Support::findOrFail($id);
-
-            // Cast to boolean explicitly since AJAX sends 0 or 1 as integer/string
-            $status = filter_var($request->input('ruangan_status'), FILTER_VALIDATE_BOOLEAN);
-
-            $support->ruangan_status = $status;
-            $support->save();
+            $laboratorium = Laboratorium::findOrFail($id);
+            $status = filter_var($request->input('status'), FILTER_VALIDATE_BOOLEAN);
+            $laboratorium->status = $status;
+            $laboratorium->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Status ruangan support berhasil diperbarui.'
+                'message' => 'Status laboratorium berhasil diperbarui.'
             ]);
         } catch (\Exception $e) {
             return response()->json([

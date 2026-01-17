@@ -43,6 +43,10 @@
                                 class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 rounded-md transition-colors">
                                 <i class="fas fa-chalkboard-teacher w-4 text-center"></i> Daftar Ruangan Support
                             </a>
+                            <a href="{{ route('users.pengajuan.laboratorium.index') }}"
+                                class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 rounded-md transition-colors">
+                                <i class="fas fa-flask w-4 text-center"></i> Daftar Laboratorium
+                            </a>
                             <a href="{{ route('users.pengajuan.riwayat') }}"
                                 class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 rounded-md transition-colors">
                                 <i class="fas fa-file-alt w-4 text-center"></i> Riwayat Pengajuan
@@ -233,6 +237,10 @@
                     <a href="{{ route('users.pengajuan.status') }}"
                         class="block rounded-md px-3 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50">
                         Status Pengajuan
+                    </a>
+                    <a href="{{ route('users.pengajuan.laboratorium.index') }}"
+                        class="block rounded-md px-3 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50">
+                        Daftar Laboratorium
                     </a>
                 </div>
             @endif

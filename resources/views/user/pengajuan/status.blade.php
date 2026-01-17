@@ -15,10 +15,12 @@
                     class="group rounded-xl border border-zinc-200 bg-white p-6 shadow-sm hover:shadow-lg hover:border-zinc-300 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
                     <!-- Status indicator dot in top right -->
                     <div class="absolute top-6 right-6">
-                        @if ($p->status == 'pending')
+                        @if (in_array($p->status, ['pending', 'pending_kaprodi', 'pending_admin']))
                             <div class="flex items-center gap-2">
                                 <span
-                                    class="text-xs font-semibold text-yellow-600 bg-yellow-50 px-2.5 py-0.5 rounded-full border border-yellow-100">Pending</span>
+                                    class="text-xs font-semibold text-yellow-600 bg-yellow-50 px-2.5 py-0.5 rounded-full border border-yellow-100">
+                                    {{ $p->status == 'pending_kaprodi' ? 'Menunggu Kaprodi' : ($p->status == 'pending_admin' ? 'Menunggu Admin' : 'Pending') }}
+                                </span>
                                 <div class="h-2.5 w-2.5 rounded-full bg-yellow-400 animate-pulse"></div>
                             </div>
                         @elseif($p->status == 'disetujui')

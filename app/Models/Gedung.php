@@ -69,4 +69,9 @@ class Gedung extends Model
     {
         return $this->hasMany(Support::class, 'gedung_id');
     }
+
+    public function laboratorium()
+    {
+        return $this->hasMany(Laboratorium::class, 'gedung_id');
+    }
 }

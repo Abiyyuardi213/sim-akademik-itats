@@ -90,6 +90,9 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:admin'])->group(functi
         Route::post('support/{id}/toggle-status', [SupportController::class, 'toggleStatus'])->name('support.toggleStatus');
         Route::resource('support', SupportController::class);
 
+        Route::post('laboratorium/{id}/toggle-status', [\App\Http\Controllers\LaboratoriumController::class, 'toggleStatus'])->name('laboratorium.toggleStatus');
+        Route::resource('laboratorium', \App\Http\Controllers\LaboratoriumController::class);
+
         Route::post('fasilitas-support/{id}/toggle-status', [FasilitasSupportController::class, 'toggleStatus'])->name('fasilitas-support.toggleStatus');
         Route::resource('fasilitas-support', FasilitasSupportController::class);
 
@@ -135,6 +138,10 @@ Route::name('users.')->middleware(['auth:users', 'users'])->group(function () {
     Route::prefix('pengajuan')->name('pengajuan.')->group(function () {
         Route::get('/support', [App\Http\Controllers\PengajuanSupportController::class, 'index'])->name('support');
         Route::get('/support/create/{support}', [App\Http\Controllers\PengajuanSupportController::class, 'create'])->name('create_support');
+
+        Route::get('/laboratorium', [\App\Http\Controllers\PengajuanLaboratoriumController::class, 'index'])->name('laboratorium.index');
+        Route::get('/laboratorium/create/{laboratorium}', [\App\Http\Controllers\PengajuanLaboratoriumController::class, 'create'])->name('laboratorium.create');
+        Route::post('/laboratorium', [\App\Http\Controllers\PengajuanLaboratoriumController::class, 'store'])->name('laboratorium.store');
 
         Route::get('/', [PengajuanPeminjamanController::class, 'index'])->name('index');
         // ubah: create menerima parameter kelas

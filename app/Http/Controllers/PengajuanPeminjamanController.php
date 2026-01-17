@@ -149,9 +149,12 @@ class PengajuanPeminjamanController extends Controller
 
     public function show($id)
     {
-        $pengajuan = PengajuanPeminjamanRuangan::with(['kelas', 'prodi'])
-            ->where('user_id', Auth::guard('users')->id()) // ✅ pakai guard users
+        $pengajuan = PengajuanPeminjamanRuangan::with(['kelas.gedung', 'prodi'])
             ->findOrFail($id);
+
+        if ($pengajuan->user_id != Auth::user()->id) {
+            abort(404); // Security: Don't reveal existence of other's records, but for now 404 is fine.
+        }
 
         return view('user.pengajuan.show', compact('pengajuan'));
     }

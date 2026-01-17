@@ -46,7 +46,7 @@
                     <h3 class="tracking-tight text-sm font-medium text-zinc-500">Total Peminjaman</h3>
                     <i class="fas fa-calendar-check text-zinc-400"></i>
                 </div>
-                <div class="text-2xl font-bold">12</div>
+                <div class="text-2xl font-bold">{{ $total_peminjaman }}</div>
                 <p class="text-xs text-zinc-500 mt-1">
                     Semua riwayat peminjaman
                 </p>
@@ -56,7 +56,7 @@
                     <h3 class="tracking-tight text-sm font-medium text-zinc-500">Menunggu Persetujuan</h3>
                     <i class="fas fa-clock text-zinc-400"></i>
                 </div>
-                <div class="text-2xl font-bold">2</div>
+                <div class="text-2xl font-bold">{{ $menunggu_persetujuan }}</div>
                 <p class="text-xs text-zinc-500 mt-1">
                     Sedang diproses admin
                 </p>
@@ -66,7 +66,7 @@
                     <h3 class="tracking-tight text-sm font-medium text-zinc-500">Disetujui</h3>
                     <i class="fas fa-check-circle text-zinc-400"></i>
                 </div>
-                <div class="text-2xl font-bold">10</div>
+                <div class="text-2xl font-bold">{{ $disetujui }}</div>
                 <p class="text-xs text-zinc-500 mt-1">
                     Peminjaman aktif & selesai
                 </p>
@@ -185,6 +185,62 @@
                             <a href="{{ route('users.pengajuan.create', $kelas->id) }}"
                                 class="flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2">
                                 Ajukan Peminjaman
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Ruangan Support Populer / Tersedia -->
+        <div class="mt-12">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Rekomendasi Ruangan Support</h2>
+                <a href="{{ route('users.pengajuan.support') }}"
+                    class="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                    Lihat Semua <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                @foreach ($rekomendasi_ruangan_support as $support)
+                    <div
+                        class="group relative bg-white rounded-xl border border-zinc-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
+                        <div class="aspect-video w-full bg-zinc-100 relative overflow-hidden">
+                            <img src="{{ $support->gambar ? asset('uploads/fasilitas/' . $support->gambar) : 'https://placehold.co/600x400?text=Support' }}"
+                                onerror="this.src='https://placehold.co/600x400?text=Support'"
+                                alt="{{ $support->nama_ruangan }}"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div
+                                class="absolute top-3 right-3 bg-blue-500/90 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide backdrop-blur-sm">
+                                Support
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <div>
+                                    <h3 class="font-bold text-zinc-900 line-clamp-1">{{ $support->nama_ruangan }}</h3>
+                                    <p class="text-xs text-zinc-500">{{ $support->gedung->nama_gedung ?? 'Gedung' }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 text-xs text-zinc-600 mb-4 mt-3">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-users text-zinc-400"></i>
+                                    <span>{{ $support->kapasitas }} Kursi</span>
+                                </div>
+                                @if ($support->keterangan)
+                                    <div class="flex items-center gap-1.5 line-clamp-1">
+                                        <i class="fas fa-info-circle text-zinc-400"></i>
+                                        <span>{{ Str::limit($support->keterangan, 20) }}</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <a href="{{ route('users.pengajuan.create_support', $support->id) }}"
+                                class="flex w-full items-center justify-center gap-2 rounded-lg bg-white border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2">
+                                Ajukan Support
                             </a>
                         </div>
                     </div>

@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Support extends Model
+class Laboratorium extends Model
 {
-    protected $table = 'support';
+    protected $table = 'laboratorium';
     protected $keyType = 'string';
     public $incrementing = false;
+
     protected $fillable = [
         'gedung_id',
-        'nama_ruangan',
+        'nama_laboratorium',
         'kapasitas',
         'keterangan',
         'gambar',
-        'ruangan_status',
+        'status',
     ];
 
     protected static function booted()
@@ -28,31 +29,31 @@ class Support extends Model
         });
     }
 
-    public static function createSupport($data)
+    public static function createLaboratorium($data)
     {
         return self::create([
             'gedung_id' => $data['gedung_id'],
-            'nama_ruangan' => $data['nama_ruangan'],
+            'nama_laboratorium' => $data['nama_laboratorium'],
             'kapasitas' => $data['kapasitas'],
             'keterangan' => $data['keterangan'] ?? '',
             'gambar' => $data['gambar'] ?? null,
-            'ruangan_status' => $data['ruangan_status'] ?? true,
+            'status' => $data['status'] ?? true,
         ]);
     }
 
-    public function updateSupport($data)
+    public function updateLaboratorium($data)
     {
         $this->update([
             'gedung_id' => $data['gedung_id'] ?? $this->gedung_id,
-            'nama_ruangan' => $data['nama_ruangan'] ?? $this->nama_ruangan,
+            'nama_laboratorium' => $data['nama_laboratorium'] ?? $this->nama_laboratorium,
             'kapasitas' => $data['kapasitas'] ?? $this->kapasitas,
             'keterangan' => array_key_exists('keterangan', $data) ? $data['keterangan'] : $this->keterangan,
             'gambar' => $data['gambar'] ?? $this->gambar,
-            'ruangan_status' => $data['ruangan_status'] ?? $this->ruangan_status,
+            'status' => $data['status'] ?? $this->status,
         ]);
     }
 
-    public function deleteSupport()
+    public function deleteLaboratorium()
     {
         return $this->delete();
     }
@@ -64,7 +65,7 @@ class Support extends Model
 
     public function toggleStatus()
     {
-        $this->ruangan_status = !$this->ruangan_status;
+        $this->status = !$this->status;
         $this->save();
     }
 }
