@@ -1,0 +1,21 @@
+{
+    "name": "Akademik WR 1",
+    "short_name": "Akademik",
+    "background_color": "#ffffff",
+    "theme_color": "#18181b",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/home",
+    "icons": [
+        {
+            "src": "image/itats-1080.jpg",
+            "sizes": "192x192",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "image/itats-1080.jpg",
+            "sizes": "512x512",
+            "type": "image/jpeg"
+        }
+    ]
+}
