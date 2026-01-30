@@ -3,7 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Akademik WR 1">
     <title>Akademik WR 1 - Home</title>
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
     <link rel="apple-touch-icon" href="{{ asset('image/itats-1080.jpg') }}">
