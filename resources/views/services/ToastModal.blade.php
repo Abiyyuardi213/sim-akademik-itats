@@ -1,6 +1,6 @@
 <!-- Toast Notification -->
 <div id="toastNotification"
-    class="fixed top-24 left-1/2 z-[1100] w-[90vw] md:w-96 transform transition-all duration-300 -translate-x-1/2 -translate-y-5 opacity-0 pointer-events-none"
+    class="fixed top-24 inset-x-0 mx-auto z-[1100] w-[90vw] md:w-96 transform transition-all duration-300 -translate-y-5 opacity-0 pointer-events-none"
     role="alert">
 
     <div class="bg-white rounded-xl shadow-lg border-l-4 overflow-hidden pointer-events-auto flex">
