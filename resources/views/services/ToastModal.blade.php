@@ -1,6 +1,6 @@
 <!-- Toast Notification -->
 <div id="toastNotification"
-    class="fixed top-20 right-5 z-[1100] w-96 transform transition-all duration-300 translate-x-full opacity-0 pointer-events-none"
+    class="fixed top-24 left-1/2 z-[1100] w-[90vw] md:w-96 transform transition-all duration-300 -translate-x-1/2 -translate-y-5 opacity-0 pointer-events-none"
     role="alert">
 
     <div class="bg-white rounded-xl shadow-lg border-l-4 overflow-hidden pointer-events-auto flex">
@@ -66,7 +66,9 @@
         body.innerText = message;
 
         // Show
-        toast.classList.remove('translate-x-full', 'opacity-0', 'pointer-events-none');
+        // Remove hidden classes (-translate-y-5, opacity-0)
+        // Keep centering classes (left-1/2, -translate-x-1/2) attached to base
+        toast.classList.remove('-translate-y-5', 'opacity-0', 'pointer-events-none');
 
         // Auto hide
         setTimeout(() => {
@@ -76,7 +78,7 @@
 
     function hideToast() {
         const toast = document.getElementById('toastNotification');
-        toast.classList.add('translate-x-full', 'opacity-0', 'pointer-events-none');
+        toast.classList.add('-translate-y-5', 'opacity-0', 'pointer-events-none');
     }
 
     // Auto-show from session

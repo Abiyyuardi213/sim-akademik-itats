@@ -6,6 +6,7 @@
     <title>Login Admin | Akademik WR 1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('image/itats-1080.jpg') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -105,7 +106,8 @@
                             Ingat saya
                         </label>
                     </div>
-                    <a href="{{ route('password.request') }}" class="text-sm font-medium text-zinc-900 hover:underline">
+                    <a href="{{ route('password.request') }}"
+                        class="text-sm font-medium text-zinc-900 hover:underline">
                         Lupa Password?
                     </a>
                 </div>

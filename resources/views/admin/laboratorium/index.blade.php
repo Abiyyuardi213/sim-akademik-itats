@@ -3,6 +3,7 @@
 @section('title', 'Manajemen Laboratorium')
 
 @section('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
     <style>
         /* Custom DataTables Pagination Styling */
         .dataTables_wrapper .dataTables_paginate {
@@ -169,6 +170,8 @@
         </div>
     </div>
 
+
+
     <!-- Modal Konfirmasi Hapus -->
     <div class="fixed inset-0 z-50 hidden" id="deleteModal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm transition-opacity"></div>
@@ -210,7 +213,12 @@
 @section('scripts')
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
+        window.closeDeleteModal = function() {
+            document.getElementById('deleteModal').classList.add('hidden');
+        }
+
         $(document).ready(function() {
+            // DataTable Initialization
             var table = $('#labTable').DataTable({
                 "paging": true,
                 "lengthChange": true,
@@ -231,20 +239,25 @@
                 table.page('last').draw(false);
             @endif
 
+            // Styling adjustments
             $('.dataTables_filter input').addClass(
                 'w-full md:w-64 rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 text-sm'
-                );
+            );
             $('.dataTables_length select').addClass(
                 'rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 text-sm'
-                );
+            );
 
-            $('.delete-lab-btn').click(function() {
+            // === Event Listeners ===
+
+            // 1. Delete Button
+            $(document).on('click', '.delete-lab-btn', function() {
                 let id = $(this).data('id');
                 let deleteUrl = "{{ url('admin/laboratorium') }}/" + id;
                 $('#deleteForm').attr('action', deleteUrl);
                 $('#deleteModal').removeClass('hidden');
             });
 
+            // 2. Toggle Status Switch
             $(document).on("change", ".toggle-status", function() {
                 let id = $(this).data("id");
                 let status = $(this).prop("checked") ? 1 : 0;
@@ -270,9 +283,5 @@
                 });
             });
         });
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.add('hidden');
-        }
     </script>
 @endsection
