@@ -11,6 +11,7 @@
     <title>Akademik WR 1 - Home</title>
     <link rel="icon" type="image/png" href="{{ asset('image/itats-1080.jpg') }}">
     <link rel="apple-touch-icon" href="{{ asset('image/itats-1080.jpg') }}">
+    <link rel="apple-touch-startup-image" href="{{ asset('image/itats-1080.jpg') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
