@@ -115,8 +115,9 @@ class PengajuanPeminjamanController extends Controller
         $startTime = $request->waktu_peminjaman;
         $endTime   = $request->waktu_berakhir_peminjaman;
 
-        $exists = PengajuanPeminjamanRuangan::where('kelas_id', $request->kelas_id)
-            ->whereIn('status', ['pending', 'disetujui'])
+        // 1. Cek bentrok dengan sesama pengajuan user (Status pending atau disetujui)
+        $conflictUser = PengajuanPeminjamanRuangan::where('kelas_id', $request->kelas_id)
+            ->whereIn('status', ['pending_kaprodi', 'pending_admin', 'disetujui']) // Cek status aktif
             ->whereDate('tanggal_peminjaman', '<=', $endDate)
             ->whereDate('tanggal_berakhir_peminjaman', '>=', $startDate)
             ->where(function ($q) use ($startTime, $endTime) {
@@ -125,9 +126,19 @@ class PengajuanPeminjamanController extends Controller
             })
             ->exists();
 
-        if ($exists) {
+        // 2. Cek bentrok dengan jadwal manual admin (PeminjamanRuangan)
+        $conflictAdmin = \App\Models\PeminjamanRuangan::where('kelas_id', $request->kelas_id)
+            ->whereDate('tanggal_peminjaman', '<=', $endDate)
+            ->whereDate('tanggal_berakhir_peminjaman', '>=', $startDate)
+            ->where(function ($q) use ($startTime, $endTime) {
+                $q->whereTime('waktu_peminjaman', '<', $endTime)
+                    ->whereTime('waktu_berakhir_peminjaman', '>', $startTime);
+            })
+            ->exists();
+
+        if ($conflictUser || $conflictAdmin) {
             return back()
-                ->withErrors(['waktu' => 'Ruangan sudah dipakai pada rentang tanggal/waktu tersebut.'])
+                ->withErrors(['waktu' => 'Ruangan sudah terisi pada tanggal/waktu tersebut (Bentrok dengan jadwal lain).'])
                 ->withInput();
         }
 
@@ -508,7 +519,18 @@ class PengajuanPeminjamanController extends Controller
         $nama_kaprodi = $pengajuan->prodi->kaprodi_name;
         $nip_kaprodi  = $pengajuan->prodi->kaprodi_nip;
 
-        $pdf = Pdf::loadView('pdf.surat_peminjaman', compact('pengajuan', 'nama_kaprodi', 'nip_kaprodi'))
+        // Hitung nomor urut peminjaman per user di tahun yang sama
+        $tahun = now()->year;
+        $nomorUrut = PengajuanPeminjamanRuangan::where('user_id', $pengajuan->user_id)
+            ->whereYear('created_at', $tahun)
+            ->where('status', 'disetujui') // Optional: only count approved ones? Or all? Usually approved/surat specific.
+            ->where('created_at', '<=', $pengajuan->created_at) // Count up to this one
+            ->count();
+
+        // Format nomor urut menjadi 3 digit, misal: 001
+        $nomor_surat_user = str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
+
+        $pdf = Pdf::loadView('pdf.surat_peminjaman', compact('pengajuan', 'nama_kaprodi', 'nip_kaprodi', 'nomor_surat_user'))
             ->setPaper('A4', 'portrait')
             ->setOptions([
                 'margin-top' => 0,

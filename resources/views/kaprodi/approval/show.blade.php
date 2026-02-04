@@ -131,11 +131,10 @@
                 <div class="p-6 border-b border-zinc-100">
                     <h2 class="text-base font-semibold text-zinc-900">Tindakan</h2>
                 </div>
-                <div class="p-6 space-y-4">
-
+                <div class="p-6 space-y-6">
                     @if ($pengajuan->status == 'pending_kaprodi')
                         <div
-                            class="flex items-start gap-3 p-3 rounded-lg bg-yellow-50 border border-yellow-100 text-yellow-800 text-sm mb-6">
+                            class="flex items-start gap-3 p-3 rounded-lg bg-yellow-50 border border-yellow-100 text-yellow-800 text-sm">
                             <i class="fas fa-info-circle mt-0.5 text-yellow-600"></i>
                             <p>Permohonan ini menunggu persetujuan Anda untuk diteruskan ke Admin.</p>
                         </div>
@@ -145,24 +144,25 @@
                             @csrf
                             <div class="mb-4">
                                 <label for="catatan_approve"
-                                    class="block text-xs font-medium text-zinc-700 mb-1 uppercase tracking-wider">Catatan
+                                    class="block text-xs font-bold text-zinc-700 mb-1.5 uppercase tracking-wider">Catatan
                                     Persetujuan (Opsional)</label>
-                                <textarea name="catatan_kaprodi" id="catatan_approve" rows="2"
-                                    class="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-zinc-600 sm:text-sm sm:leading-6 bg-zinc-50"
+                                <textarea name="catatan_kaprodi" id="catatan_approve" rows="3"
+                                    class="block w-full rounded-lg border-zinc-200 p-3 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-200 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-zinc-900 sm:text-sm sm:leading-6 bg-zinc-50 focus:bg-white transition-all"
                                     placeholder="Tambahkan catatan jika perlu..."></textarea>
                             </div>
                             <button type="submit"
-                                class="w-full inline-flex justify-center items-center rounded-md bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600 transition-all">
+                                class="w-full inline-flex justify-center items-center rounded-lg bg-zinc-900 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600 transition-all hover:scale-[1.02]">
                                 <i class="fas fa-check mr-2"></i> Setujui & Teruskan
                             </button>
                         </form>
 
-                        <div class="relative py-2">
+                        <div class="relative py-4">
                             <div class="absolute inset-0 flex items-center" aria-hidden="true">
                                 <div class="w-full border-t border-zinc-200"></div>
                             </div>
                             <div class="relative flex justify-center">
-                                <span class="bg-white px-2 text-xs text-zinc-400 uppercase">Atau</span>
+                                <span
+                                    class="bg-white px-3 text-xs font-medium text-zinc-400 uppercase tracking-widest">Atau</span>
                             </div>
                         </div>
 
@@ -171,14 +171,14 @@
                             @csrf
                             <div class="mb-4">
                                 <label for="catatan_reject"
-                                    class="block text-xs font-medium text-zinc-700 mb-1 uppercase tracking-wider">Alasan
+                                    class="block text-xs font-bold text-red-700 mb-1.5 uppercase tracking-wider">Alasan
                                     Penolakan <span class="text-red-500">*</span></label>
-                                <textarea name="catatan_kaprodi" id="catatan_reject" rows="2" required
-                                    class="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 bg-red-50/10"
+                                <textarea name="catatan_kaprodi" id="catatan_reject" rows="3" required
+                                    class="block w-full rounded-lg border-red-200 p-3 text-zinc-900 shadow-sm ring-1 ring-inset ring-red-200 placeholder:text-red-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6 bg-red-50/30 focus:bg-white transition-all"
                                     placeholder="Wajib mengisi alasan penolakan..."></textarea>
                             </div>
                             <button type="submit"
-                                class="w-full inline-flex justify-center items-center rounded-md bg-white border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 shadow-sm hover:bg-red-50 hover:border-red-300 transition-all">
+                                class="w-full inline-flex justify-center items-center rounded-lg bg-white border-2 border-red-100 px-4 py-3 text-sm font-bold text-red-600 shadow-sm hover:bg-red-50 hover:border-red-200 transition-all hover:scale-[1.02]">
                                 <i class="fas fa-times mr-2"></i> Tolak Pengajuan
                             </button>
                         </form>

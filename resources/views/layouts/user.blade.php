@@ -60,6 +60,7 @@
     <!-- Footer -->
     @include('include.footerUser')
     @include('services.LogoutModalUser')
+    @include('services.ToastModal')
 
     @yield('scripts')
 </body>

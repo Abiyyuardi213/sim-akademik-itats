@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\PeminjamanRuangan;
+use App\Models\PengajuanPeminjamanRuangan;
 use App\Models\Kelas;
 use App\Models\Prodi;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PeminjamanRuanganController extends Controller
 {
@@ -33,6 +35,39 @@ class PeminjamanRuanganController extends Controller
             'prodi_id' => 'required|exists:prodi,id',
             'keperluan_peminjaman' => 'required|string|max:255',
         ]);
+
+        // Validasi Bentrok Jadwal
+        $startDate = $request->tanggal_peminjaman;
+        $endDate   = $request->tanggal_berakhir_peminjaman;
+        $startTime = $request->waktu_peminjaman;
+        $endTime   = $request->waktu_berakhir_peminjaman;
+
+        // 1. Cek bentrok dengan sesama Manual Booking
+        $conflictAdmin = PeminjamanRuangan::where('kelas_id', $request->kelas_id)
+            ->whereDate('tanggal_peminjaman', '<=', $endDate)
+            ->whereDate('tanggal_berakhir_peminjaman', '>=', $startDate)
+            ->where(function ($q) use ($startTime, $endTime) {
+                $q->whereTime('waktu_peminjaman', '<', $endTime)
+                    ->whereTime('waktu_berakhir_peminjaman', '>', $startTime);
+            })
+            ->exists();
+
+        // 2. Cek bentrok dengan Pengajuan User yang SUDAH DISETUJUI
+        $conflictUser = PengajuanPeminjamanRuangan::where('kelas_id', $request->kelas_id)
+            ->where('status', 'disetujui')
+            ->whereDate('tanggal_peminjaman', '<=', $endDate)
+            ->whereDate('tanggal_berakhir_peminjaman', '>=', $startDate)
+            ->where(function ($q) use ($startTime, $endTime) {
+                $q->whereTime('waktu_peminjaman', '<', $endTime)
+                    ->whereTime('waktu_berakhir_peminjaman', '>', $startTime);
+            })
+            ->exists();
+
+        if ($conflictAdmin || $conflictUser) {
+            return back()
+                ->withErrors(['conflict' => 'Jadwal bentrok! Ruangan sudah terisi pada waktu tersebut.'])
+                ->withInput();
+        }
 
         $data = $request->all();
 
@@ -91,5 +126,62 @@ class PeminjamanRuanganController extends Controller
 
         return redirect()->route('admin.peminjaman-ruangan.index')
             ->with('success', 'Data peminjaman ruangan berhasil dihapus');
+    }
+
+    public function monitoring()
+    {
+        // 1. Ambil data PeminjamanRuangan (Manual Admin)
+        $manualBookings = PeminjamanRuangan::with(['kelas', 'prodi'])->get();
+
+        // 2. Ambil data PengajuanPeminjamanRuangan (User Request - Status Disetujui)
+        $userRequests = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
+            ->where('status', 'disetujui')
+            ->get();
+
+        $events = [];
+
+        // Mapping Manual Bookings
+        foreach ($manualBookings as $booking) {
+            $peminjamName = $booking->prodi->nama_prodi ?? 'Admin (Manual)';
+
+            $events[] = [
+                'id' => 'manual-' . $booking->id,
+                'title' => $booking->kelas->nama_kelas . ' - ' . $peminjamName,
+                'start' => $booking->tanggal_peminjaman . 'T' . $booking->waktu_peminjaman,
+                'end' => $booking->tanggal_berakhir_peminjaman . 'T' . $booking->waktu_berakhir_peminjaman,
+                'backgroundColor' => '#3b82f6', // blue-500
+                'borderColor' => '#2563eb',
+                'extendedProps' => [
+                    'peminjam' => $peminjamName,
+                    'kegiatan' => $booking->keperluan_peminjaman,
+                    'waktu' => Carbon::parse($booking->waktu_peminjaman)->format('H:i') . ' - ' . Carbon::parse($booking->waktu_berakhir_peminjaman)->format('H:i') . ' WIB',
+                    'ruangan' => $booking->kelas->nama_kelas,
+                    'tanggal' => Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('d F Y'),
+                ]
+            ];
+        }
+
+        // Mapping User Requests
+        foreach ($userRequests as $request) {
+            $peminjamName = $request->prodi->nama_prodi ?? $request->user->name ?? '-';
+
+            $events[] = [
+                'id' => 'user-' . $request->id,
+                'title' => ($request->kelas->nama_kelas ?? '-') . ' - ' . $peminjamName,
+                'start' => $request->tanggal_peminjaman . 'T' . $request->waktu_peminjaman,
+                'end' => $request->tanggal_berakhir_peminjaman . 'T' . $request->waktu_berakhir_peminjaman,
+                'backgroundColor' => '#10b981', // emerald-500
+                'borderColor' => '#059669',
+                'extendedProps' => [
+                    'peminjam' => $peminjamName,
+                    'kegiatan' => $request->keperluan_peminjaman,
+                    'waktu' => Carbon::parse($request->waktu_peminjaman)->format('H:i') . ' - ' . Carbon::parse($request->waktu_berakhir_peminjaman)->format('H:i') . ' WIB',
+                    'ruangan' => $request->kelas->nama_kelas ?? '-',
+                    'tanggal' => Carbon::parse($request->tanggal_peminjaman)->translatedFormat('d F Y'),
+                ]
+            ];
+        }
+
+        return view('admin.peminjaman-ruangan.monitoring', compact('events'));
     }
 }

@@ -37,21 +37,21 @@
     <div class="absolute inset-0 bg-zinc-950/70 backdrop-blur-sm z-0"></div>
 
     <!-- Login Card -->
-    <div class="relative z-10 w-full max-w-[400px] px-4">
-        <div class="bg-white rounded-xl shadow-2xl p-8 border border-zinc-200/80">
+    <div class="relative z-10 w-full max-w-[350px] md:max-w-[400px] px-4">
+        <div class="bg-white rounded-xl shadow-xl p-6 md:p-8 border border-zinc-200/80">
             <!-- Header -->
-            <div class="flex flex-col items-center space-y-4 mb-8">
-                <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" class="h-10 w-auto opacity-90">
+            <div class="flex flex-col items-center space-y-3 md:space-y-4 mb-6 md:mb-8">
+                <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" class="h-8 md:h-10 w-auto opacity-90">
                 <div class="text-center space-y-1">
-                    <h2 class="text-xl font-semibold tracking-tight text-zinc-900">Login Guest</h2>
-                    <p class="text-sm text-zinc-500">Masuk untuk mengakses layanan sarpras</p>
+                    <h2 class="text-lg md:text-xl font-semibold tracking-tight text-zinc-900">Login Guest</h2>
+                    <p class="text-xs md:text-sm text-zinc-500">Masuk untuk mengakses layanan sarpras</p>
                 </div>
             </div>
 
             <!-- Flash Error -->
             @if (session('error'))
                 <div
-                    class="mb-6 p-3 rounded-md bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
+                    class="mb-4 md:mb-6 p-3 rounded-md bg-red-50 border border-red-200 text-xs md:text-sm text-red-600 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                         class="w-4 h-4 shrink-0">
                         <path fill-rule="evenodd"
@@ -64,7 +64,7 @@
 
             @if ($errors->any())
                 <div
-                    class="mb-6 p-3 rounded-md bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
+                    class="mb-4 md:mb-6 p-3 rounded-md bg-red-50 border border-red-200 text-xs md:text-sm text-red-600 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                         class="w-4 h-4 shrink-0">
                         <path fill-rule="evenodd"
@@ -76,40 +76,40 @@
             @endif
 
             <!-- Form -->
-            <form action="{{ route('login.guest.post') }}" method="POST" class="space-y-4">
+            <form action="{{ route('login.guest.post') }}" method="POST" class="space-y-3 md:space-y-4">
                 @csrf
 
-                <div class="space-y-2">
+                <div class="space-y-1.5 md:space-y-2">
                     <label for="username"
-                        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Username</label>
+                        class="text-xs md:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Username</label>
                     <input id="username" name="username" type="text" value="{{ old('username') }}" required
                         autofocus
-                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="flex h-9 md:h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-1 md:py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Masukkan Username">
                     @error('username')
-                        <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                        <p class="text-[0.7rem] md:text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="space-y-2">
+                <div class="space-y-1.5 md:space-y-2">
                     <label for="password"
-                        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
+                        class="text-xs md:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
                     <input id="password" name="password" type="password" required
-                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="flex h-9 md:h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-1 md:py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Masukkan Password">
                     @error('password')
-                        <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
+                        <p class="text-[0.7rem] md:text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <button type="submit"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 h-10 w-full mt-2">
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 h-9 md:h-10 w-full mt-2">
                     Masuk
                 </button>
             </form>
 
-            <div class="mt-8 text-center">
-                <p class="text-xs text-zinc-400">
+            <div class="mt-6 md:mt-8 text-center">
+                <p class="text-[10px] md:text-xs text-zinc-400">
                     &copy; 2025 ITATS. All rights reserved.
                 </p>
             </div>

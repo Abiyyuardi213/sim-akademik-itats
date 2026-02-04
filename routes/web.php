@@ -96,6 +96,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:admin'])->group(functi
         Route::post('fasilitas-support/{id}/toggle-status', [FasilitasSupportController::class, 'toggleStatus'])->name('fasilitas-support.toggleStatus');
         Route::resource('fasilitas-support', FasilitasSupportController::class);
 
+        Route::get('peminjaman-ruangan/monitoring', [PeminjamanRuanganController::class, 'monitoring'])->name('peminjaman-ruangan.monitoring');
         Route::resource('peminjaman-ruangan', PeminjamanRuanganController::class);
 
         Route::get('fasilitas/dashboard', [DashboardFasilitasController::class, 'index'])->name('fasilitas.dashboard');

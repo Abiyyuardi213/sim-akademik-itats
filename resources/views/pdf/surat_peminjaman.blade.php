@@ -127,7 +127,13 @@
                 <td>
                     : <strong>
                         {{ $pengajuan->nomor_surat ??
-                            '___ / ' . strtoupper($pengajuan->prodi->alias_prodi) . ' / ITATS / ' . $bulanSekarang . ' / ' . now()->year }}
+                            $nomor_surat_user .
+                                ' / ' .
+                                strtoupper($pengajuan->prodi->alias_prodi) .
+                                ' / ITATS / ' .
+                                $bulanSekarang .
+                                ' / ' .
+                                now()->year }}
                     </strong>
                 </td>
             </tr>

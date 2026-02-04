@@ -150,8 +150,12 @@
                     class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.laboratorium.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
                     <span>Laboratorium</span>
                 </a>
+                <a href="{{ route('admin.peminjaman-ruangan.monitoring') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.peminjaman-ruangan.monitoring') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    <span>Monitoring Ruangan</span>
+                </a>
                 <a href="{{ route('admin.peminjaman-ruangan.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.peminjaman-ruangan.*') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
+                    class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2 {{ request()->routeIs('admin.peminjaman-ruangan.*') && !request()->routeIs('admin.peminjaman-ruangan.monitoring') ? 'text-zinc-900 font-semibold border-zinc-900' : 'text-zinc-500 hover:text-zinc-900 hover:border-zinc-400' }}">
                     <span>Jadwal Peminjaman</span>
                 </a>
                 <a href="{{ route('admin.pengajuan-ruangan.index') }}"

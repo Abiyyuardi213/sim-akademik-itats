@@ -111,6 +111,7 @@
 
     @include('include.footerUser')
     @include('services.LogoutModalUser')
+    @include('services.ToastModal')
 </body>
 
 </html>
