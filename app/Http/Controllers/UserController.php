@@ -69,7 +69,73 @@ class UserController extends Controller
         return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan')->with('new_entry', true);
     }
 
-    // ... (edit, update, show methods remain implicitly same, just skipping in this replacement block to save space if not modifying) ...
+    public function show($id)
+    {
+        $user = User::with(['role', 'prodi'])->findOrFail($id);
+        return view('admin.user.show', compact('user'));
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        $prodis = \App\Models\Prodi::all();
+        return view('admin.user.edit', compact('user', 'roles', 'prodis'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $id,
+            'email' => 'nullable|email|max:255|unique:users,email,' . $id,
+            'no_telepon' => 'nullable|string|max:20',
+            'password' => 'nullable|string|min:6',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'role_id' => 'required|exists:role,id',
+            'prodi_id' => [
+                'nullable',
+                Rule::requiredIf(function () use ($request) {
+                    $role = Role::find($request->role_id);
+                    return $role && (Str::contains(strtolower($role->role_name), 'kaprodi') || Str::contains(strtolower($role->role_name), 'kepala program studi'));
+                }),
+                'exists:prodi,id'
+            ],
+            'nip' => [
+                'nullable',
+                'string',
+                'max:50',
+                Rule::requiredIf(function () use ($request) {
+                    $role = Role::find($request->role_id);
+                    return $role && (Str::contains(strtolower($role->role_name), 'kaprodi') || Str::contains(strtolower($role->role_name), 'kepala program studi'));
+                }),
+            ],
+        ]);
+
+        $data = $request->except(['password', 'profile_picture']);
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        if ($request->hasFile('profile_picture')) {
+            // Delete old image if exists
+            if ($user->profile_picture && file_exists(public_path('uploads/profile/' . $user->profile_picture))) {
+                unlink(public_path('uploads/profile/' . $user->profile_picture));
+            }
+
+            $file = $request->file('profile_picture');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/profile'), $filename);
+            $data['profile_picture'] = $filename;
+        }
+
+        $user->updatePengguna($data);
+
+        return redirect()->route('admin.user.index')->with('success', 'User berhasil diperbarui');
+    }
 
     public function destroy($id)
     {
