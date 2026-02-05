@@ -277,6 +277,10 @@
             $('.dataTables_length select').addClass(
                 'rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 text-sm'
             );
+
+            @if (session('new_entry'))
+                table.page('last').draw('page');
+            @endif
         });
 
         let deleteUserId = null;

@@ -66,7 +66,7 @@ class UserController extends Controller
 
         User::createPengguna($data);
 
-        return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan');
+        return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan')->with('new_entry', true);
     }
 
     // ... (edit, update, show methods remain implicitly same, just skipping in this replacement block to save space if not modifying) ...
