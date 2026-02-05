@@ -272,6 +272,13 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->deletePengguna();
 
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'User berhasil dihapus.'
+            ]);
+        }
+
         return redirect()->route('admin.user.index')->with('success', 'User berhasil dihapus.');
     }
 }

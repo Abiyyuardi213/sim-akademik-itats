@@ -158,7 +158,7 @@
                                     </a>
                                     <button
                                         class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-1 focus:ring-red-500 shadow-sm transition-colors"
-                                        onclick="openDeleteModal('{{ $user->id }}')" title="Hapus">
+                                        onclick="openDeleteModal('{{ $user->id }}', this)" title="Hapus">
                                         <i class="fas fa-trash text-xs"></i>
                                     </button>
                                 </td>
@@ -261,7 +261,10 @@
             );
         });
 
-        function openDeleteModal(id) {
+        let deleteTargetRow = null;
+
+        function openDeleteModal(id, buttonElement) {
+            deleteTargetRow = $(buttonElement).closest('tr');
             const modal = document.getElementById('deleteModal');
             const form = document.getElementById('deleteForm');
             form.action = "{{ url('admin/user') }}/" + id;
@@ -271,6 +274,29 @@
         function closeDeleteModal() {
             const modal = document.getElementById('deleteModal');
             modal.classList.add('hidden');
+            deleteTargetRow = null;
         }
+
+        $('#deleteForm').on('submit', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const actionUrl = form.attr('action');
+
+            $.ajax({
+                url: actionUrl,
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    closeDeleteModal();
+                    if (response.success) {
+                        // Remove row from DataTables and redraw keeping current page
+                        $('#userTable').DataTable().row(deleteTargetRow).remove().draw(false);
+                    }
+                },
+                error: function(xhr) {
+                    alert('Terjadi kesalahan saat menghapus data.');
+                }
+            });
+        });
     </script>
 @endsection
