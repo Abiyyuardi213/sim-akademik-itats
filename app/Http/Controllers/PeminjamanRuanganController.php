@@ -128,60 +128,81 @@ class PeminjamanRuanganController extends Controller
             ->with('success', 'Data peminjaman ruangan berhasil dihapus');
     }
 
-    public function monitoring()
+    public function monitoring(Request $request)
     {
-        // 1. Ambil data PeminjamanRuangan (Manual Admin)
-        $manualBookings = PeminjamanRuangan::with(['kelas', 'prodi'])->get();
+        if ($request->ajax()) {
+            $start = $request->start; // sent by FullCalendar
+            $end = $request->end;     // sent by FullCalendar
 
-        // 2. Ambil data PengajuanPeminjamanRuangan (User Request - Status Disetujui)
-        $userRequests = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
-            ->where('status', 'disetujui')
-            ->get();
+            // 1. Ambil data PeminjamanRuangan (Manual Admin)
+            $manualBookings = PeminjamanRuangan::with(['kelas', 'prodi'])
+                ->where(function ($q) use ($start, $end) {
+                    $q->whereBetween('tanggal_peminjaman', [$start, $end])
+                        ->orWhereBetween('tanggal_berakhir_peminjaman', [$start, $end]);
+                })
+                ->get();
 
-        $events = [];
+            // 2. Ambil data PengajuanPeminjamanRuangan (User Request - Status Disetujui)
+            $userRequests = PengajuanPeminjamanRuangan::with(['kelas', 'prodi', 'user'])
+                ->where('status', 'disetujui')
+                ->where(function ($q) use ($start, $end) {
+                    $q->whereBetween('tanggal_peminjaman', [$start, $end])
+                        ->orWhereBetween('tanggal_berakhir_peminjaman', [$start, $end]);
+                })
+                ->get();
 
-        // Mapping Manual Bookings
-        foreach ($manualBookings as $booking) {
-            $peminjamName = $booking->prodi->nama_prodi ?? 'Admin (Manual)';
+            $events = [];
 
-            $events[] = [
-                'id' => 'manual-' . $booking->id,
-                'title' => $booking->kelas->nama_kelas . ' - ' . $peminjamName,
-                'start' => $booking->tanggal_peminjaman . 'T' . $booking->waktu_peminjaman,
-                'end' => $booking->tanggal_berakhir_peminjaman . 'T' . $booking->waktu_berakhir_peminjaman,
-                'backgroundColor' => '#3b82f6', // blue-500
-                'borderColor' => '#2563eb',
-                'extendedProps' => [
-                    'peminjam' => $peminjamName,
-                    'kegiatan' => $booking->keperluan_peminjaman,
-                    'waktu' => Carbon::parse($booking->waktu_peminjaman)->format('H:i') . ' - ' . Carbon::parse($booking->waktu_berakhir_peminjaman)->format('H:i') . ' WIB',
-                    'ruangan' => $booking->kelas->nama_kelas,
-                    'tanggal' => Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('d F Y'),
-                ]
-            ];
+            // Mapping Manual Bookings
+            foreach ($manualBookings as $booking) {
+                $peminjamName = $booking->prodi->nama_prodi ?? 'Admin (Manual)';
+                // Basic colors
+                $bgColor = '#3b82f6';
+                $borderColor = '#2563eb';
+
+                // Optional: Customize color based on prodi or other logic if needed in future
+
+                $events[] = [
+                    'id' => 'manual-' . $booking->id,
+                    'title' => $booking->kelas->nama_kelas . ' - ' . $peminjamName,
+                    'start' => $booking->tanggal_peminjaman . 'T' . $booking->waktu_peminjaman,
+                    'end' => $booking->tanggal_berakhir_peminjaman . 'T' . $booking->waktu_berakhir_peminjaman,
+                    'backgroundColor' => $bgColor,
+                    'borderColor' => $borderColor,
+                    'extendedProps' => [
+                        'peminjam' => $peminjamName,
+                        'kegiatan' => $booking->keperluan_peminjaman,
+                        'waktu' => Carbon::parse($booking->waktu_peminjaman)->format('H:i') . ' - ' . Carbon::parse($booking->waktu_berakhir_peminjaman)->format('H:i') . ' WIB',
+                        'ruangan' => $booking->kelas->nama_kelas,
+                        'tanggal' => Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('d F Y'),
+                    ]
+                ];
+            }
+
+            // Mapping User Requests
+            foreach ($userRequests as $request) {
+                $peminjamName = $request->prodi->nama_prodi ?? $request->user->name ?? '-';
+
+                $events[] = [
+                    'id' => 'user-' . $request->id,
+                    'title' => ($request->kelas->nama_kelas ?? '-') . ' - ' . $peminjamName,
+                    'start' => $request->tanggal_peminjaman . 'T' . $request->waktu_peminjaman,
+                    'end' => $request->tanggal_berakhir_peminjaman . 'T' . $request->waktu_berakhir_peminjaman,
+                    'backgroundColor' => '#10b981', // emerald-500
+                    'borderColor' => '#059669',
+                    'extendedProps' => [
+                        'peminjam' => $peminjamName,
+                        'kegiatan' => $request->keperluan_peminjaman,
+                        'waktu' => Carbon::parse($request->waktu_peminjaman)->format('H:i') . ' - ' . Carbon::parse($request->waktu_berakhir_peminjaman)->format('H:i') . ' WIB',
+                        'ruangan' => $request->kelas->nama_kelas ?? '-',
+                        'tanggal' => Carbon::parse($request->tanggal_peminjaman)->translatedFormat('d F Y'),
+                    ]
+                ];
+            }
+
+            return response()->json($events);
         }
 
-        // Mapping User Requests
-        foreach ($userRequests as $request) {
-            $peminjamName = $request->prodi->nama_prodi ?? $request->user->name ?? '-';
-
-            $events[] = [
-                'id' => 'user-' . $request->id,
-                'title' => ($request->kelas->nama_kelas ?? '-') . ' - ' . $peminjamName,
-                'start' => $request->tanggal_peminjaman . 'T' . $request->waktu_peminjaman,
-                'end' => $request->tanggal_berakhir_peminjaman . 'T' . $request->waktu_berakhir_peminjaman,
-                'backgroundColor' => '#10b981', // emerald-500
-                'borderColor' => '#059669',
-                'extendedProps' => [
-                    'peminjam' => $peminjamName,
-                    'kegiatan' => $request->keperluan_peminjaman,
-                    'waktu' => Carbon::parse($request->waktu_peminjaman)->format('H:i') . ' - ' . Carbon::parse($request->waktu_berakhir_peminjaman)->format('H:i') . ' WIB',
-                    'ruangan' => $request->kelas->nama_kelas ?? '-',
-                    'tanggal' => Carbon::parse($request->tanggal_peminjaman)->translatedFormat('d F Y'),
-                ]
-            ];
-        }
-
-        return view('admin.peminjaman-ruangan.monitoring', compact('events'));
+        return view('admin.peminjaman-ruangan.monitoring');
     }
 }

@@ -96,7 +96,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
-            var events = @json($events);
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -106,7 +105,8 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                events: events,
+                // Fetch events from the current URL (which handles AJAX requests)
+                events: "{{ route('admin.peminjaman-ruangan.monitoring') }}",
                 eventClick: function(info) {
                     openModal(info.event);
                 },
@@ -114,6 +114,13 @@
                     hour: '2-digit',
                     minute: '2-digit',
                     meridiem: false
+                },
+                loading: function(isLoading) {
+                    if (isLoading) {
+                        // Optional: show a loading spinner
+                    } else {
+                        // hide spinner
+                    }
                 }
             });
 

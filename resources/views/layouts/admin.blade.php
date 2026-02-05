@@ -67,29 +67,60 @@
             const scriptsContainer = document.getElementById('page-scripts');
 
             // Helper to update sidebar active state
+            // Helper to update sidebar active state
             function updateSidebarActiveState(targetUrl) {
+                // Base classes
+                const mainBaseClass =
+                    'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200';
+                const subBaseClass =
+                    'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 border-l border-zinc-200 ml-2';
+
+                // Reset all links first
                 sidebarLinks.forEach(link => {
-                    // Reset to inactive styles
-                    link.className =
-                        'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900';
-
-                    // Specific check for Cuti and Fasilitas submenus (optional, can be improved)
-                    // For now, simple URL matching
-                    if (link.href === targetUrl || targetUrl.startsWith(link.href)) {
-                        // Apply active styles
+                    const isSubmenu = link.closest('[id$="-submenu"]');
+                    if (isSubmenu) {
                         link.className =
-                            'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 bg-zinc-100 text-zinc-900 shadow-sm';
+                            `${subBaseClass} text-zinc-500 hover:text-zinc-900 hover:border-zinc-400`;
+                    } else {
+                        link.className =
+                            `${mainBaseClass} text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900`;
+                    }
+                });
 
-                        // Expand parent submenu if exists
-                        const parentSubmenu = link.closest('[id$="-submenu"]');
-                        if (parentSubmenu) {
-                            parentSubmenu.classList.remove('hidden');
-                            const arrowId = parentSubmenu.id.replace('submenu', 'arrow');
-                            const arrow = document.getElementById(arrowId);
-                            if (arrow) arrow.classList.add('rotate-180');
+                // Find the best match (longest prefix match)
+                let bestMatch = null;
+                let maxLen = 0;
+
+                sidebarLinks.forEach(link => {
+                    // Normalize URLs for comparison (simple check)
+                    // We check if targetUrl starts with link.href
+                    // e.g. target: /admin/users/create, link: /admin/users -> Match
+                    // e.g. target: /admin/users, link: /admin/users -> Match
+
+                    if (targetUrl === link.href || targetUrl.startsWith(link.href)) {
+                        // We want the longest matching href to be the "active" one
+                        if (link.href.length > maxLen) {
+                            bestMatch = link;
+                            maxLen = link.href.length;
                         }
                     }
                 });
+
+                // Apply active state to best match
+                if (bestMatch) {
+                    const isSubmenu = bestMatch.closest('[id$="-submenu"]');
+                    if (isSubmenu) {
+                        bestMatch.className = `${subBaseClass} text-zinc-900 font-semibold border-zinc-900`;
+
+                        // Expand parent submenu
+                        isSubmenu.classList.remove('hidden');
+                        const arrowId = isSubmenu.id.replace('submenu', 'arrow');
+                        const arrow = document.getElementById(arrowId);
+                        if (arrow) arrow.classList.add('rotate-180');
+                    } else {
+                        bestMatch.className = `${mainBaseClass} bg-zinc-100 text-zinc-900 shadow-sm`;
+                    }
+                }
             }
 
             // Highlighting based on current URL on initial load (fallback)

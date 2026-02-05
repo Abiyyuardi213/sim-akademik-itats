@@ -226,7 +226,7 @@
     <script>
         $(document).ready(function() {
             // Tailwind-styled DataTables
-            $('#userTable').DataTable({
+            var table = $('#userTable').DataTable({
                 "paging": true,
                 "lengthChange": true,
                 "searching": true,
@@ -249,8 +249,26 @@
                         "previous": '<i class="fas fa-angle-left"></i>'
                     }
                 },
-                "dom": '<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"lf>rt<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"ip>'
+                "dom": '<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"lf>rt<"flex flex-col md:flex-row justify-between items-center p-4 gap-4"ip>',
+                "columnDefs": [{
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }],
+                "order": [
+                    [1, 'asc']
+                ]
             });
+
+            // Index column handling
+            table.on('order.dt search.dt', function() {
+                table.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
 
             // Custom styling for inputs
             $('.dataTables_filter input').addClass(
@@ -289,12 +307,39 @@
                 success: function(response) {
                     closeDeleteModal();
                     if (response.success) {
-                        // Remove row from DataTables and redraw keeping current page
-                        $('#userTable').DataTable().row(deleteTargetRow).remove().draw(false);
+                        // Display success notification
+                        if (typeof showToast === 'function') {
+                            showToast(response.message, 'success');
+                        } else {
+                            // Fallback if showToast is not defined
+                            alert(response.message);
+                        }
+
+                        // Remove row from DataTables and redraw
+                        // We use the DataTable API to ensure it handles pagination correcty
+                        const table = $('#userTable').DataTable();
+                        table.row(deleteTargetRow).remove().draw(false);
+
+                        // Update Total Count manually
+                        const countElement = document.querySelector(
+                            '.px-6.py-4 span.font-medium.text-zinc-900');
+                        if (countElement) {
+                            let currentCount = parseInt(countElement.innerText);
+                            if (!isNaN(currentCount) && currentCount > 0) {
+                                countElement.innerText = currentCount - 1;
+                            }
+                        }
                     }
                 },
                 error: function(xhr) {
-                    alert('Terjadi kesalahan saat menghapus data.');
+                    // Display error notification
+                    const errorMessage = xhr.responseJSON?.message ||
+                        'Terjadi kesalahan saat menghapus data.';
+                    if (typeof showToast === 'function') {
+                        showToast(errorMessage, 'error');
+                    } else {
+                        alert(errorMessage);
+                    }
                 }
             });
         });
