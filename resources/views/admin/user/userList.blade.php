@@ -118,7 +118,7 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-100 bg-white">
                         @forelse($users as $index => $user)
-                            <tr class="hover:bg-zinc-50/50 transition-colors">
+                            <tr id="user-row-{{ $user->id }}" class="hover:bg-zinc-50/50 transition-colors">
                                 <td class="px-6 py-4 text-center font-medium text-zinc-900">{{ $index + 1 }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
@@ -255,18 +255,18 @@
                     "orderable": false,
                     "targets": 0
                 }],
-                "order": [
-                    [1, 'asc']
-                ]
+                // Disable initial sort to respect backend order (Oldest -> Newest)
+                "order": []
             });
 
-            // Index column handling
-            table.on('order.dt search.dt', function() {
+            // Index column handling - robust re-indexing on every draw
+            table.on('draw.dt', function() {
+                var info = table.page.info();
                 table.column(0, {
                     search: 'applied',
                     order: 'applied'
                 }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
+                    cell.innerHTML = i + 1 + info.start;
                 });
             }).draw();
 
@@ -279,10 +279,10 @@
             );
         });
 
-        let deleteTargetRow = null;
+        let deleteUserId = null;
 
         function openDeleteModal(id, buttonElement) {
-            deleteTargetRow = $(buttonElement).closest('tr');
+            deleteUserId = id;
             const modal = document.getElementById('deleteModal');
             const form = document.getElementById('deleteForm');
             form.action = "{{ url('admin/user') }}/" + id;
@@ -292,7 +292,7 @@
         function closeDeleteModal() {
             const modal = document.getElementById('deleteModal');
             modal.classList.add('hidden');
-            deleteTargetRow = null;
+            deleteUserId = null;
         }
 
         $('#deleteForm').on('submit', function(e) {
@@ -305,22 +305,23 @@
                 type: 'POST',
                 data: form.serialize(),
                 success: function(response) {
-                    closeDeleteModal();
                     if (response.success) {
+                        const idToDelete = deleteUserId;
+                        closeDeleteModal();
                         // Display success notification
                         if (typeof showToast === 'function') {
                             showToast(response.message, 'success');
                         } else {
-                            // Fallback if showToast is not defined
                             alert(response.message);
                         }
 
-                        // Remove row from DataTables and redraw
-                        // We use the DataTable API to ensure it handles pagination correcty
+                        // Remove row using DataTable API by ID
                         const table = $('#userTable').DataTable();
-                        table.row(deleteTargetRow).remove().draw(false);
 
-                        // Update Total Count manually
+                        // Use captured ID
+                        table.row('#user-row-' + idToDelete).remove().draw(false);
+
+                        // Update Total Count in view
                         const countElement = document.querySelector(
                             '.px-6.py-4 span.font-medium.text-zinc-900');
                         if (countElement) {
@@ -332,7 +333,7 @@
                     }
                 },
                 error: function(xhr) {
-                    // Display error notification
+                    closeDeleteModal();
                     const errorMessage = xhr.responseJSON?.message ||
                         'Terjadi kesalahan saat menghapus data.';
                     if (typeof showToast === 'function') {
