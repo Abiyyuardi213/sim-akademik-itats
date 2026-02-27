@@ -4,14 +4,23 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto">
-        <div class="mb-8">
-            <nav class="flex text-sm font-medium text-zinc-500 items-center mb-4">
-                <a href="{{ route('admin.kaprodi.index') }}" class="hover:text-zinc-900 transition-colors">Daftar Kaprodi</a>
-                <span class="mx-2 text-zinc-300">/</span>
-                <span class="text-zinc-900">Detail</span>
-            </nav>
-            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Kaprodi</h1>
-            <p class="mt-1 text-sm text-zinc-500">Informasi lengkap tentang {{ $user->name }}.</p>
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <nav class="flex text-sm font-medium text-zinc-500 items-center mb-4">
+                    <a href="{{ route('admin.kaprodi.index') }}" class="hover:text-zinc-900 transition-colors">Daftar
+                        Kaprodi</a>
+                    <span class="mx-2 text-zinc-300">/</span>
+                    <span class="text-zinc-900">Detail</span>
+                </nav>
+                <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Kaprodi</h1>
+                <p class="mt-1 text-sm text-zinc-500">Informasi lengkap tentang {{ $user->name }}.</p>
+            </div>
+            <div>
+                <a href="{{ route('admin.kaprodi.index') }}"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-zinc-50 text-zinc-700 rounded-lg transition-colors text-sm font-medium border border-zinc-200 shadow-sm">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </a>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

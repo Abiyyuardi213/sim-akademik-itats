@@ -112,6 +112,28 @@
                         @enderror
                     </div>
 
+                    <div class="space-y-2">
+                        <label for="prodi_id" class="text-sm font-medium leading-none text-zinc-900">Program Studi</label>
+                        <div class="relative">
+                            <select id="prodi_id" name="prodi_id"
+                                class="flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 appearance-none">
+                                <option value="">-- Pilih Program Studi --</option>
+                                @foreach ($prodis as $prodi)
+                                    <option value="{{ $prodi->id }}"
+                                        {{ old('prodi_id', $user->prodi_id) == $prodi->id ? 'selected' : '' }}>
+                                        {{ $prodi->kode_prodi }} | {{ $prodi->nama_prodi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <i class="fas fa-chevron-down text-zinc-400 text-xs"></i>
+                            </div>
+                        </div>
+                        @error('prodi_id')
+                            <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Kaprodi Fields (Hidden by default) -->
                     <div id="kaprodiFields" class="col-span-1 md:col-span-2 hidden space-y-6 pt-4 border-t border-zinc-100">
                         <div class="flex items-center gap-2">
@@ -120,29 +142,6 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label for="prodi_id" class="text-sm font-medium leading-none text-zinc-900">Program Studi
-                                    <span class="text-red-500">*</span></label>
-                                <div class="relative">
-                                    <select id="prodi_id" name="prodi_id"
-                                        class="flex h-10 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 appearance-none">
-                                        <option value="">-- Pilih Program Studi --</option>
-                                        @foreach ($prodis as $prodi)
-                                            <option value="{{ $prodi->id }}"
-                                                {{ old('prodi_id', $user->prodi_id) == $prodi->id ? 'selected' : '' }}>
-                                                {{ $prodi->nama_prodi }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                        <i class="fas fa-chevron-down text-zinc-400 text-xs"></i>
-                                    </div>
-                                </div>
-                                @error('prodi_id')
-                                    <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-
                             <div class="space-y-2">
                                 <label for="nip" class="text-sm font-medium leading-none text-zinc-900">NIP <span
                                         class="text-red-500">*</span></label>
@@ -213,11 +212,9 @@
 
             if (roleName && (roleName.includes('kaprodi') || roleName.includes('kepala program studi'))) {
                 kaprodiFields.classList.remove('hidden');
-                document.getElementById('prodi_id').setAttribute('required', 'required');
                 document.getElementById('nip').setAttribute('required', 'required');
             } else {
                 kaprodiFields.classList.add('hidden');
-                document.getElementById('prodi_id').removeAttribute('required');
                 document.getElementById('nip').removeAttribute('required');
                 // We don't clear values on edit if they hide it, just incase they made a mistake selecting role
             }

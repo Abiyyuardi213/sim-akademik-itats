@@ -18,6 +18,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -30,20 +33,17 @@
     </style>
 </head>
 
-<body class="h-screen w-full bg-cover bg-center overflow-hidden flex items-center justify-center relative"
-    style="background-image: url('{{ asset('image/gedungA.jpg') }}');">
+<body class="h-screen w-full bg-white flex overflow-hidden">
 
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-zinc-950/70 backdrop-blur-sm z-0"></div>
+    <!-- Left Panel (Form) -->
+    <div class="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-12 relative overflow-y-auto bg-white">
 
-    <!-- Login Card -->
-    <div class="relative z-10 w-full max-w-[400px] px-4">
-        <div class="bg-white rounded-xl shadow-2xl p-8 border border-zinc-200/80">
+        <div class="m-auto w-full max-w-[380px]">
             <!-- Header -->
-            <div class="flex flex-col items-center space-y-4 mb-8">
+            <div class="flex flex-col items-center space-y-3 mb-8">
                 <img src="{{ asset('image/itats-biru.png') }}" alt="Logo ITATS" class="h-10 w-auto opacity-90">
                 <div class="text-center space-y-1">
-                    <h2 class="text-xl font-semibold tracking-tight text-zinc-900">Login Admin</h2>
+                    <h2 class="text-xl font-bold tracking-tight text-zinc-900">Login Admin</h2>
                     <p class="text-sm text-zinc-500">Masuk untuk mengelola sistem WR 1</p>
                 </div>
             </div>
@@ -51,86 +51,133 @@
             <!-- Flash Error -->
             @if (session('error'))
                 <div
-                    class="mb-6 p-3 rounded-md bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                        class="w-4 h-4 shrink-0">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                            clip-rule="evenodd" />
-                    </svg>
+                    class="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
+                    <i class="fas fa-exclamation-circle"></i>
                     {{ session('error') }}
                 </div>
             @endif
 
             @if ($errors->any())
                 <div
-                    class="mb-6 p-3 rounded-md bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                        class="w-4 h-4 shrink-0">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                            clip-rule="evenodd" />
-                    </svg>
+                    class="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600 flex items-center gap-2">
+                    <i class="fas fa-exclamation-circle"></i>
                     {{ $errors->first() }}
                 </div>
             @endif
 
-            <!-- Form -->
-            <form action="{{ route('login') }}" method="POST" class="space-y-4">
-                @csrf
+            <!-- Form Card -->
+            <div class="bg-white rounded-[14px] border border-zinc-200 p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]">
+                <form action="{{ route('login') }}" method="POST" class="space-y-4">
+                    @csrf
 
-                <div class="space-y-2">
-                    <label for="username"
-                        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Username</label>
-                    <input id="username" name="username" type="text" value="{{ old('username') }}" required
-                        autofocus
-                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        placeholder="Masukkan Username">
-                    @error('username')
-                        <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="space-y-2">
-                    <label for="password"
-                        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
-                    <input id="password" name="password" type="password" required
-                        class="flex h-10 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        placeholder="Masukkan Password">
-                    @error('password')
-                        <p class="text-[0.8rem] font-medium text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <input type="checkbox" id="remember" name="remember"
-                            class="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900">
-                        <label for="remember"
-                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            Ingat saya
-                        </label>
+                    <!-- Username -->
+                    <div class="space-y-1.5">
+                        <label for="username" class="text-[13px] font-semibold text-zinc-800">Username</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="far fa-user text-zinc-400 text-sm"></i>
+                            </div>
+                            <input id="username" name="username" type="text" value="{{ old('username') }}" required
+                                autofocus
+                                class="flex h-10 w-full rounded-lg border border-zinc-200 bg-white pl-10 pr-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
+                                placeholder="Masukkan username anda">
+                        </div>
+                        @error('username')
+                            <p class="text-[0.8rem] font-medium text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
-                    <a href="{{ route('password.request') }}"
-                        class="text-sm font-medium text-zinc-900 hover:underline">
-                        Lupa Password?
-                    </a>
-                </div>
 
-                <button type="submit"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 h-10 w-full mt-2">
-                    Masuk
-                </button>
-            </form>
+                    <!-- Password -->
+                    <div class="space-y-1.5">
+                        <label for="password" class="text-[13px] font-semibold text-zinc-800">Password</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-zinc-400 text-sm"></i>
+                            </div>
+                            <input id="password" name="password" type="password" required
+                                class="flex h-10 w-full rounded-lg border border-zinc-200 bg-white pl-10 pr-10 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
+                                placeholder="Masukkan password anda">
+                            <button type="button" onclick="togglePassword()"
+                                class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-400 hover:text-zinc-600 focus:outline-none">
+                                <i id="eye-icon" class="far fa-eye text-sm"></i>
+                            </button>
+                        </div>
+                        @error('password')
+                            <p class="text-[0.8rem] font-medium text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
+                    <!-- Options: Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between pt-1 pb-2">
+                        <div class="flex items-center">
+                            <input id="remember" name="remember" value="1" type="checkbox"
+                                class="h-4 w-4 text-zinc-900 focus:ring-zinc-900 border-zinc-300 rounded cursor-pointer accent-zinc-900">
+                            <label for="remember"
+                                class="ml-2.5 block text-[13px] text-zinc-600 cursor-pointer select-none">Ingat
+                                saya</label>
+                        </div>
+                        <a href="{{ route('password.request') }}"
+                            class="text-[13px] font-medium text-zinc-900 hover:text-blue-600 transition-colors">
+                            Lupa Password?
+                        </a>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit"
+                        class="w-full h-10 flex items-center justify-center gap-2 rounded-lg bg-[#18181b] text-white text-sm font-semibold hover:bg-black transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-zinc-900">
+                        Masuk <i class="fas fa-sign-in-alt ml-1"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Footer -->
             <div class="mt-8 text-center">
-                <p class="text-xs text-zinc-400">
+                <p class="text-[11px] text-zinc-400">
                     &copy; 2025 ITATS. All rights reserved.
                 </p>
             </div>
         </div>
     </div>
 
+    <!-- Right Panel (Background Image) -->
+    <div class="hidden lg:block lg:w-1/2 relative bg-zinc-900">
+        <img src="{{ asset('image/gedungA.jpg') }}" alt="Background"
+            class="absolute inset-0 w-full h-full object-cover">
+
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10"></div>
+
+        <!-- Top Left Logo -->
+        <div class="absolute top-8 left-10">
+            <img src="{{ asset('image/itats-biru.png') }}" alt="Logo Background"
+                class="h-10 opacity-90 brightness-0 invert drop-shadow">
+        </div>
+
+        <!-- Bottom Text Quote -->
+        <div class="absolute bottom-12 left-10 pr-12">
+            <p class="text-white text-[17px] font-medium leading-relaxed mb-2 max-w-xl shadow-sm">
+                "Sistem Informasi Sarana dan Prasarana Terintegrasi untuk efisiensi dan keunggulan operasional kampus."
+            </p>
+            <p class="text-white/80 text-[13px]">Institut Teknologi Adhi Tama Surabaya</p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 
 </html>

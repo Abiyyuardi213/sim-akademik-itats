@@ -15,13 +15,14 @@ class UserController extends Controller
     {
         // Urutkan dari yang terlama (ASC) ke terbaru
         $users = User::orderBy('created_at', 'asc')->with('role')->get();
-        return view('admin.user.userList', compact('users'));
+        $roles = Role::all();
+        return view('admin.user.userList', compact('users', 'roles'));
     }
 
     public function create()
     {
         $roles = Role::all();
-        $prodis = \App\Models\Prodi::all();
+        $prodis = \App\Models\Prodi::orderBy('kode_prodi', 'asc')->get();
         return view('admin.user.create', compact('roles', 'prodis'));
     }
 
@@ -79,7 +80,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $roles = Role::all();
-        $prodis = \App\Models\Prodi::all();
+        $prodis = \App\Models\Prodi::orderBy('kode_prodi', 'asc')->get();
         return view('admin.user.edit', compact('user', 'roles', 'prodis'));
     }
 
@@ -134,7 +135,7 @@ class UserController extends Controller
 
         $user->updatePengguna($data);
 
-        return redirect()->route('admin.user.index')->with('success', 'User berhasil diperbarui');
+        return redirect()->to(route('admin.user.index') . '#user-row-' . $id)->with('success', 'User berhasil diperbarui');
     }
 
     public function destroy($id)

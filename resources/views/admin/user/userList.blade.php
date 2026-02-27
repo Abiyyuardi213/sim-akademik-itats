@@ -95,11 +95,37 @@
     </div>
 
     <!-- Actions Toolbar -->
-    <div class="mb-6 flex justify-end">
-        <a href="{{ route('admin.user.create') }}"
-            class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus:ring-zinc-950 transition-colors">
-            <i class="fas fa-plus mr-2"></i> Tambah Pengguna
-        </a>
+    <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <!-- Filter Controls -->
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div class="relative w-full sm:w-56">
+                <select id="roleFilter"
+                    class="w-full pl-10 pr-8 py-2 bg-white border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-zinc-900 appearance-none transition-shadow text-zinc-700">
+                    <option value="">Semua Peran</option>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->role_name }}">{{ $role->role_name }}</option>
+                    @endforeach
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+                    <i class="fas fa-user-tag text-xs"></i>
+                </div>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+
+            <button id="resetFilter" title="Reset Filter"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-white border border-zinc-200 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-colors shadow-sm">
+                <i class="fas fa-sync-alt sm:mr-0 md:mr-2"></i> <span class="md:hidden lg:inline">Reset</span>
+            </button>
+        </div>
+
+        <div class="flex justify-end w-full md:w-auto">
+            <a href="{{ route('admin.user.create') }}"
+                class="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 transition-colors w-full">
+                <i class="fas fa-plus mr-2"></i> Tambah Pengguna
+            </a>
+        </div>
     </div>
 
     <!-- Table Card -->
@@ -225,8 +251,8 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Tailwind-styled DataTables
             var table = $('#userTable').DataTable({
+                "stateSave": true,
                 "paging": true,
                 "lengthChange": true,
                 "searching": true,
@@ -241,7 +267,8 @@
                     "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                     "infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
                     "infoFiltered": "(disaring dari _MAX_ total data)",
-                    "zeroRecords": "Tidak ada data yang cocok",
+                    "emptyTable": '<div class="py-10 flex flex-col items-center justify-center text-zinc-500"><i class="fas fa-users-slash text-4xl mb-3 text-zinc-300"></i><p>Belum ada data pengguna.</p></div>',
+                    "zeroRecords": '<div class="py-10 flex flex-col items-center justify-center text-zinc-500"><i class="fas fa-search text-4xl mb-3 text-zinc-300"></i><p>Tidak ada data yang cocok</p></div>',
                     "paginate": {
                         "first": '<i class="fas fa-angle-double-left"></i>',
                         "last": '<i class="fas fa-angle-double-right"></i>',
@@ -277,6 +304,31 @@
             $('.dataTables_length select').addClass(
                 'rounded-md border border-zinc-300 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-900 text-sm'
             );
+
+            // Custom Role Filter
+            $('#roleFilter').on('change', function() {
+                var selectedRole = $(this).val();
+                if (selectedRole) {
+                    // Match the text anywhere in the cell to avoid whitespace/newline issues
+                    table.column(3).search(selectedRole).draw();
+                } else {
+                    table.column(3).search('').draw();
+                }
+            });
+
+            // Restore Custom Role Filter visual state
+            var state = table.state.loaded();
+            if (state && state.columns[3].search.search) {
+                $('#roleFilter').val(state.columns[3].search.search);
+            }
+
+            // Reset Filter
+            $('#resetFilter').on('click', function() {
+                // Reset role filter
+                $('#roleFilter').val('').trigger('change');
+                // Reset global search
+                table.search('').draw();
+            });
 
             @if (session('new_entry'))
                 table.page('last').draw('page');

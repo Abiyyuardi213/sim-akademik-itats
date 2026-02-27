@@ -1,54 +1,40 @@
 <!-- Modal Konfirmasi Logout -->
 <div id="logoutModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <!-- Backdrop -->
-    <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="closeLogoutModal()"></div>
+    <div class="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm transition-opacity" onclick="closeLogoutModal()"></div>
 
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <!-- Modal Panel -->
             <div
-                class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-gray-100">
-                <!-- Header -->
-                <div class="bg-gradient-to-r from-red-500 to-rose-600 px-6 py-4 flex items-center justify-between">
-                    <h5 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-sign-out-alt"></i> Konfirmasi Logout
-                    </h5>
+                class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-[400px] border border-zinc-200">
+                <!-- Header Component -->
+                <div class="px-6 pt-6 pb-4 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-zinc-900" id="modal-title">Konfirmasi Logout</h3>
                     <button type="button" onclick="closeLogoutModal()"
-                        class="text-white/80 hover:text-white transition-colors">
-                        <i class="fas fa-times text-xl"></i>
+                        class="text-zinc-400 hover:text-zinc-500 focus:outline-none transition-colors">
+                        <i class="fas fa-times text-lg"></i>
                     </button>
                 </div>
 
-                <!-- Body -->
-                <div class="px-6 py-6">
-                    <div class="flex items-start gap-4">
-                        <div
-                            class="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
-                            <i class="fas fa-question text-lg"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Anda yakin ingin keluar?</h3>
-                            <p class="mt-2 text-sm text-gray-500">
-                                Anda akan diarahkan kembali ke halaman login. Pastikan semua pekerjaan Anda sudah
-                                tersimpan.
-                            </p>
-                        </div>
-                    </div>
+                <!-- Body Component -->
+                <div class="px-6 pb-8">
+                    <p class="text-[15px] text-zinc-600">Apakah anda yakin ingin mengakhiri sesi ini?</p>
                 </div>
 
-                <!-- Footer -->
-                <div class="bg-gray-50 px-6 py-4 flex flex-row-reverse gap-3">
-                    <form action="{{ route('logout') }}" method="POST" class="inline-block w-full sm:w-auto">
+                <!-- Footer Component -->
+                <div class="px-6 py-4 flex justify-end gap-3 rounded-b-xl">
+                    <button type="button" onclick="closeLogoutModal()"
+                        class="inline-flex justify-center items-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 transition-colors">
+                        Cancel
+                    </button>
+                    <form action="{{ route('logout') }}" method="POST" class="inline-block m-0">
                         @csrf
                         <button type="submit"
-                            class="inline-flex w-full sm:w-auto justify-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-all duration-200">
-                            <i class="fas fa-sign-out-alt mr-2 mt-0.5"></i> Logout
+                            class="inline-flex justify-center items-center rounded-lg bg-[#e50000] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#cc0000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e50000] transition-colors">
+                            Logout
                         </button>
                     </form>
-                    <button type="button" onclick="closeLogoutModal()"
-                        class="mt-3 sm:mt-0 inline-flex w-full sm:w-auto justify-center rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-all duration-200">
-                        Batal
-                    </button>
                 </div>
             </div>
         </div>

@@ -148,7 +148,9 @@
                                         class="flex h-10 w-full appearance-none items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
                                         <option value="">Pilih Program Studi</option>
                                         @foreach ($prodis as $prodi)
-                                            <option value="{{ $prodi->id }}">{{ $prodi->nama_prodi }}</option>
+                                            <option value="{{ $prodi->id }}"
+                                                {{ auth()->user()->prodi_id == $prodi->id ? 'selected' : '' }}>
+                                                {{ $prodi->nama_prodi }}</option>
                                         @endforeach
                                     </select>
                                     <div

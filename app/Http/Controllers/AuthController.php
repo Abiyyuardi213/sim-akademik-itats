@@ -63,7 +63,9 @@ class AuthController extends Controller
             return back()->with('error', 'Password salah.')->withInput($request->only('username'));
         }
 
-        Auth::guard('admin')->login($user);
+        $remember = $request->has('remember');
+
+        Auth::guard('admin')->login($user, $remember);
 
         $request->session()->regenerate();
 
@@ -97,7 +99,9 @@ class AuthController extends Controller
                 ->withInput($request->only('username'));
         }
 
-        Auth::guard('users')->login($user);
+        $remember = $request->has('remember');
+
+        Auth::guard('users')->login($user, $remember);
 
         $request->session()->regenerate();
 
